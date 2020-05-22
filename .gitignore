@@ -295,3 +295,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/java,linux,maven,windows,java-web,intellij,code-java,intellij+all,intellij+iml,visualstudiocode
+
+.settings
