@@ -5,3 +5,11 @@ jdk:
 cache:
   directories:
   - $HOME/.m2
+
+before_install:
+  - mvn pmd:pmd -B -V
+  - ./check_pmd.sh
+
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
