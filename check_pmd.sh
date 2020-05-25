@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ev
 file="server/target/site/pmd.html"
 if [ -f "$file" ]
 then
