@@ -8,7 +8,6 @@ cache:
 
 before_install:
   - mvn pmd:pmd -B -V
-  - ls server/target/site
   - ./check_pmd.sh
 
 install:
