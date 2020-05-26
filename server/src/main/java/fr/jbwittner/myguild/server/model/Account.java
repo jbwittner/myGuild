@@ -32,7 +32,7 @@ public class Account extends AbstractModel{
      * Constructor of Account type
      * @param type String of type
      */
-    public Account(final String nickName, String email, String password) {
+    public Account(final String nickName, final String email, final String password) {
         super();
         this.nickName = nickName;
         this.email = email;
@@ -51,7 +51,7 @@ public class Account extends AbstractModel{
      * Setter of nickName
      * @param id nickName
      */
-    public void setNickName(String nickName) {
+    public void setNickName(final String nickName) {
         this.nickName = nickName;
     }
 
@@ -67,7 +67,7 @@ public class Account extends AbstractModel{
      * Setter of email
      * @param id email
      */
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -83,7 +83,7 @@ public class Account extends AbstractModel{
      * Setter of password
      * @param id password
      */
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
