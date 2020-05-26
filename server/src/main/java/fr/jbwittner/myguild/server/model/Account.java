@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "ACCOUNT")
 public class Account extends AbstractModel{
 
-    @Column(name = "NICK_NAME", nullable = false, length = 20)
+    @Column(name = "NICK_NAME", nullable = false, unique = true, length = 20)
     private String nickName;
 
     @Column(name = "EMAIL", nullable = false, unique = true, length = 30)
