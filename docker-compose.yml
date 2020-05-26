@@ -1,0 +1,37 @@
+version: '3'
+
+volumes:
+  myguild_db:
+
+services:
+
+  # Database
+  mariadb:
+    image: mariadb:10.4.12
+    ports:
+      - '3306:3306'
+    volumes:
+      - myguild_db:/var/lib/mysql
+    command: --character_set_client=utf8 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MyGuildRootPass2020
+      MYSQL_DATABASE: myGuild_db
+      MYSQL_USER: myGuild_user
+      MYSQL_PASSWORD: MyGuildPass2020
+    networks:
+      - default
+
+  # phpmyadmin
+  phpmyadmin:
+    depends_on:
+      - mariadb
+    image: phpmyadmin/phpmyadmin:5.0.2
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: MyGuildRootPass2020
+    networks:
+      - default

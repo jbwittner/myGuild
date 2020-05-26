@@ -299,3 +299,5 @@ $RECYCLE.BIN/
 .settings
 .vscode
 .factorypath
+.vagrant
+logs

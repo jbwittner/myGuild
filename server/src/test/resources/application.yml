@@ -1,0 +1,33 @@
+Application:
+  db-param:
+    host: localhost
+    port: 3306
+    db-name: myGuild_db
+    user: myGuild_user
+    password: MyGuildPass2020
+
+logging:
+  level:
+    fr.jbwittner.myguild.server:
+      ServerApplication: INFO
+      aop.interceptor: 
+        RepositoriesInterceptor: INFO
+    org:
+      apache: INFO
+      springframework:
+        data: INFO
+spring:
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    ddl-auto: create
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+  datasource:
+    url: jdbc:h2:mem:${application.db-param.db-name};DB_CLOSE_ON_EXIT=false
+    databaseName: ${application.db-param.db-name}
+    username: ${application.db-param.user}
+    password: ${application.db-param.password}
+    driverClassName: org.h2.Driver
