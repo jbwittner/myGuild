@@ -14,4 +14,11 @@ public interface UserAccountRepository extends AbstractRepository<UserAccount, L
      */
     UserAccount findByEmail(String email);
 
+    /**
+     * Method to find UserAccount by email
+     * @param nickName nick name to find
+     * @return UserAccount which the nick name match
+     */
+    UserAccount findByNickName(String nickName);
+
 }
