@@ -17,7 +17,7 @@ import fr.jbwittner.myguild.server.repository.UserAccountRepository;
 /**
  * Test class for creation of Account type
  */
-public class CreationUserAccountTest extends AbstractMotherTest {
+public class CreationUserAccountModelTest extends AbstractMotherTest {
 
     @Autowired
     UserAccountRepository userAccountRepository;

@@ -25,7 +25,7 @@ public abstract class AbstractMotherTest {
      * Method launch before each test
      */
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() throws Exception{
         this.initDataBeforeEach();
     }
 
@@ -40,6 +40,15 @@ public abstract class AbstractMotherTest {
     /**
      * Method used to prepare the data of tests
      */
-    abstract protected void initDataBeforeEach();
+    abstract protected void initDataBeforeEach() throws Exception;
+
+    /**
+     * Method used to check the data of tests
+     */
+    protected void checkDataCount(long count) throws Exception {
+        if(0 >= count){
+            throw new Exception("Problem during initialisation of data");
+        }
+    }
 
 }
