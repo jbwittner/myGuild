@@ -1,4 +1,4 @@
-package fr.jbwittner.myguild.server;
+package fr.jbwittner.myguild.server.tools;
 
 import java.util.ArrayList;
 import java.util.List;

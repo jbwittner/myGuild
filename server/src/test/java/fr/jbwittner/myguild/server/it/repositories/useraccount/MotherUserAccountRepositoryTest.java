@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import fr.jbwittner.myguild.server.it.AbstractMotherTest;
 import fr.jbwittner.myguild.server.model.UserAccount;
 import fr.jbwittner.myguild.server.repository.UserAccountRepository;
+import fr.jbwittner.myguild.server.tools.exceptions.DataInitialisationException;
 
 
 /**
@@ -29,9 +30,9 @@ public class MotherUserAccountRepositoryTest extends AbstractMotherTest {
      * {@inheritDoc}
      */
     @Override
-    public void initDataBeforeEach() throws Exception{
+    public void initDataBeforeEach() throws DataInitialisationException{
 
-        Integer numberUserAccount = this.factory.getRandomInteger(MIN_ACCOUNT_TYPE, MAX_ACCOUNT_TYPE);
+        final Integer numberUserAccount = this.factory.getRandomInteger(MIN_ACCOUNT_TYPE, MAX_ACCOUNT_TYPE);
 
         UserAccount userAccount;
 

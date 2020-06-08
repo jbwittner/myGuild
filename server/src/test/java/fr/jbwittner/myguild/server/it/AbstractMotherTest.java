@@ -8,7 +8,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.jbwittner.myguild.server.TestObjectFactory;
+import fr.jbwittner.myguild.server.tools.TestObjectFactory;
+import fr.jbwittner.myguild.server.tools.exceptions.DataInitialisationException;
 
 /**
  * Mother class for integrations tests
@@ -25,7 +26,7 @@ public abstract class AbstractMotherTest {
      * Method launch before each test
      */
     @BeforeEach
-    public void beforeEach() throws Exception{
+    public void beforeEach() throws DataInitialisationException{
         this.initDataBeforeEach();
     }
 
@@ -40,14 +41,14 @@ public abstract class AbstractMotherTest {
     /**
      * Method used to prepare the data of tests
      */
-    abstract protected void initDataBeforeEach() throws Exception;
+    abstract protected void initDataBeforeEach() throws DataInitialisationException;
 
     /**
      * Method used to check the data of tests
      */
-    protected void checkDataCount(long count) throws Exception {
+    protected void checkDataCount(final long count) throws DataInitialisationException {
         if(0 >= count){
-            throw new Exception("Problem during initialisation of data");
+            throw new DataInitialisationException();
         }
     }
 
