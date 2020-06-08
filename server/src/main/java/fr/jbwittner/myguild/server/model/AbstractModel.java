@@ -26,14 +26,6 @@ public abstract class AbstractModel {
     }
 
     /**
-     * Setter of id
-     * @param id id
-     */
-    public void setId(final Integer id) {
-        this.id = id;
-    }
-
-    /**
      * Override of toString method
      * @return String representation of the model
      */
