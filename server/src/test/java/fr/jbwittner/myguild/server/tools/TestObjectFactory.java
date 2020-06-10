@@ -14,7 +14,10 @@ import fr.jbwittner.myguild.server.model.UserAccount;
 public class TestObjectFactory {
 
     public static final int NUMBER_MAX = 100;
-    public static final int LENGTH_EMAIL = 20;
+    public static final int LENGTH_EMAIL_NAME = 20;
+    public static final int LENGTH_DOMAINE = 10;
+    public static final int LENGTH_NICKNAME = 10;
+    public static final int LENGTH_PASSWORD = 20;
 
     private List<String> listRandomString = new ArrayList<>();
     private List<String> listRandomEmail = new ArrayList<>();
@@ -82,8 +85,8 @@ public class TestObjectFactory {
         String email = "";
 
         while (isNotUnique){
-            email = RandomStringUtils.randomAscii(LENGTH_EMAIL);
-            email = email + "@" + RandomStringUtils.randomAscii(LENGTH_EMAIL) + ".com";
+            email = RandomStringUtils.randomAlphabetic(LENGTH_EMAIL_NAME);
+            email = email + "@" + RandomStringUtils.randomAlphabetic(LENGTH_DOMAINE) + ".com";
             isNotUnique = listRandomEmail.contains(email);
         }
 
@@ -198,8 +201,8 @@ public class TestObjectFactory {
     public UserAccount createUserAccount(){
 
         final String email = this.getUniqueRandomEmail();
-        final String nickName = this.getUniqueRandomAsciiString(LENGTH_EMAIL);
-        final String password = this.getUniqueRandomAsciiString(LENGTH_EMAIL);
+        final String nickName = this.getUniqueRandomAsciiString(LENGTH_NICKNAME);
+        final String password = this.getUniqueRandomAsciiString(LENGTH_PASSWORD);
         final Boolean enabled = false;
         
         final List<Roles> roles = new ArrayList<>();

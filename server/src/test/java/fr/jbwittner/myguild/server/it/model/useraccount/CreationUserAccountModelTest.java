@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
 
-import fr.jbwittner.myguild.server.it.AbstractMotherTest;
+import fr.jbwittner.myguild.server.it.AbstractMotherIntegrationTest;
 import fr.jbwittner.myguild.server.model.Roles;
 import fr.jbwittner.myguild.server.model.UserAccount;
 import fr.jbwittner.myguild.server.repository.UserAccountRepository;
@@ -17,7 +17,7 @@ import fr.jbwittner.myguild.server.repository.UserAccountRepository;
 /**
  * Test class for creation of Account type
  */
-public class CreationUserAccountModelTest extends AbstractMotherTest {
+public class CreationUserAccountModelTest extends AbstractMotherIntegrationTest {
 
     @Autowired
     UserAccountRepository userAccountRepository;
@@ -32,7 +32,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * Test to check the good creation of user account
      */
     @Test
-    public void createOk(){
+    public void createUserAccountTestOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -47,7 +47,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * with a previously used nickname
      */
     @Test
-    public void createDuplicateNickNameNOk(){
+    public void createDuplicateNickNameTestNOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -65,7 +65,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * with a previously used email
      */
     @Test
-    public void createDuplicateEmailNOk(){
+    public void createDuplicateEmailTestNOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -83,7 +83,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * used password
      */
     @Test
-    public void createDuplicatePasswordOk(){
+    public void createDuplicatePasswordTestOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -99,7 +99,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * used enabled
      */
     @Test
-    public void createDuplicateEnableOk(){
+    public void createDuplicateEnableTestOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -115,7 +115,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * with a previously used roles entity
      */
     @Test
-    public void createDuplicateRolesNOk(){
+    public void createDuplicateRolesTestNOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);
@@ -133,7 +133,7 @@ public class CreationUserAccountModelTest extends AbstractMotherTest {
      * with a previously same used roles
      */
     @Test
-    public void createDuplicateRolesOk(){
+    public void createDuplicateRolesTestOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         this.userAccountRepository.saveAndFlush(userAccount);

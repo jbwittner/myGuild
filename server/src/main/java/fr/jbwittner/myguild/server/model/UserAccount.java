@@ -150,8 +150,7 @@ public class UserAccount extends AbstractModel {
     }
 
     /**
-     * Getter of enabled
-     * @return string representing the object
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
