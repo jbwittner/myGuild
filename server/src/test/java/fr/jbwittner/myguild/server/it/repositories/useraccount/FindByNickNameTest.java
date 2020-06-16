@@ -12,10 +12,10 @@ import fr.jbwittner.myguild.server.model.UserAccount;
 public class FindByNickNameTest extends MotherUserAccountRepositoryTest {
 
     /**
-     * Test to check the findBy method when the UserAccount are in the database
+     * Test to check the findBy method when the UserAccount is in the database
      */
     @Test
-    public void findByNickNameOk(){
+    public void findByNickNameTestOk(){
         UserAccount userAccountSaved;
 
         for(final UserAccount userAccount: this.userAccountList){
@@ -25,20 +25,20 @@ public class FindByNickNameTest extends MotherUserAccountRepositoryTest {
     }
 
     /**
-     * Test to check the findBy method when the UserAccount the input are null
+     * Test to check the findBy method when the UserAccount the input is null
      */
     @Test
-    public void findByNickNameNullNok(){
+    public void findByNickNameNullTestNOk(){
         final UserAccount UserAccount = this.userAccountRepository.findByNickName(null);
 
         Assertions.assertNull(UserAccount);
     }
 
     /**
-     * Test to check the findBy method when the UserAccount are not in the database
+     * Test to check the findBy method when the UserAccount is not in the database
      */
     @Test
-    public void findByNickNameNotExistOk(){
+    public void findByNickNameNotExistTestOk(){
         final String randomString = this.factory.getUniqueRandomAsciiString(10);
 
         final UserAccount UserAccount = this.userAccountRepository.findByNickName(randomString);

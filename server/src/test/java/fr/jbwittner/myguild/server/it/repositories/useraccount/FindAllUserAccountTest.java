@@ -17,9 +17,10 @@ public class FindAllUserAccountTest extends MotherUserAccountRepositoryTest {
      * Test to verify the findAll method
      */
     @Test
-    public void findAllOk() {
+    public void findAllTestOk() {
         final Iterable<UserAccount> UserAccountIterable = this.userAccountRepository.findAll();
         final List<UserAccount> resultsList = new ArrayList<>();
+        
         UserAccountIterable.forEach(resultsList::add);
 
         Assertions.assertEquals(this.userAccountList.size(), resultsList.size());

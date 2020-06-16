@@ -12,10 +12,10 @@ import fr.jbwittner.myguild.server.model.UserAccount;
 public class FindByEmailTest extends MotherUserAccountRepositoryTest {
 
     /**
-     * Test to check the findBy method when the UserAccount are in the database
+     * Test to check the findBy method when the UserAccount is in the database
      */
     @Test
-    public void findByEmailOk(){
+    public void findByEmailTestOk(){
         UserAccount userAccountSaved;
 
         for(final UserAccount userAccount: this.userAccountList){
@@ -25,20 +25,20 @@ public class FindByEmailTest extends MotherUserAccountRepositoryTest {
     }
 
     /**
-     * Test to check the findBy method when the UserAccount the input are null
+     * Test to check the findBy method when the UserAccount the input is null
      */
     @Test
-    public void findByEmailNullOk(){
+    public void findByEmailNullTestOk(){
         final UserAccount UserAccount = this.userAccountRepository.findByEmail(null);
 
         Assertions.assertNull(UserAccount);
     }
 
     /**
-     * Test to check the findBy method when the UserAccount are not in the database
+     * Test to check the findBy method when the UserAccount is not in the database
      */
     @Test
-    public void findByEmailNotExistOk(){
+    public void findByEmailNotExistTestOk(){
         final String randomString = this.factory.getUniqueRandomAsciiString(10);
 
         final UserAccount UserAccount = this.userAccountRepository.findByEmail(randomString);

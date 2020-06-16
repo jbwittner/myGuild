@@ -1,4 +1,4 @@
-package fr.jbwittner.myguild.server.it.repositories.useraccount;
+package fr.jbwittner.myguild.server.it.service.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import fr.jbwittner.myguild.server.tools.exceptions.DataInitialisationException;
 /**
  * Class to prepare test of user account repository
  */
-public class MotherUserAccountRepositoryTest extends AbstractMotherIntegrationTest {
+public class MotherUserServiceTest extends AbstractMotherIntegrationTest {
 
     static final Integer MIN_ACCOUNT_TYPE = 25;
     static final Integer MAX_ACCOUNT_TYPE = 50;

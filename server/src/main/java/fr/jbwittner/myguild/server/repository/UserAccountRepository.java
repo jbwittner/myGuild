@@ -21,4 +21,18 @@ public interface UserAccountRepository extends AbstractRepository<UserAccount, L
      */
     UserAccount findByNickName(String nickName);
 
+    /**
+     * Method to check if the nick name is already used
+     * @param nickName nick name to check
+     * @return true if the nick name is already used otherwise false
+     */
+    boolean existsByNickName(String nickName);
+
+    /**
+     * Method to check if the email is already used
+     * @param email email to check
+     * @return true if the email is already used otherwise false
+     */
+    boolean existsByEmail(String email);
+
 }

@@ -9,13 +9,16 @@ Application:
 logging:
   level:
     fr.jbwittner.myguild.server:
-      ServerApplication: INFO
+      MyGuildApplication: INFO
       aop.interceptor: 
-        RepositoriesInterceptor: INFO
+        GeneralInterceptor: ERROR
+        ServiceInterceptor: INFO
     org:
       apache: INFO
       springframework:
+        security: INFO
         data: INFO
+
 spring:
   jpa:
     show-sql: false

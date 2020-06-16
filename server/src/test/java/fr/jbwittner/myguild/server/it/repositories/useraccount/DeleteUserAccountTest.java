@@ -19,7 +19,7 @@ public class DeleteUserAccountTest extends MotherUserAccountRepositoryTest {
      * Test to verify if deleting an account is correct
      */
     @Test
-    public void deleteOneAccountTypeOk(){
+    public void deleteOneAccountTypeTestOk(){
 
         final Long numberAccountTypeBefore = this.userAccountRepository.count();
 
@@ -37,7 +37,7 @@ public class DeleteUserAccountTest extends MotherUserAccountRepositoryTest {
      * Test to verify if the deletion of all accounts is correct
      */
     @Test
-    public void deleteAllAccountTypeOk(){
+    public void deleteAllAccountTypeTestOk(){
 
         this.userAccountRepository.deleteAll();
 

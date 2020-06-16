@@ -11,10 +11,12 @@ logging:
     fr.jbwittner.myguild.server:
       MyGuildApplication: INFO
       aop.interceptor: 
-        RepositoriesInterceptor: INFO
+        GeneralInterceptor: INFO
+        ServiceInterceptor: INFO
     org:
       apache: INFO
       springframework:
+        security: INFO
         data: INFO
 
 server:

@@ -153,7 +153,6 @@
     </rule>
     <rule ref="category/java/design.xml/AvoidThrowingNullPointerException" />
     <rule ref="category/java/design.xml/AvoidThrowingRawExceptionTypes" />
-    <rule ref="category/java/design.xml/AvoidUncheckedExceptionsInSignatures" />
     <rule ref="category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal" />
     <rule ref="category/java/design.xml/CollapsibleIfStatements" />
     <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
