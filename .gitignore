@@ -301,3 +301,5 @@ $RECYCLE.BIN/
 .factorypath
 .vagrant
 logs
+
+.theia

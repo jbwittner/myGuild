@@ -25,15 +25,15 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "docker-compose.yml", destination: "docker-compose.yml"
   config.vm.provision "file", source: "sql/init_tables.sql", destination: "init_tables.sql"
   config.vm.provision "file", source: "sql/add_data_dev.sql", destination: "add_data_dev.sql"
-  config.vm.provision "file", source: "waitForMariaDB.sh", destination: "waitForMariaDB.sh"
+  config.vm.provision "file", source: "waitForMySQL.sh", destination: "waitForMySQL.sh"
 
   config.vm.provision "shell", inline: <<-SHELL 
     source ~/.profile && [ -z "$SQL_USER" ] && echo "export SQL_USER=myGuild_user" >> ~/.profile
     source ~/.profile && [ -z "$SQL_PASSWORD" ] && echo "export SQL_PASSWORD=MyGuildPass2020" >> ~/.profile
     source ~/.profile && [ -z "$SQL_DB" ] && echo "export SQL_DB=myGuild_db" >> ~/.profile
     apt-get install -y mysql-client dos2unix
-    chmod +x waitForMariaDB.sh
-    dos2unix waitForMariaDB.sh
+    chmod +x waitForMySQL.sh
+    dos2unix waitForMySQL.sh
   SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     echo SQL_PASSWORD = $SQL_PASSWORD
     echo SQL_DB = $SQL_DB
     echo Start waiting
-    sh waitForMariaDB.sh
+    sh waitForMySQL.sh
     echo Start init tables
     docker exec -i vagrant_mariadb_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" "$SQL_DB" < init_tables.sql
     echo Start add datas

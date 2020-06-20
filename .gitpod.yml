@@ -1,0 +1,13 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - before : mysql -h localhost -u root < sql/prepare_db.sql &&
+              mysql -h localhost -u root myGuild_db < sql/init_tables.sql &&
+              mysql -h localhost -u root myGuild_db < sql/add_data_dev.sql
+  - command : mvn -DskipTests clean package
+
+vscode:
+  extensions:
+    - vscjava.vscode-maven@0.21.2:tFEkt2FqLujaNTLU5AmRiQ==
+    - vscjava.vscode-java-test@0.22.3:qwXOIvA9XTSccfoQjgULTg==

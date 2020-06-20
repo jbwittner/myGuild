@@ -24,7 +24,7 @@ server:
 
 spring:
   jpa:
-    database-platform : org.hibernate.dialect.MariaDB103Dialect
+    database-platform : org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
       naming:
@@ -32,8 +32,8 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
 
   datasource:
-    url: jdbc:mariadb://${application.db-param.host}:${application.db-param.port}/${application.db-param.db-name}
+    url: jdbc:mysql://${application.db-param.host}:${application.db-param.port}/${application.db-param.db-name}
     databaseName: ${application.db-param.db-name}
     username: ${application.db-param.user}
     password: ${application.db-param.password}
-    driverClassName: org.mariadb.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
