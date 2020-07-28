@@ -22,7 +22,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision :docker
   config.vm.provision :docker_compose
 
-  config.vm.provision "file", source: "docker-compose.yml", destination: "docker-compose.yml"
   config.vm.provision "file", source: "sql/init_tables.sql", destination: "init_tables.sql"
   config.vm.provision "file", source: "sql/add_data_dev.sql", destination: "add_data_dev.sql"
   config.vm.provision "file", source: "waitForMySQL.sh", destination: "waitForMySQL.sh"
@@ -36,9 +35,8 @@ Vagrant.configure("2") do |config|
     dos2unix waitForMySQL.sh
   SHELL
 
-  config.vm.provision "shell", inline: <<-SHELL
-    docker-compose up -d
-  SHELL
+# Install Docker Compose once on the Ubuntu VM
+  config.vm.provision :docker_compose, yml: "/vagrant/docker-compose.yml", run: "always"
 
   config.vm.provision "shell", inline: <<-SHELL
     echo SQL_USER = $SQL_USER
@@ -47,9 +45,9 @@ Vagrant.configure("2") do |config|
     echo Start waiting
     sh waitForMySQL.sh
     echo Start init tables
-    docker exec -i vagrant_mariadb_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" "$SQL_DB" < init_tables.sql
+    docker exec -i vagrant_mysql_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" "$SQL_DB" < init_tables.sql
     echo Start add datas
-    docker exec -i vagrant_mariadb_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" "$SQL_DB" < add_data_dev.sql
+    docker exec -i vagrant_mysql_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" "$SQL_DB" < add_data_dev.sql
   SHELL
   
 end
