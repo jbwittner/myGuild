@@ -3,7 +3,7 @@
 maxcounter=100
 
 counter=1
-while ! mysql --protocol TCP -u"$SQL_USER" -p"$SQL_PASSWORD" -e "show databases;" > localfile 2>&1; do
+while ! docker exec -i vagrant_mysql_1 mysql -u"$SQL_USER" -p"$SQL_PASSWORD" -e "show databases;" > localfile 2>&1; do
     echo Counter = $counter
     sleep 1
     counter=`expr $counter + 1`
