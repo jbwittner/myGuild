@@ -103,3 +103,11 @@ jobs:
         name: $GITHUB_ACTOR
         # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
         flags: integration_test
+  
+  coverage:
+    needs: [test]
+    runs-on: ubuntu-18.04
+    
+    steps:
+      - uses: actions/checkout@master
+      - uses: codecov/codecov-action@v1
