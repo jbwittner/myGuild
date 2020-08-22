@@ -1,18 +1,15 @@
 package fr.jbwittner.myguild.server.it.service.user;
 
-
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
+import fr.jbwittner.myguild.server.exception.UserBattleTagAlreadyUsedException;
+import fr.jbwittner.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
 import fr.jbwittner.myguild.server.exception.UserEmailAlreadyUsedException;
 import fr.jbwittner.myguild.server.exception.UserNickNameAlreadyUsedException;
 import fr.jbwittner.myguild.server.exception.ValidationDataException;
-import fr.jbwittner.myguild.server.model.Roles;
 import fr.jbwittner.myguild.server.model.UserAccount;
 import fr.jbwittner.myguild.server.parameters.UserRegistrationParameter;
 import fr.jbwittner.myguild.server.service.UserService;
@@ -26,9 +23,6 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     /**
      * Test with all good parameters
      */
@@ -39,14 +33,15 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         final UserAccount userAccount = this.userService.registerNewUserAccount(userRegistrationParameter);
 
         Assertions.assertEquals(userRegistrationParameter.getEmail(), userAccount.getEmail());
         Assertions.assertEquals(userRegistrationParameter.getNickName(), userAccount.getNickName());
-        Assertions.assertTrue(passwordEncoder.matches(userRegistrationParameter.getPassword(), userAccount.getPassword()));
-        Assertions.assertEquals(Arrays.asList(Roles.ROLES_USER), userAccount.getRoles());
+        Assertions.assertEquals(userRegistrationParameter.getBlizzardId(), userAccount.getBlizzardId());
+        Assertions.assertEquals(userRegistrationParameter.getBattletag(), userAccount.getBattleTag());
     }
 
     /**
@@ -58,8 +53,9 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
         final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
 
         userRegistrationParameter.setEmail(null);
-        userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));  
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -76,8 +72,9 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
         final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
-        userRegistrationParameter.setNickName(null);  
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setNickName(null);
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -86,22 +83,41 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
     }
 
     /**
-     * Test with null password
+     * Test with null Blizzard Id
      */
     @Test
-    public void registerNewUserAccountPasswordNullNOkTest(){
+    public void registerNewUserAccountBlizzardIdNullNOkTest(){
 
         final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword(null);
+        userRegistrationParameter.setBlizzardId(null);
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
         });
-          
     }
+
+    /**
+     * Test with null BattleTag
+     */
+    @Test
+    public void registerNewUserAccountBattletagNullNOkTest(){
+
+        final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
+
+        userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
+        userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(null);
+
+        Assertions.assertThrows(ValidationDataException.class, () -> {
+            this.userService.registerNewUserAccount(userRegistrationParameter);
+        });
+    }
+
 
     /**
      * Test with empty email
@@ -113,7 +129,8 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
 
         userRegistrationParameter.setEmail("");
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -131,7 +148,8 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName("");
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -140,16 +158,17 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
     }
 
     /**
-     * Test with empty password
+     * Test with empty BattleTag
      */
     @Test
-    public void registerNewUserAccountPasswordEmptyNOkTest(){
+    public void registerNewUserAccountBattleTagEmptyNOkTest(){
 
         final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword("");
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag("");
 
         Assertions.assertThrows(ValidationDataException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -167,7 +186,8 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
 
         userRegistrationParameter.setEmail(this.randomUserAccount.getEmail());
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(UserEmailAlreadyUsedException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -175,8 +195,8 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
         
     }
 
-    /**
-     * Test with an nick name already used
+   /**
+     * Test with an Nick Name already used
      */
     @Test
     public void registerNewUserAccountNickNameAlreadyUsedNOkTest(){
@@ -185,7 +205,8 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName(this.randomUserAccount.getNickName());
-        userRegistrationParameter.setPassword(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_PASSWORD));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
         Assertions.assertThrows(UserNickNameAlreadyUsedException.class, () -> {
             this.userService.registerNewUserAccount(userRegistrationParameter);
@@ -194,23 +215,41 @@ public class RegisterNewUserAccountTest extends MotherUserServiceTest {
     }
 
     /**
-     * Test with an password already used
+     * Test with an Blizzard Id already used
      */
     @Test
-    public void registerNewUserAccountPasswordAlreadyUsedOkTest(){
+    public void registerNewUserAccountBlizzardIdAlreadyUsedNOkTest(){
 
         final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
 
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
         userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
-        userRegistrationParameter.setPassword(this.randomUserAccount.getPassword());
+        userRegistrationParameter.setBlizzardId(this.randomUserAccount.getBlizzardId());
+        userRegistrationParameter.setBattleTag(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG));
 
-        final UserAccount userAccount = this.userService.registerNewUserAccount(userRegistrationParameter);
+        Assertions.assertThrows(UserBlizzardIdAlreadyUsedException.class, () -> {
+            this.userService.registerNewUserAccount(userRegistrationParameter);
+        });
 
-        Assertions.assertEquals(userRegistrationParameter.getEmail(), userAccount.getEmail());
-        Assertions.assertEquals(userRegistrationParameter.getNickName(), userAccount.getNickName());
-        Assertions.assertTrue(passwordEncoder.matches(userRegistrationParameter.getPassword(), userAccount.getPassword()));
-        Assertions.assertEquals(Arrays.asList(Roles.ROLES_USER), userAccount.getRoles());
+    }
+
+    /**
+     * Test with an BattleTag already used
+     */
+    @Test
+    public void registerNewUserAccountBattleTagAlreadyUsedNOkTest(){
+
+        final UserRegistrationParameter userRegistrationParameter = new UserRegistrationParameter();
+
+        userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
+        userRegistrationParameter.setNickName(this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME));
+        userRegistrationParameter.setBlizzardId(this.factory.getUniqueRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID));
+        userRegistrationParameter.setBattleTag(this.randomUserAccount.getBattleTag());
+
+        Assertions.assertThrows(UserBattleTagAlreadyUsedException.class, () -> {
+            this.userService.registerNewUserAccount(userRegistrationParameter);
+        });
+
 
     }
 

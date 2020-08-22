@@ -1,15 +1,7 @@
 package fr.jbwittner.myguild.server.model;
 
-import java.util.List;
-
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -18,58 +10,53 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "USER_ACCOUNT" , uniqueConstraints = {
+                @UniqueConstraint(columnNames = "BLIZZARD_ID", name = "UK_BLIZZARD_ID"),
+                @UniqueConstraint(columnNames = "BATTLETAG", name = "UK_BATTLETAG"),
                 @UniqueConstraint(columnNames = "EMAIL", name = "UK_EMAIL"),
                 @UniqueConstraint(columnNames = "NICK_NAME", name = "UK_NICK_NAME")
             })
 public class UserAccount extends AbstractModel {
 
-    @Column(name = "EMAIL", nullable = false, length = 60)
-    private String email;
+    @Column(name = "BLIZZARD_ID", nullable = false)
+    private Integer blizzardId;
+
+    @Column(name = "BATTLETAG", nullable = false, length = 60)
+    private String battleTag;
 
     @Column(name = "NICK_NAME", nullable = false, length = 60)
     private String nickName;
 
-    @Column(name = "PASSWORD", nullable = false, length = 60)
-    private String password;
+    @Column(name = "EMAIL", nullable = false, length = 60)
+    private String email;
 
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled;
-
-    @ElementCollection
-    @CollectionTable(name="USER_ROLES",
-                        joinColumns=@JoinColumn(name = "USER_ACCOUNT_ID"),
-                        foreignKey = @ForeignKey(name = "FK_ACCOUNT_ID"))
-    @Column(name = "ROLES")
-    @Enumerated(EnumType.STRING)
-    private List<Roles> roles;
 
     /**
      * Default constructor
      */
     public UserAccount() {
         super();
-        this.enabled = false;
+        this.enabled = true;
     }
 
     /**
      * Constructor of User account
+     * @param blizzardId blizzard Id of the account
+     * @param battleTag battleTag of the account
      * @param email email of the account
      * @param nickName nickName of the account
-     * @param password password of the account
-     * @param enabled enable the account
-     * @param roles roles of the account
      */
-    public UserAccount(final String email, final String nickName, final String password,
-                        final boolean enabled, final List<Roles> roles) {
+    public UserAccount(final Integer blizzardId, final String battleTag, final String email, final String nickName) {
         super();
         this.email = email;
         this.nickName = nickName;
-        this.password = password;
-        this.enabled = enabled;
-        this.roles = roles;
+        this.battleTag = battleTag;
+        this.enabled = true;
+        this.blizzardId = blizzardId;
     }
 
-    /**
+	/**
      * Getter of email
      * @return email of the account
      */
@@ -102,35 +89,35 @@ public class UserAccount extends AbstractModel {
     }
 
     /**
-     * Getter of password
-     * @return password of the account
+     * Getter of battleTag
+     * @return battleTag of the account
      */
-    public String getPassword() {
-        return password;
+    public String getBattleTag() {
+        return battleTag;
     }
 
     /**
-     * Setter of password
-     * @param password password of the account
+     * Setter of battleTag
+     * @param battleTag battleTag of the account
      */
-    public void setPassword(final String password) {
-        this.password = password;
+    public void setBattleTag(String battleTag) {
+        this.battleTag = battleTag;
     }
 
     /**
-     * Getter of Roles
-     * @return List of Roles of the account
+     * Getter of blizzardId
+     * @return blizzardId of the account
      */
-    public List<Roles> getRoles() {
-        return roles;
+    public Integer getBlizzardId() {
+        return blizzardId;
     }
 
     /**
-     * Setter of Roles
-     * @param Roles List of Roles of the account
+     * Setter of blizzardId
+     * @param blizzardId blizzardId of the account
      */
-    public void setRoles(final List<Roles> roles) {
-        this.roles = roles;
+    public void setBlizzardId(Integer blizzardId) {
+        this.blizzardId = blizzardId;
     }
 
     /**
@@ -148,14 +135,36 @@ public class UserAccount extends AbstractModel {
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return "UserAccount [email=" + email + ", enabled=" + enabled + ", nickName=" + nickName + ", password="
-                + password + ", roles=" + roles + "]";
+        return "UserAccount [blizzardId=" + this.blizzardId + ", battleTag=" + battleTag + ", email=" + email + ", enabled="
+                + enabled + ", nickName=" + nickName + "]";
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj){
+        UserAccount userAccount = (UserAccount) obj;
+        boolean status = false;
+        
+        if(obj != null){
+            if(this.blizzardId.equals(userAccount.getBlizzardId())){
+                status = true;
+            } else if (this.battleTag.equals(userAccount.getBattleTag())) {
+                status = true;
+            } else if (this.email.equals(userAccount.getEmail())) {
+                status = true;
+            } else if (this.nickName.equals(userAccount.getNickName())) {
+                status = true;
+            }
+        }
+
+        return status;
+    }
 }

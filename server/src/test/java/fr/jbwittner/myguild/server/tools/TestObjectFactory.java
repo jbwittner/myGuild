@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import fr.jbwittner.myguild.server.model.Roles;
 import fr.jbwittner.myguild.server.model.UserAccount;
 
 /**
@@ -13,11 +12,13 @@ import fr.jbwittner.myguild.server.model.UserAccount;
  */
 public class TestObjectFactory {
 
-    public static final int NUMBER_MAX = 100;
+    public static final Integer NUMBER_MAX = 200;
+    public static final Integer NUMBER_MAX_BLIZZARD_ID = 100000000;
+
     public static final int LENGTH_EMAIL_NAME = 20;
     public static final int LENGTH_DOMAINE = 10;
     public static final int LENGTH_NICKNAME = 10;
-    public static final int LENGTH_PASSWORD = 20;
+    public static final int LENGTH_BATTLETAG = 20;
 
     private List<String> listRandomString = new ArrayList<>();
     private List<String> listRandomEmail = new ArrayList<>();
@@ -154,8 +155,10 @@ public class TestObjectFactory {
      * @param max Max value of random integer
      * @return integer generated
      */
-    public Integer getRandomInteger(final Integer max){
-        return (int) Math.random() * max;
+    public int getRandomInteger(final Integer max){
+        final double random = Math.random() * max;
+        final Integer value = (int) random;
+        return value;
     }
 
     /**
@@ -178,18 +181,15 @@ public class TestObjectFactory {
 
     /**
      * Generate a new user account.
+     * @param blizzardId Blizzard Id of the account
+     * @param battleTag BattleTag of the account
      * @param email email of the account
      * @param nickName nickName of the account
-     * @param password password of the account
-     * @param enabled enable the account
-     * @param roles roles of the account
      * @return user account generated
      */
-    public UserAccount createUserAccount(final String email, final String nickName,
-                                        final String password, final Boolean enabled,
-                                        final List<Roles> roles){
+    public UserAccount createUserAccount(final Integer blizzardId, final String battleTag, final String email, final String nickName){
         
-        final UserAccount userAccount = new UserAccount(email, nickName, password, enabled, roles);
+        final UserAccount userAccount = new UserAccount(blizzardId, battleTag, email, nickName);
 
         return userAccount;
     }
@@ -202,13 +202,10 @@ public class TestObjectFactory {
 
         final String email = this.getUniqueRandomEmail();
         final String nickName = this.getUniqueRandomAsciiString(LENGTH_NICKNAME);
-        final String password = this.getUniqueRandomAsciiString(LENGTH_PASSWORD);
-        final Boolean enabled = false;
-        
-        final List<Roles> roles = new ArrayList<>();
-        roles.add(Roles.ROLES_USER);
-        
-        final UserAccount userAccount = new UserAccount(email, nickName, password, enabled, roles);
+        final String battleTag = this.getUniqueRandomAsciiString(LENGTH_BATTLETAG);
+        final Integer blizzardId = this.getRandomInteger(NUMBER_MAX_BLIZZARD_ID);
+                
+        final UserAccount userAccount = new UserAccount(blizzardId, battleTag, email, nickName);
 
         return userAccount;
     }

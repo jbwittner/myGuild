@@ -19,7 +19,7 @@ logging:
     org:
       apache: INFO
       springframework:
-        security: INFO
+        security: DEBUG
         data: INFO
 
 server:

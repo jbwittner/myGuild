@@ -16,12 +16,15 @@ public class UserRegistrationParameter {
      
     @NotNull
     @NotEmpty
-    private String password;
-     
-    @NotNull
-    @NotEmpty
     @ValidEmail
     private String email;
+
+    @NotNull
+    @NotEmpty
+    private String battleTag;
+
+    @NotNull
+    private Integer blizzardId;
 
     /**
      * Getter of the nick name
@@ -40,22 +43,6 @@ public class UserRegistrationParameter {
     }
 
     /**
-     * Getter of the password
-     * @return password of the account
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Setter of the password
-     * @param password password of the account
-     */
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
-    /**
      * Getter of the email
      * @return email of the account
      */
@@ -69,6 +56,38 @@ public class UserRegistrationParameter {
      */
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    /**
+     * Getter of blizzardId
+     * @return id used of the account by Blizzard
+     */
+    public Integer getBlizzardId() {
+        return blizzardId;
+    }
+
+    /**
+     * Setter of blizzardId
+     * @param blizzardId id used of the account by Blizzard
+     */
+    public void setBlizzardId(Integer blizzardId) {
+        this.blizzardId = blizzardId;
+    }
+
+    /**
+     * Getter of battletag
+     * @return battletag of the account
+     */
+    public String getBattletag() {
+        return this.battleTag;
+    }
+
+    /**
+     * Setter of battletag
+     * @param battletag battletag of the account
+     */
+    public void setBattleTag(String battleTag) {
+        this.battleTag = battleTag;
     }
      
 }

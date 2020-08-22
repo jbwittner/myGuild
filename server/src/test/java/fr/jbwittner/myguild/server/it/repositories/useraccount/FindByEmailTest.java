@@ -39,7 +39,7 @@ public class FindByEmailTest extends MotherUserAccountRepositoryTest {
      */
     @Test
     public void findByEmailNotExistTestOk(){
-        final String randomString = this.factory.getUniqueRandomAsciiString(10);
+        final String randomString = this.factory.getUniqueRandomEmail();
 
         final UserAccount UserAccount = this.userAccountRepository.findByEmail(randomString);
 
