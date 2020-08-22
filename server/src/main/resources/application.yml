@@ -1,4 +1,7 @@
-Application:
+application:
+  server:
+    port: 2142
+    url: http://localhost
   db-param:
     host: localhost
     port: 3306
@@ -20,17 +23,37 @@ logging:
         data: INFO
 
 server:
-  port : 2142
+  port : ${application.server.port}
 
 spring:
   jpa:
-    database-platform : org.hibernate.dialect.MySQLDialect
+    database-platform : org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-
+  security:
+    oauth2:
+      client:
+        registration:
+          oauth-blizard:
+            client-id: 154f1ea2fa934b02a608eb6027cf527e
+            client-secret: ARdKjDop8uMrjlnjzBfEOiK69lUeFB9e
+            client-name: testpourmanagementdeguilde
+            provider: blizzard
+            scope: wow.profile
+            redirect-uri: "${application.server.url}:${application.server.port}/login/oauth2/code/oauth-blizard"
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code 
+        provider:
+          blizzard:
+            issuer-uri: https://eu.battle.net/oauth
+            authorization-uri: https://eu.battle.net/oauth/authorize
+            token-uri: https://eu.battle.net/oauth/token
+            user-info-uri: https://eu.battle.net/oauth/userinfo
+            user-name-attribute: battletag
+  
   datasource:
     url: jdbc:mysql://${application.db-param.host}:${application.db-param.port}/${application.db-param.db-name}
     databaseName: ${application.db-param.db-name}
