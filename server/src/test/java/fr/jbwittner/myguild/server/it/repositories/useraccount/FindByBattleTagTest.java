@@ -10,17 +10,17 @@ import fr.jbwittner.myguild.server.tools.TestObjectFactory;
 /**
  * Class to check the findByType method of AccountTypeRepository
  */
-public class FindByNickNameTest extends MotherUserAccountRepositoryTest {
+public class FindByBattleTagTest extends MotherUserAccountRepositoryTest {
 
     /**
      * Test to check the findBy method when the UserAccount is in the database
      */
     @Test
-    public void findByNickNameTestOk(){
+    public void findByBattleTagTestOk(){
         UserAccount userAccountSaved;
 
         for(final UserAccount userAccount: this.userAccountList){
-            userAccountSaved = this.userAccountRepository.findByNickName(userAccount.getNickName());
+            userAccountSaved = this.userAccountRepository.findByBattleTag(userAccount.getBattleTag());
             Assertions.assertEquals(userAccount, userAccountSaved);
         }
     }
@@ -29,8 +29,8 @@ public class FindByNickNameTest extends MotherUserAccountRepositoryTest {
      * Test to check the findBy method when the UserAccount the input is null
      */
     @Test
-    public void findByNickNameNullTestNOk(){
-        final UserAccount UserAccount = this.userAccountRepository.findByNickName(null);
+    public void findByBattleTagNullTestOk(){
+        final UserAccount UserAccount = this.userAccountRepository.findByBattleTag(null);
 
         Assertions.assertNull(UserAccount);
     }
@@ -39,10 +39,10 @@ public class FindByNickNameTest extends MotherUserAccountRepositoryTest {
      * Test to check the findBy method when the UserAccount is not in the database
      */
     @Test
-    public void findByNickNameNotExistTestOk(){
-        final String randomString = this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_NICKNAME);
+    public void findByBattleTagNotExistTestOk(){
+        final String randomString = this.factory.getUniqueRandomAsciiString(TestObjectFactory.LENGTH_BATTLETAG);
 
-        final UserAccount UserAccount = this.userAccountRepository.findByNickName(randomString);
+        final UserAccount UserAccount = this.userAccountRepository.findByBattleTag(randomString);
 
         Assertions.assertNull(UserAccount);
     }

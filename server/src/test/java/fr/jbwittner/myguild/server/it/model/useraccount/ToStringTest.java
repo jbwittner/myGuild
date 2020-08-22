@@ -10,6 +10,7 @@ import fr.jbwittner.myguild.server.model.UserAccount;
  * Class to test toString method of UserAccount
  */
 public class ToStringTest extends AbstractMotherIntegrationTest {
+    
 
     /**
      * {@inheritDoc}
@@ -24,9 +25,9 @@ public class ToStringTest extends AbstractMotherIntegrationTest {
     public void createUserAccountTestOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
-        String toStringExpectex = "UserAccount [email=" + userAccount.getEmail() + ", enabled=" + userAccount.isEnabled();
-        toStringExpectex = toStringExpectex + ", nickName=" + userAccount.getNickName() + ", password=";
-        toStringExpectex = toStringExpectex + userAccount.getPassword() + ", roles=" + userAccount.getRoles()+ "]";
+        String toStringExpectex = "UserAccount [blizzardId=" + userAccount.getBlizzardId() + ", battleTag=" + userAccount.getBattleTag();
+        toStringExpectex = toStringExpectex + ", email=" + userAccount.getEmail() + ", enabled=" + userAccount.isEnabled();
+        toStringExpectex = toStringExpectex + ", nickName=" + userAccount.getNickName() + "]";
 
         Assertions.assertEquals(toStringExpectex, userAccount.toString());
     }
