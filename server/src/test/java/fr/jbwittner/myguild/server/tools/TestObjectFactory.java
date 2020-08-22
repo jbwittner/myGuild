@@ -13,7 +13,7 @@ import fr.jbwittner.myguild.server.model.UserAccount;
 public class TestObjectFactory {
 
     public static final Integer NUMBER_MAX = 200;
-    public static final Integer NUMBER_MAX_BLIZZARD_ID = 100000000;
+    public static final Integer NUMBER_MAX_BLIZZARD_ID = 100_000_000;
 
     public static final int LENGTH_EMAIL_NAME = 20;
     public static final int LENGTH_DOMAINE = 10;

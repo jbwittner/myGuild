@@ -70,7 +70,7 @@ public class UserRegistrationParameter {
      * Setter of blizzardId
      * @param blizzardId id used of the account by Blizzard
      */
-    public void setBlizzardId(Integer blizzardId) {
+    public void setBlizzardId(final Integer blizzardId) {
         this.blizzardId = blizzardId;
     }
 
@@ -86,7 +86,7 @@ public class UserRegistrationParameter {
      * Setter of battletag
      * @param battletag battletag of the account
      */
-    public void setBattleTag(String battleTag) {
+    public void setBattleTag(final String battleTag) {
         this.battleTag = battleTag;
     }
      

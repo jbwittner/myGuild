@@ -100,7 +100,7 @@ public class UserAccount extends AbstractModel {
      * Setter of battleTag
      * @param battleTag battleTag of the account
      */
-    public void setBattleTag(String battleTag) {
+    public void setBattleTag(final String battleTag) {
         this.battleTag = battleTag;
     }
 
@@ -116,7 +116,7 @@ public class UserAccount extends AbstractModel {
      * Setter of blizzardId
      * @param blizzardId blizzardId of the account
      */
-    public void setBlizzardId(Integer blizzardId) {
+    public void setBlizzardId(final Integer blizzardId) {
         this.blizzardId = blizzardId;
     }
 
@@ -149,8 +149,8 @@ public class UserAccount extends AbstractModel {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj){
-        UserAccount userAccount = (UserAccount) obj;
+    public boolean equals(final Object obj){
+        final UserAccount userAccount = (UserAccount) obj;
         boolean status = false;
         
         if(obj != null){
