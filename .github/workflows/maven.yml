@@ -95,15 +95,7 @@ jobs:
       
     - name: Test with Maven
       run: mvn -B test --file pom.xml
-    
-    - name: Codecov
-      uses: codecov/codecov-action@v1.0.7
-      with:
-        # User defined upload name. Visible in Codecov UI
-        name: $GITHUB_ACTOR
-        # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
-        flags: integration_test
-  
+
   coverage:
     needs: [test]
     runs-on: ubuntu-18.04
