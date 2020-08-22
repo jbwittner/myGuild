@@ -154,13 +154,13 @@ public class UserAccount extends AbstractModel {
         boolean status = false;
         
         if(obj != null){
-            if(this.blizzardId.equals(userAccount.getBlizzardId())){
-                status = true;
-            } else if (this.battleTag.equals(userAccount.getBattleTag())) {
-                status = true;
-            } else if (this.email.equals(userAccount.getEmail())) {
-                status = true;
-            } else if (this.nickName.equals(userAccount.getNickName())) {
+
+            final boolean isBlizzardIdEquals = this.blizzardId.equals(userAccount.getBlizzardId());
+            final boolean isBattleTagEquals = this.battleTag.equals(userAccount.getBattleTag());
+            final boolean isEmailEquals = this.email.equals(userAccount.getEmail());
+            final boolean isNickNameEquals = this.nickName.equals(userAccount.getNickName());
+
+            if(isBlizzardIdEquals && isBattleTagEquals && isEmailEquals && isNickNameEquals){
                 status = true;
             }
         }

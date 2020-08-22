@@ -10,6 +10,7 @@ import fr.jbwittner.myguild.server.model.UserAccount;
  * Class to test toString method of UserAccount
  */
 public class ToStringTest extends AbstractMotherIntegrationTest {
+    
 
     /**
      * {@inheritDoc}
