@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import fr.jbwittner.myguild.server.model.TokenResponse;
+import fr.jbwittner.myguild.server.service.oauth2.models.TokenResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

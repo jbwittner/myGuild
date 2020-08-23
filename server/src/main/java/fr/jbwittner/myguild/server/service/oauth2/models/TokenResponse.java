@@ -1,4 +1,4 @@
-package fr.jbwittner.myguild.server.model;
+package fr.jbwittner.myguild.server.service.oauth2.models;
 
 /**
  * POJO for reading in the oAuth2 access token response from https://_region_.battle.net/oauth/token .
