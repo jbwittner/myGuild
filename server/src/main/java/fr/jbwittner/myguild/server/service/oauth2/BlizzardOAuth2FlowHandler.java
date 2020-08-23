@@ -37,13 +37,21 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
 
     private static final String ENCODING = "UTF-8";
 
-    @Autowired
     private ObjectMapper objectMapper;
 
     private String token = null;
     private Instant tokenExpiry = null; // Instant when the token will expire
 
     private final Object tokenLock = new Object();
+
+    /**
+     * Constructor of BlizzardOAuth2FlowHandler
+     * @param objectMapper ObjectMapper provides functionality for reading and writing JSON
+     */
+    @Autowired
+    public BlizzardOAuth2FlowHandler(final ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * {@inheritDoc}
@@ -53,29 +61,30 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
         if(isTokenInvalid()){
             logger.info("Fetching/Creating token.");
 
-            String encodedCredentials = Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
+            final String encodedCredentials = Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
 
             // ------------------------------------------------- Allows testing/mocking of the URL connection object
             HttpURLConnection con = null;
 
             try{
-            URL url = new URL(this.tockenUrl);
+            final URL url = new URL(this.tockenUrl);
+
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", String.format("Basic %s", encodedCredentials));
             con.setDoOutput(true);
             con.getOutputStream().write("grant_type=client_credentials".getBytes(BlizzardOAuth2FlowHandler.ENCODING));
 
-            int responseCode = con.getResponseCode();
+            final int responseCode = con.getResponseCode();
             logger.info(String.format("Sent 'POST' to %s requesting access token via client credentials grant type.", url));
             logger.info(String.format("Result code: %s", responseCode));
 
-            String response = IOUtils.toString(con.getInputStream(), BlizzardOAuth2FlowHandler.ENCODING);
+            final String response = IOUtils.toString(con.getInputStream(), BlizzardOAuth2FlowHandler.ENCODING);
 
             logger.debug(String.format("Response: %s", response));
 
             // Reads the JSON response and converts it to TokenResponse class or throws an exception
-            TokenResponse tokenResponse = objectMapper.readValue(response, TokenResponse.class);
+            final TokenResponse tokenResponse = objectMapper.readValue(response, TokenResponse.class);
             synchronized (tokenLock) {
                 tokenExpiry = Instant.now().plusSeconds(tokenResponse.getExpires_in());
                 token = tokenResponse.getAccess_token();
@@ -97,14 +106,18 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
      */
     @Override
     public boolean isTokenInvalid(){
+        Boolean value;
+
         synchronized (tokenLock) {
             if (token == null) {
-                return true;
+                value = true;
+            }else if (tokenExpiry == null) {
+                value = true;
+            }else{
+                value = Instant.now().isAfter(tokenExpiry);
             }
-            if (tokenExpiry == null) {
-                return true;
-            }
-            return Instant.now().isAfter(tokenExpiry);
+            return value;
         }
     }
+
 }
