@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.jbwittner</groupId>
+    <groupId>fr.opendoha</groupId>
     <artifactId>myguild-server</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -13,7 +13,7 @@
     <name>${application.name} - ${application.service}</name>
 
     <parent>
-        <groupId>fr.jbwittner</groupId>
+        <groupId>fr.opendoha</groupId>
         <artifactId>myguild</artifactId>
         <version>0.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
