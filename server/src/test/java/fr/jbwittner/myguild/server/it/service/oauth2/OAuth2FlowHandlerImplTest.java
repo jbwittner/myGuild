@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -14,29 +13,32 @@ import fr.jbwittner.myguild.server.service.oauth2.BlizzardOAuth2FlowHandler;
 import fr.jbwittner.myguild.server.service.oauth2.models.TokenResponse;
 import fr.jbwittner.myguild.server.tools.HttpHelper;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLStreamHandler;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 import fr.jbwittner.myguild.server.it.AbstractMotherIntegrationTest;
 
-import static org.mockito.Mockito.*;
-
+/**
+ * Test for BlizzardOAuth2FlowHandler
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
 
     @Mock
     private ObjectMapper objectMapper;
-
-    @Mock
-    private HttpURLConnection mockHttpConnection;
 
     @InjectMocks
     private BlizzardOAuth2FlowHandler blizzardOAuth2FlowHandler;
@@ -44,8 +46,14 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
     @Override
     public void initDataBeforeEach(){}
 
+    /**
+     * Test to get a new token
+     * @throws IOException
+     * @throws NoSuchFieldException
+     * @throws Exception
+     */
     @Test
-    public void getTokenFreshGoldenPath() throws IOException, NoSuchFieldException, Exception {
+    public void testGetNewTokenOk() throws IOException, NoSuchFieldException, Exception {
         final String token = "exampleToken";
         final OutputStream outputStream = mock(OutputStream.class);
         final TokenResponse mockTokenResponse = mock(TokenResponse.class);
@@ -53,12 +61,12 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
         final URL mockUrl = mock(URL.class);
         final HttpHelper mockHttpHelper = mock(HttpHelper.class);
 
-        String clientId = "someClientId";
-        String clientSecret = "someClientSecret";
-        String encodeFormat = "UTF-8";
-        int responseCode = 200;
+        final String clientId = "someClientId";
+        final String clientSecret = "someClientSecret";
+        final String encodeFormat = "UTF-8";
+        final int responseCode = 200;
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
             String.format("{'access_token':'%s', 'expires_in':'1'}", token).getBytes("UTF-8")
         );
 
@@ -93,13 +101,15 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
         verify(mockUrlConnection, times(1)).setDoOutput(true);
         verify(outputStream, times(1)).write("grant_type=client_credentials".getBytes(encodeFormat));
         verify(mockUrlConnection, times(1)).getResponseCode();
-
-
     }
     
-
+    /**
+     * Test to get the current valid token
+     * @throws NoSuchFieldException
+     * @throws IOException
+     */
     @Test
-    public void getTokenCachedGoldenPath() throws NoSuchFieldException, IOException {
+    public void testGetNotExpiredTokenOk() throws NoSuchFieldException, IOException {
         final String token = "myCachedToken";
         // Cached token condition and setting the token
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
@@ -108,29 +118,45 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
         Assert.assertEquals(token, blizzardOAuth2FlowHandler.getToken());
     }
 
+    /**
+     * Test to check if the token is valid because it has not expired 
+     * @throws NoSuchFieldException
+     */
     @Test
-    public void isTokenInvalidGoldenPath() throws NoSuchFieldException {
+    public void testIsTokenInvalidWithValidTokenOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assert.assertFalse(blizzardOAuth2FlowHandler.isTokenInvalid());
     }
 
+    /**
+     * Test to check if the token is not valid
+     * @throws NoSuchFieldException
+     */
     @Test
-    public void isTokenInvalidNullToken() throws NoSuchFieldException {
+    public void testIsTokenInvalidWithNullTokenOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), null);
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), null);
         Assert.assertTrue(blizzardOAuth2FlowHandler.isTokenInvalid());
     }
 
+    /**
+     * Test to check if the token is valid
+     * @throws NoSuchFieldException
+     */
     @Test
-    public void isTokenInvalidExpiredTokenExpiry() throws NoSuchFieldException {
+    public void testIsTokenInvalidExpiredTokenExpiryOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.EPOCH);
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assert.assertTrue(blizzardOAuth2FlowHandler.isTokenInvalid());
     }
 
+    /**
+     * Test to check if the token is valid
+     * @throws NoSuchFieldException
+     */
     @Test
-    public void isTokenInvalidNullTokenExpiry() throws NoSuchFieldException {
+    public void testIsTokenInvalidNullTokenExpiryOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), null);
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assert.assertTrue(blizzardOAuth2FlowHandler.isTokenInvalid());
