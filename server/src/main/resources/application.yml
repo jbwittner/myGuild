@@ -13,13 +13,16 @@ logging:
   level:
     fr.jbwittner.myguild.server:
       MyGuildApplication: INFO
+      service.oauth2:
+        BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 
         GeneralInterceptor: INFO
         ServiceInterceptor: INFO
     org:
       apache: INFO
       springframework:
-        security: DEBUG
+        web.client.RestTemplate: INFO
+        security: INFO
         data: INFO
 
 server:
