@@ -11,7 +11,7 @@ application:
 
 logging:
   level:
-    fr.jbwittner.myguild.server:
+    fr.opendoha.myguild.server:
       MyGuildApplication: INFO
       service.oauth2:
         BlizzardOAuth2FlowHandler: INFO

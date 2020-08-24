@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>fr.jbwittner</groupId>
+    <groupId>fr.opendoha</groupId>
     <artifactId>myguild</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <name>myGuild</name>
