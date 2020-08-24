@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import fr.jbwittner.myguild.server.service.oauth2.models.TokenResponse;
+import fr.jbwittner.myguild.server.tools.HttpHelper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -44,6 +45,8 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
 
     private final Object tokenLock = new Object();
 
+    private HttpHelper httpHelper = new HttpHelper();
+
     /**
      * Constructor of BlizzardOAuth2FlowHandler
      * @param objectMapper ObjectMapper provides functionality for reading and writing JSON
@@ -51,6 +54,13 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
     @Autowired
     public BlizzardOAuth2FlowHandler(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * @param httpHelper the httpHelper to set
+     */
+    public void setHttpHelper(HttpHelper httpHelper) {
+        this.httpHelper = httpHelper;
     }
 
     /**
@@ -67,7 +77,7 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
             HttpURLConnection con = null;
 
             try{
-            final URL url = new URL(this.tockenUrl);
+            final URL url = httpHelper.getUrl(this.tockenUrl);
 
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
