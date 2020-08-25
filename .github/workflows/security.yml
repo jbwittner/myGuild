@@ -25,6 +25,6 @@ jobs:
     - name: Snyk
       # You may pin to the exact commit or the version.
       # uses: snyk/actions@636d44c7ccc65571d778ddb10dddc244db6e4a61
-      uses: snyk/actions@0.1.1
+      uses: snyk/actions/maven-3-jdk-11@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
