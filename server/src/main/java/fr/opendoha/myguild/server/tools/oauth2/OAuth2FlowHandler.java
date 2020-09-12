@@ -1,4 +1,4 @@
-package fr.opendoha.myguild.server.service.oauth2;
+package fr.opendoha.myguild.server.tools.oauth2;
 
 import java.io.IOException;
 

@@ -5,6 +5,12 @@ Application:
     db-name: myGuild_db
     user: myGuild_user
     password: MyGuildPass2020
+  blizzard:
+    wow:
+      delay-ms: 11
+      game-data:
+        base-uri: https://eu.api.blizzard.com/data/wow
+        namespace: static-eu
 
 logging:
   level:

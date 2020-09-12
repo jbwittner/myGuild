@@ -22,7 +22,7 @@ public class ToStringTest extends AbstractMotherIntegrationTest {
      * Test of toString
      */
     @Test
-    public void createUserAccountTestOk(){
+    public void testToStringOk(){
         final UserAccount userAccount = this.factory.createUserAccount();
 
         String toStringExpectex = "UserAccount [blizzardId=" + userAccount.getBlizzardId() + ", battleTag=" + userAccount.getBattleTag();

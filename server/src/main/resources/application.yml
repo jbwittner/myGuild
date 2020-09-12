@@ -8,13 +8,22 @@ application:
     db-name: myGuild_db
     user: myGuild_user
     password: MyGuildPass2020
+  blizzard:
+    wow:
+      delay-ms: 11
+      game-data:
+        base-uri: https://eu.api.blizzard.com/data/wow
+        namespace: static-eu
+
 
 logging:
   level:
     fr.opendoha.myguild.server:
       MyGuildApplication: INFO
-      service.oauth2:
-        BlizzardOAuth2FlowHandler: INFO
+      service:
+        BlizzardGameData: DEBUG
+        oauth2:
+          BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 
         GeneralInterceptor: INFO
         ServiceInterceptor: INFO
@@ -30,6 +39,7 @@ server:
 
 spring:
   jpa:
+    show-sql: true
     database-platform : org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create-drop

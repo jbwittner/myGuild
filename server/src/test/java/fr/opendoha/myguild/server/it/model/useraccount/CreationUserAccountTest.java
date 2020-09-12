@@ -12,7 +12,7 @@ import fr.opendoha.myguild.server.repository.UserAccountRepository;
 /**
  * Test class for creation of Account type
  */
-public class CreationUserAccountModelTest extends AbstractMotherIntegrationTest {
+public class CreationUserAccountTest extends AbstractMotherIntegrationTest {
 
     @Autowired
     UserAccountRepository userAccountRepository;

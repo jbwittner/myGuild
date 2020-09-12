@@ -1,4 +1,4 @@
-package fr.opendoha.myguild.server.service.oauth2;
+package fr.opendoha.myguild.server.tools.oauth2;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import fr.opendoha.myguild.server.service.oauth2.models.TokenResponse;
+import fr.opendoha.myguild.server.tools.oauth2.models.TokenResponse;
 import fr.opendoha.myguild.server.tools.HttpHelper;
 
 import java.io.IOException;
@@ -45,15 +45,18 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
 
     private final Object tokenLock = new Object();
 
-    private HttpHelper httpHelper = new HttpHelper();
+    private HttpHelper httpHelper;
 
     /**
      * Constructor of BlizzardOAuth2FlowHandler
      * @param objectMapper ObjectMapper provides functionality for reading and writing JSON
      */
     @Autowired
-    public BlizzardOAuth2FlowHandler(final ObjectMapper objectMapper) {
+    public BlizzardOAuth2FlowHandler(
+        final ObjectMapper objectMapper,
+        final HttpHelper httpHelper) {
         this.objectMapper = objectMapper;
+        this.httpHelper = httpHelper;
     }
 
     /**

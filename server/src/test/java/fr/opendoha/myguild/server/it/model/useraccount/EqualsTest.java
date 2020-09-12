@@ -32,6 +32,14 @@ public class EqualsTest extends AbstractMotherIntegrationTest {
     }
 
     /**
+     * Test a null
+     */
+    @Test
+    public void isNotEqualsNullOk(){
+        Assertions.assertNotEquals(this.userAccountOne, null);
+    }
+
+    /**
      * Test with the same battle tag
      */
     @Test

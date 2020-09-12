@@ -32,4 +32,10 @@ public abstract class AbstractModel {
     @Override
     public abstract String toString();
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract boolean equals(final Object obj);
+
 }

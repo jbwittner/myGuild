@@ -39,6 +39,6 @@ To merge the pull request all actions need to passe.
 
 One of the action is a static check of the code. We used PMD (https://pmd.github.io/).
 
-To check the code, run the command `mvn pmd:pmd` and check if the file pmd.hmtml on the folder `target/site` exist. **All remarks must be taken into account**
+To check the code, run the command `mvn pmd:pmd` and check if the file pmd.html on the folder `target/site` exist. **All remarks must be taken into account**
 
 Finally a manual validation of the pull request is necessary.

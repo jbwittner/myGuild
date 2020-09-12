@@ -1,4 +1,4 @@
-package fr.opendoha.myguild.server.it.service.oauth2;
+package fr.opendoha.myguild.server.it.tools.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -26,8 +26,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 import fr.opendoha.myguild.server.it.AbstractMotherIntegrationTest;
-import fr.opendoha.myguild.server.service.oauth2.BlizzardOAuth2FlowHandler;
-import fr.opendoha.myguild.server.service.oauth2.models.TokenResponse;
+import fr.opendoha.myguild.server.tools.oauth2.BlizzardOAuth2FlowHandler;
+import fr.opendoha.myguild.server.tools.oauth2.models.TokenResponse;
 import fr.opendoha.myguild.server.tools.HttpHelper;
 
 /**
