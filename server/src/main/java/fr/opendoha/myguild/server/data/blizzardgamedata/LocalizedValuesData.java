@@ -1,9 +1,9 @@
-package fr.opendoha.myguild.server.parameters.blizzardgamedata;
+package fr.opendoha.myguild.server.data.blizzardgamedata;
 
 /**
- * DTO used for the internationalized values
+ * Data used for the internationalized values
  */
-public class LocalizedValuesDTO {
+public class LocalizedValuesData {
 
     private String en_US;
     private String fr_FR;
@@ -26,7 +26,7 @@ public class LocalizedValuesDTO {
 
     @Override
     public String toString() {
-        return "LocalizedValuesDTO [en_US=" + en_US + ", fr_FR=" + fr_FR + "]";
+        return "LocalizedValuesData [en_US=" + en_US + ", fr_FR=" + fr_FR + "]";
     }
 
 }

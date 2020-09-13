@@ -14,12 +14,12 @@ import fr.opendoha.myguild.server.model.blizzard.LocalizedString;
 import fr.opendoha.myguild.server.model.blizzard.PlayableClass;
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.IndexDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassesDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationsDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.SpecializationRoleDTO;
+import fr.opendoha.myguild.server.data.blizzardgamedata.IndexData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassesData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationsData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.SpecializationRoleData;
 import fr.opendoha.myguild.server.repository.blizzard.PlayableClassRepository;
 import fr.opendoha.myguild.server.repository.blizzard.PlayableSpecializationRepository;
 import fr.opendoha.myguild.server.repository.blizzard.SpecializationRoleRepository;
@@ -151,28 +151,28 @@ public class BlizzardGameData implements IBlizzardGameData{
         String token = this.blizzaOAuth2FlowHandler.getToken();
         String uri = this.baseUri + "/playable-class/index?namespace=" + this.namespace + "&locale=en_US&access_token=" + token;
 
-        final PlayableClassesDTO playableClassesDTO = this.httpHelper.getForObject(uri,PlayableClassesDTO.class);
+        final PlayableClassesData playableClassesData = this.httpHelper.getForObject(uri,PlayableClassesData.class);
 
-        for(final IndexDTO indexDTO : playableClassesDTO.getClasses()){
+        for(final IndexData indexData : playableClassesData.getClasses()){
             
             token = this.blizzaOAuth2FlowHandler.getToken();
-            uri = this.baseUri + "/playable-class/" + indexDTO.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + token;
+            uri = this.baseUri + "/playable-class/" + indexData.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + token;
 
-            final PlayableClassDTO playableClassDTO = this.httpHelper.getForObject(uri,PlayableClassDTO.class);
+            final PlayableClassData playableClassData = this.httpHelper.getForObject(uri,PlayableClassData.class);
 
-            updateClass(playableClassDTO);
+            updateClass(playableClassData);
 
         }
 
     }
 
-    private void updateClass(final PlayableClassDTO playableClassDTO) {
+    private void updateClass(final PlayableClassData playableClassData) {
         final LocalizedString localizedString = new LocalizedString();
         PlayableClass playableClass;
         Optional<PlayableClass> optionalPlayableClass;
 
         //Get the optional for the playable class
-        optionalPlayableClass = this.playableClassRepository.findById(playableClassDTO.getId());
+        optionalPlayableClass = this.playableClassRepository.findById(playableClassData.getId());
 
         //If the id is already used, we update the model, otherwise we create model
         if(optionalPlayableClass.isPresent()){
@@ -180,11 +180,11 @@ public class BlizzardGameData implements IBlizzardGameData{
             playableClass.setIsUdpated(true);
         } else {
             playableClass = new PlayableClass();
-            playableClass.setId(playableClassDTO.getId());
+            playableClass.setId(playableClassData.getId());
         }
 
         //We already update the localized string
-        localizedString.builderFromDTO(playableClassDTO.getName());
+        localizedString.builderFromData(playableClassData.getName());
         playableClass.setNames(localizedString);
         
         this.playableClassRepository.save(playableClass);
@@ -195,62 +195,62 @@ public class BlizzardGameData implements IBlizzardGameData{
         String token = this.blizzaOAuth2FlowHandler.getToken();
         String uri = this.baseUri + "/playable-specialization/index?namespace=" + this.namespace + "&locale=en_US&access_token=" + token;
 
-        final PlayableSpecializationsDTO playableSpecializationsDTO = this.httpHelper.getForObject(uri,PlayableSpecializationsDTO.class);
+        final PlayableSpecializationsData playableSpecializationsData = this.httpHelper.getForObject(uri,PlayableSpecializationsData.class);
 
-        PlayableSpecializationDTO playableSpecializationDTO;
+        PlayableSpecializationData playableSpecializationData;
 
-        for(final IndexDTO indexDTO : playableSpecializationsDTO.getCharacter_specializations()){
+        for(final IndexData indexData : playableSpecializationsData.getCharacter_specializations()){
             
             token = this.blizzaOAuth2FlowHandler.getToken();
-            uri = this.baseUri + "/playable-specialization/" + indexDTO.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + token;
+            uri = this.baseUri + "/playable-specialization/" + indexData.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + token;
 
-            playableSpecializationDTO = this.httpHelper.getForObject(uri,PlayableSpecializationDTO.class);
+            playableSpecializationData = this.httpHelper.getForObject(uri,PlayableSpecializationData.class);
 
-            updateSpecializationRole(playableSpecializationDTO.getRole());
-            updateSpecialization(playableSpecializationDTO);
+            updateSpecializationRole(playableSpecializationData.getRole());
+            updateSpecialization(playableSpecializationData);
 
         }
 
     }
 
-    private void updateSpecializationRole(final SpecializationRoleDTO specializationRoleDTO){
+    private void updateSpecializationRole(final SpecializationRoleData specializationRoleData){
         final LocalizedString localizedString = new LocalizedString();
         SpecializationRole specializationRole;
         Boolean dataAlreadyExist;
         
 
         //Get the optional for the playable class
-        dataAlreadyExist = this.specializationRoleRepository.existsByType(specializationRoleDTO.getType());
+        dataAlreadyExist = this.specializationRoleRepository.existsByType(specializationRoleData.getType());
         
 
         //If the id is already used, we update the model, otherwise we create model
         if(dataAlreadyExist){
-            specializationRole = this.specializationRoleRepository.findByType(specializationRoleDTO.getType());
+            specializationRole = this.specializationRoleRepository.findByType(specializationRoleData.getType());
             specializationRole.setIsUdpated(true);
         } else {
             specializationRole = new SpecializationRole();
             Integer index;
 
-            if(this.specializationRoleRepository.findTopByOrderByIdDesc() == null){
+            if(this.specializationRoleRepository.finDatapByOrderByIdDesc() == null){
                 index = 0;
             } else {
-                index = this.specializationRoleRepository.findTopByOrderByIdDesc().getId();
+                index = this.specializationRoleRepository.finDatapByOrderByIdDesc().getId();
             }
             index = index + 1;
             specializationRole.setId(index);
         }
 
         //We already update the localized string
-        localizedString.builderFromDTO(specializationRoleDTO.getName());
+        localizedString.builderFromData(specializationRoleData.getName());
             
         specializationRole.setNames(localizedString);
-        specializationRole.setType(specializationRoleDTO.getType());
+        specializationRole.setType(specializationRoleData.getType());
         
         this.specializationRoleRepository.save(specializationRole);
 
     }
 
-    private void updateSpecialization(final PlayableSpecializationDTO playableSpecializationDTO) {
+    private void updateSpecialization(final PlayableSpecializationData playableSpecializationData) {
         final LocalizedString localizedString = new LocalizedString();
         
         PlayableSpecialization playableSpecialization;
@@ -259,7 +259,7 @@ public class BlizzardGameData implements IBlizzardGameData{
         SpecializationRole specializationRole;
 
         //Get the optional for the playable specialization class
-        optionalPlayableSpecialization = this.playableSpecializationRepository.findById(playableSpecializationDTO.getId());
+        optionalPlayableSpecialization = this.playableSpecializationRepository.findById(playableSpecializationData.getId());
 
         //If the id is already used, we update the model, otherwise we create model
         if(optionalPlayableSpecialization.isPresent()){
@@ -267,18 +267,18 @@ public class BlizzardGameData implements IBlizzardGameData{
             playableSpecialization.setIsUdpated(true);
         } else {
             playableSpecialization = new PlayableSpecialization();
-            playableSpecialization.setId(playableSpecializationDTO.getId());
+            playableSpecialization.setId(playableSpecializationData.getId());
         }
 
         //We already update the localized string
-        localizedString.builderFromDTO(playableSpecializationDTO.getName());
+        localizedString.builderFromData(playableSpecializationData.getName());
         playableSpecialization.setNames(localizedString);
 
-        playableClass = this.playableClassRepository.findById(playableSpecializationDTO.getPlayable_class().getId()).get();
+        playableClass = this.playableClassRepository.findById(playableSpecializationData.getPlayable_class().getId()).get();
 
         playableSpecialization.setPlayableClass(playableClass);
 
-        specializationRole = this.specializationRoleRepository.findByType(playableSpecializationDTO.getRole().getType());
+        specializationRole = this.specializationRoleRepository.findByType(playableSpecializationData.getRole().getType());
 
         playableSpecialization.setSpecializationRole(specializationRole);
         

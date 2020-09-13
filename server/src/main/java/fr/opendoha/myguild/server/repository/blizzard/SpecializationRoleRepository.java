@@ -26,6 +26,6 @@ public interface SpecializationRoleRepository extends AbstractRepository<Special
      * Method to get the specialization role with the bigger id
      * @return specialization role with the biggest id
      */
-    SpecializationRole findTopByOrderByIdDesc();
+    SpecializationRole finDatapByOrderByIdDesc();
     
 }

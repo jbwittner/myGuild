@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.IndexDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassesDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationsDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.SpecializationRoleDTO;
+import fr.opendoha.myguild.server.data.blizzardgamedata.IndexData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassesData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationsData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.SpecializationRoleData;
 import fr.opendoha.myguild.server.it.AbstractMotherIntegrationTest;
 
 import fr.opendoha.myguild.server.repository.blizzard.PlayableClassRepository;
@@ -65,12 +65,12 @@ public class MotherBlizzardGameDataTest extends AbstractMotherIntegrationTest {
     @Autowired
     protected PlayableClassRepository playableClassRepository;
 
-    protected List<PlayableClassDTO> listPlayableClassDTO;
-    protected List<PlayableSpecializationDTO> listPlayableSpecializationDTO;
-    protected List<SpecializationRoleDTO> listSpecializationRoleDTO;
+    protected List<PlayableClassData> listPlayableClassData;
+    protected List<PlayableSpecializationData> listPlayableSpecializationData;
+    protected List<SpecializationRoleData> listSpecializationRoleData;
 
-    protected PlayableClassesDTO playableClassesDTO;
-    protected PlayableSpecializationsDTO playableSpecializationsDTO;
+    protected PlayableClassesData playableClassesData;
+    protected PlayableSpecializationsData playableSpecializationsData;
 
     protected String tokenValue;
 
@@ -96,26 +96,26 @@ public class MotherBlizzardGameDataTest extends AbstractMotherIntegrationTest {
     }
 
     /**
-     * Method used to mock the DTO
+     * Method used to mock the Data
      */
-    protected void prepareDTOMock() {
+    protected void prepareDataMock() {
         ReflectionTestUtils.setField(blizzardGameData, "baseUri", baseUri);
         ReflectionTestUtils.setField(blizzardGameData, "namespace", namespace);
 
         String uri = this.baseUri + "/playable-class/index?namespace=" + this.namespace + "&locale=en_US&access_token=" + this.tokenValue;
-        Mockito.when(httpHelper.getForObject(uri, PlayableClassesDTO.class)).thenReturn(this.playableClassesDTO);
+        Mockito.when(httpHelper.getForObject(uri, PlayableClassesData.class)).thenReturn(this.playableClassesData);
 
-        for(final PlayableClassDTO playableClassDTO : this.listPlayableClassDTO){
-            uri = this.baseUri + "/playable-class/" + playableClassDTO.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + this.tokenValue;
-            Mockito.when(httpHelper.getForObject(uri, PlayableClassDTO.class)).thenReturn(playableClassDTO);
+        for(final PlayableClassData playableClassData : this.listPlayableClassData){
+            uri = this.baseUri + "/playable-class/" + playableClassData.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + this.tokenValue;
+            Mockito.when(httpHelper.getForObject(uri, PlayableClassData.class)).thenReturn(playableClassData);
         }
 
         uri = this.baseUri + "/playable-specialization/index?namespace=" + this.namespace + "&locale=en_US&access_token=" + this.tokenValue;
-        Mockito.when(httpHelper.getForObject(uri, PlayableSpecializationsDTO.class)).thenReturn(this.playableSpecializationsDTO);
+        Mockito.when(httpHelper.getForObject(uri, PlayableSpecializationsData.class)).thenReturn(this.playableSpecializationsData);
 
-        for(final PlayableSpecializationDTO playableSpecializationDTO: this.listPlayableSpecializationDTO){
-            uri = this.baseUri + "/playable-specialization/" + playableSpecializationDTO.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + this.tokenValue;
-            Mockito.when(httpHelper.getForObject(uri, PlayableSpecializationDTO.class)).thenReturn(playableSpecializationDTO);
+        for(final PlayableSpecializationData playableSpecializationData: this.listPlayableSpecializationData){
+            uri = this.baseUri + "/playable-specialization/" + playableSpecializationData.getId().toString() + "?namespace=" + this.namespace + "&locale=&access_token=" + this.tokenValue;
+            Mockito.when(httpHelper.getForObject(uri, PlayableSpecializationData.class)).thenReturn(playableSpecializationData);
         }
     }
 
@@ -124,68 +124,68 @@ public class MotherBlizzardGameDataTest extends AbstractMotherIntegrationTest {
      */
     protected void prepareDatas(){
 
-        this.listPlayableClassDTO = new ArrayList<>();
-        this.listPlayableSpecializationDTO = new ArrayList<>();
-        this.listSpecializationRoleDTO = new ArrayList<>();
+        this.listPlayableClassData = new ArrayList<>();
+        this.listPlayableSpecializationData = new ArrayList<>();
+        this.listSpecializationRoleData = new ArrayList<>();
 
         final Integer numberPlayableClass = this.factory.getRandomInteger(MIN_PLAYABLE_CLASS, MAX_PLAYABLE_CLASS);
         final Integer numberPlayableSpecialiaztion = numberPlayableClass * PLAYABLE_SPECIALIZATION_PER_CLASS;
         final Integer numberSpecializationRole = this.factory.getRandomInteger(MIN_SPECILIZATION_ROLE, MAX_SPECILIZATION_ROLE);
 
-        PlayableClassDTO playableClassDTO;
+        PlayableClassData playableClassData;
 
-        SpecializationRoleDTO specializationRoleDTO;
+        SpecializationRoleData specializationRoleData;
 
-        PlayableSpecializationDTO playableSpecializationDTO;
-        PlayableSpecializationDTO[] playableSpecializationDTOs;
+        PlayableSpecializationData playableSpecializationData;
+        PlayableSpecializationData[] playableSpecializationDatas;
 
-        this.playableClassesDTO = new PlayableClassesDTO();
-        this.playableSpecializationsDTO = new PlayableSpecializationsDTO();
+        this.playableClassesData = new PlayableClassesData();
+        this.playableSpecializationsData = new PlayableSpecializationsData();
 
         for (int i = 0; i < numberSpecializationRole; i++) {
-            specializationRoleDTO = this.factory.createSpecilizationRoleDTOWithoutPlayableSpecialization();
-            this.listSpecializationRoleDTO.add(specializationRoleDTO);
+            specializationRoleData = this.factory.createSpecilizationRoleDataWithoutPlayableSpecialization();
+            this.listSpecializationRoleData.add(specializationRoleData);
         }
 
-        IndexDTO indexDTOPlayableClass;
-        IndexDTO[] indexDTOPlayableClasses = new IndexDTO[numberPlayableClass];
+        IndexData indexDataPlayableClass;
+        IndexData[] indexDataPlayableClasses = new IndexData[numberPlayableClass];
 
-        IndexDTO indexDTOPlayableSpecialization;
-        IndexDTO[] indexDTOPlayableSpecializations = new IndexDTO[numberPlayableSpecialiaztion];
+        IndexData indexDataPlayableSpecialization;
+        IndexData[] indexDataPlayableSpecializations = new IndexData[numberPlayableSpecialiaztion];
 
         int indexPlayableSpecialization = 0;
 
         for (int i = 0; i < numberPlayableClass; i++) {
-            playableClassDTO = this.factory.createPlayableClassDTOWithoutPlayableSpecialization();
-            indexDTOPlayableClass = new IndexDTO();
-            indexDTOPlayableClass.setId(playableClassDTO.getId());
-            indexDTOPlayableClass.setName(playableClassDTO.getName().getEn_US());
-            indexDTOPlayableClasses[i] = indexDTOPlayableClass;
+            playableClassData = this.factory.createPlayableClassDataWithoutPlayableSpecialization();
+            indexDataPlayableClass = new IndexData();
+            indexDataPlayableClass.setId(playableClassData.getId());
+            indexDataPlayableClass.setName(playableClassData.getName().getEn_US());
+            indexDataPlayableClasses[i] = indexDataPlayableClass;
 
-            playableSpecializationDTOs = new PlayableSpecializationDTO[PLAYABLE_SPECIALIZATION_PER_CLASS];
+            playableSpecializationDatas = new PlayableSpecializationData[PLAYABLE_SPECIALIZATION_PER_CLASS];
 
             for (int j = 0; j < PLAYABLE_SPECIALIZATION_PER_CLASS; j++) {
-                playableSpecializationDTO = this.factory.createPlayableSpecializationDTOWithoutSpecializationRoleAndPlayableClass();
-                playableSpecializationDTO.setPlayable_class(playableClassDTO);
+                playableSpecializationData = this.factory.createPlayableSpecializationDataWithoutSpecializationRoleAndPlayableClass();
+                playableSpecializationData.setPlayable_class(playableClassData);
                 final Integer randomIdSpecializationRole = this.factory.getRandomInteger(numberSpecializationRole);
-                playableSpecializationDTO.setRole(this.listSpecializationRoleDTO.get(randomIdSpecializationRole));
-                playableSpecializationDTOs[j] = playableSpecializationDTO;
-                indexDTOPlayableSpecialization = new IndexDTO();
-                indexDTOPlayableSpecialization.setId(playableSpecializationDTO.getId());
-                indexDTOPlayableSpecialization.setName(playableSpecializationDTO.getName().getEn_US());
-                this.listPlayableSpecializationDTO.add(playableSpecializationDTO);
-                indexDTOPlayableSpecializations[indexPlayableSpecialization] = indexDTOPlayableSpecialization;
+                playableSpecializationData.setRole(this.listSpecializationRoleData.get(randomIdSpecializationRole));
+                playableSpecializationDatas[j] = playableSpecializationData;
+                indexDataPlayableSpecialization = new IndexData();
+                indexDataPlayableSpecialization.setId(playableSpecializationData.getId());
+                indexDataPlayableSpecialization.setName(playableSpecializationData.getName().getEn_US());
+                this.listPlayableSpecializationData.add(playableSpecializationData);
+                indexDataPlayableSpecializations[indexPlayableSpecialization] = indexDataPlayableSpecialization;
                 indexPlayableSpecialization++ ;
             }
 
-            playableClassDTO.setSpecializations(playableSpecializationDTOs);
+            playableClassData.setSpecializations(playableSpecializationDatas);
 
-            this.listPlayableClassDTO.add(playableClassDTO);
+            this.listPlayableClassData.add(playableClassData);
             
         }
 
-        this.playableClassesDTO.setClasses(indexDTOPlayableClasses);
-        this.playableSpecializationsDTO.setCharacter_specializations(indexDTOPlayableSpecializations);
+        this.playableClassesData.setClasses(indexDataPlayableClasses);
+        this.playableSpecializationsData.setCharacter_specializations(indexDataPlayableSpecializations);
 
     }
 
@@ -206,7 +206,7 @@ public class MotherBlizzardGameDataTest extends AbstractMotherIntegrationTest {
 
         this.prepareDatas();
 
-        this.prepareDTOMock();
+        this.prepareDataMock();
 
     }
     

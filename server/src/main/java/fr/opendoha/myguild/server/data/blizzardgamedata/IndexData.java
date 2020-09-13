@@ -1,9 +1,9 @@
-package fr.opendoha.myguild.server.parameters.blizzardgamedata;
+package fr.opendoha.myguild.server.data.blizzardgamedata;
 
 /**
- * DTO used for the indexations
+ * Data used for the indexations
  */
-public class IndexDTO {
+public class IndexData {
 
     private String name;
 
@@ -27,7 +27,7 @@ public class IndexDTO {
 
     @Override
     public String toString() {
-        return "IndexDTO [id=" + id + ", name=" + name + "]";
+        return "IndexData [id=" + id + ", name=" + name + "]";
     }
     
 }

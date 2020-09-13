@@ -19,7 +19,7 @@ public interface IHttpHelper {
     /**
      * Method to make a http get
      * @param url Url who want to call
-     * @param responseType Type of DTO
+     * @param responseType Type of Data
      * @param uriVariables Url variables
      * @return Object with the response of the call
      */

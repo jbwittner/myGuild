@@ -10,10 +10,10 @@ import fr.opendoha.myguild.server.model.blizzard.LocalizedString;
 import fr.opendoha.myguild.server.model.blizzard.PlayableClass;
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.LocalizedValuesDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
-import fr.opendoha.myguild.server.parameters.blizzardgamedata.SpecializationRoleDTO;
+import fr.opendoha.myguild.server.data.blizzardgamedata.LocalizedValuesData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.SpecializationRoleData;
 import fr.opendoha.myguild.server.tools.oauth2.models.TokenResponse;
 
 /**
@@ -265,42 +265,42 @@ public class TestObjectFactory {
     }
 
     /**
-     * Generate a new localized values DTO with a random values.
+     * Generate a new localized values Data with a random values.
      * @return localized values generated
      */
-    public LocalizedValuesDTO createLocalizedValuesDTO(){
-        final LocalizedValuesDTO localizedValuesDTO = new LocalizedValuesDTO();
-        localizedValuesDTO.setEn_US(this.getUniqueRandomAsciiString(LENGTH_LOCALIZED_STRING));
-        localizedValuesDTO.setFr_FR(this.getUniqueRandomAsciiString(LENGTH_LOCALIZED_STRING));
+    public LocalizedValuesData createLocalizedValuesData(){
+        final LocalizedValuesData localizedValuesData = new LocalizedValuesData();
+        localizedValuesData.setEn_US(this.getUniqueRandomAsciiString(LENGTH_LOCALIZED_STRING));
+        localizedValuesData.setFr_FR(this.getUniqueRandomAsciiString(LENGTH_LOCALIZED_STRING));
 
-        return localizedValuesDTO;
+        return localizedValuesData;
     }
 
     /**
-     * Generate a new playable class DTO with a random values without a specialization.
+     * Generate a new playable class Data with a random values without a specialization.
      * @return playable class generated
      */
-    public PlayableClassDTO createPlayableClassDTOWithoutPlayableSpecialization(){
+    public PlayableClassData createPlayableClassDataWithoutPlayableSpecialization(){
                 
-        final PlayableClassDTO playableClassDTO = new PlayableClassDTO();
+        final PlayableClassData playableClassData = new PlayableClassData();
 
-        playableClassDTO.setName(this.createLocalizedValuesDTO());
-        playableClassDTO.setId(this.getUniqueRandomInteger());
+        playableClassData.setName(this.createLocalizedValuesData());
+        playableClassData.setId(this.getUniqueRandomInteger());
 
-        return playableClassDTO;
+        return playableClassData;
     }
 
     /**
-     * Generate a new playable specialization DTO with a random values.
+     * Generate a new playable specialization Data with a random values.
      * @return playable specialization generated
      */
-    public PlayableSpecializationDTO createPlayableSpecializationDTOWithoutSpecializationRoleAndPlayableClass(){
+    public PlayableSpecializationData createPlayableSpecializationDataWithoutSpecializationRoleAndPlayableClass(){
 
-        final PlayableSpecializationDTO playableSpecializationDTO = new PlayableSpecializationDTO();
-        playableSpecializationDTO.setId(this.getUniqueRandomInteger());
-        playableSpecializationDTO.setName(this.createLocalizedValuesDTO());
+        final PlayableSpecializationData playableSpecializationData = new PlayableSpecializationData();
+        playableSpecializationData.setId(this.getUniqueRandomInteger());
+        playableSpecializationData.setName(this.createLocalizedValuesData());
                 
-        return playableSpecializationDTO;
+        return playableSpecializationData;
     }
 
     /**
@@ -377,16 +377,16 @@ public class TestObjectFactory {
     }
 
     /**
-     * Generate a new specialization role DTO with a random values.
+     * Generate a new specialization role Data with a random values.
      * @return specialization role generated
      */
-    public SpecializationRoleDTO createSpecilizationRoleDTOWithoutPlayableSpecialization(){
+    public SpecializationRoleData createSpecilizationRoleDataWithoutPlayableSpecialization(){
 
-        final SpecializationRoleDTO specializationRoleDTO = new SpecializationRoleDTO();
-        specializationRoleDTO.setName(this.createLocalizedValuesDTO());
-        specializationRoleDTO.setType(this.getUniqueRandomAsciiString(LENGTH_SPECILIZATION_TYPE));
+        final SpecializationRoleData specializationRoleData = new SpecializationRoleData();
+        specializationRoleData.setName(this.createLocalizedValuesData());
+        specializationRoleData.setType(this.getUniqueRandomAsciiString(LENGTH_SPECILIZATION_TYPE));
                 
-        return specializationRoleDTO;
+        return specializationRoleData;
     }
 
     /**
