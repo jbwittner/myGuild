@@ -3,8 +3,8 @@ package fr.opendoha.myguild.server.it.dto.blizzard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import fr.opendoha.myguild.server.dto.blizzard.IndexDTO;
 import fr.opendoha.myguild.server.it.AbstractMotherIntegrationTest;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.IndexDTO;
 
 /**
  * Class to test toString method of IndexDTO

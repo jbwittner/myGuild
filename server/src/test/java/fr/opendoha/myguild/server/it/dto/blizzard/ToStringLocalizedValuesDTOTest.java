@@ -3,8 +3,8 @@ package fr.opendoha.myguild.server.it.dto.blizzard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import fr.opendoha.myguild.server.dto.blizzard.LocalizedValuesDTO;
 import fr.opendoha.myguild.server.it.AbstractMotherIntegrationTest;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.LocalizedValuesDTO;
 
 /**
  * Class to test toString method of LocalizedValuesDTO

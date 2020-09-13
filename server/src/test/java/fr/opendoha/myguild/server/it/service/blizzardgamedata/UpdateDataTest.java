@@ -6,8 +6,8 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import fr.opendoha.myguild.server.dto.blizzard.PlayableClassDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableSpecializationDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
 import fr.opendoha.myguild.server.model.blizzard.PlayableClass;
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;

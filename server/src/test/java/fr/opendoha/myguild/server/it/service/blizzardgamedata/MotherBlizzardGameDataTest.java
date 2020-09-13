@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.opendoha.myguild.server.dto.blizzard.IndexDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableClassDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableClassesDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableSpecializationDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableSpecializationsDTO;
-import fr.opendoha.myguild.server.dto.blizzard.SpecializationRoleDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.IndexDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassesDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationsDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.it.AbstractMotherIntegrationTest;
 
 import fr.opendoha.myguild.server.repository.blizzard.PlayableClassRepository;

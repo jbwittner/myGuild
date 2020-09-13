@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import fr.opendoha.myguild.server.dto.blizzard.LocalizedValuesDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableClassDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableSpecializationDTO;
-import fr.opendoha.myguild.server.dto.blizzard.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.model.UserAccount;
 import fr.opendoha.myguild.server.model.blizzard.LocalizedString;
 import fr.opendoha.myguild.server.model.blizzard.PlayableClass;
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.LocalizedValuesDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableClassDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.PlayableSpecializationDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.tools.oauth2.models.TokenResponse;
 
 /**

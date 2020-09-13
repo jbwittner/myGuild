@@ -1,4 +1,4 @@
-package fr.opendoha.myguild.server.dto.blizzard;
+package fr.opendoha.myguild.server.parameters.blizzardgamedata;
 
 /**
  * DTO used for the indexations

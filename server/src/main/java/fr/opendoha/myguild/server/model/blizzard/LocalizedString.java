@@ -3,7 +3,7 @@ package fr.opendoha.myguild.server.model.blizzard;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import fr.opendoha.myguild.server.dto.blizzard.LocalizedValuesDTO;
+import fr.opendoha.myguild.server.parameters.blizzardgamedata.LocalizedValuesDTO;
 
 /**
  * Embeddable model used for the internationalization
