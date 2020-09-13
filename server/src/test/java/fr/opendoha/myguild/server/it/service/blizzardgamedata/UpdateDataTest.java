@@ -6,8 +6,8 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import fr.opendoha.myguild.server.dto.blizzard.PlayableClassDTO;
-import fr.opendoha.myguild.server.dto.blizzard.PlayableSpecializationDTO;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableClassData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
 import fr.opendoha.myguild.server.model.blizzard.PlayableClass;
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
@@ -25,26 +25,26 @@ public class UpdateDataTest extends MotherBlizzardGameDataTest {
         final long countPlayableRepository = this.playableSpecializationRepository.count();
         final long countSpecializationRole = this.specializationRoleRepository.count();
 
-        Assertions.assertEquals(this.listPlayableClassDTO.size(), countPlayableClass);
-        Assertions.assertEquals(this.listPlayableSpecializationDTO.size(), countPlayableRepository);
-        Assertions.assertEquals(this.listSpecializationRoleDTO.size(), countSpecializationRole);
+        Assertions.assertEquals(this.listPlayableClassData.size(), countPlayableClass);
+        Assertions.assertEquals(this.listPlayableSpecializationData.size(), countPlayableRepository);
+        Assertions.assertEquals(this.listSpecializationRoleData.size(), countSpecializationRole);
 
-        for(final PlayableClassDTO playableClassDTO : this.listPlayableClassDTO){
-            final PlayableClass playableClass = this.playableClassRepository.findById(playableClassDTO.getId()).get();
-            Assertions.assertEquals(playableClassDTO.getId(), playableClass.getId());
-            Assertions.assertEquals(playableClassDTO.getName().getEn_US(), playableClass.getNames().getEn_US());
-            Assertions.assertEquals(playableClassDTO.getName().getFr_FR(), playableClass.getNames().getFr_FR());
+        for(final PlayableClassData playableClassData : this.listPlayableClassData){
+            final PlayableClass playableClass = this.playableClassRepository.findById(playableClassData.getId()).get();
+            Assertions.assertEquals(playableClassData.getId(), playableClass.getId());
+            Assertions.assertEquals(playableClassData.getName().getEn_US(), playableClass.getNames().getEn_US());
+            Assertions.assertEquals(playableClassData.getName().getFr_FR(), playableClass.getNames().getFr_FR());
         }
 
-        for(final PlayableSpecializationDTO playableSpecializationDTO : this.listPlayableSpecializationDTO){
-            final PlayableSpecialization playableSpecialization = this.playableSpecializationRepository.findById(playableSpecializationDTO.getId()).get();
-            Assertions.assertEquals(playableSpecializationDTO.getId(), playableSpecialization.getId());
-            Assertions.assertEquals(playableSpecializationDTO.getName().getEn_US(), playableSpecialization.getNames().getEn_US());
-            Assertions.assertEquals(playableSpecializationDTO.getName().getFr_FR(), playableSpecialization.getNames().getFr_FR());
-            Assertions.assertEquals(playableSpecializationDTO.getPlayable_class().getId(), playableSpecialization.getPlayableClass().getId());
-            Assertions.assertEquals(playableSpecializationDTO.getRole().getType(), playableSpecialization.getSpecializationRole().getType());
-            Assertions.assertEquals(playableSpecializationDTO.getRole().getName().getEn_US(), playableSpecialization.getSpecializationRole().getNames().getEn_US());
-            Assertions.assertEquals(playableSpecializationDTO.getRole().getName().getFr_FR(), playableSpecialization.getSpecializationRole().getNames().getFr_FR());
+        for(final PlayableSpecializationData playableSpecializationData : this.listPlayableSpecializationData){
+            final PlayableSpecialization playableSpecialization = this.playableSpecializationRepository.findById(playableSpecializationData.getId()).get();
+            Assertions.assertEquals(playableSpecializationData.getId(), playableSpecialization.getId());
+            Assertions.assertEquals(playableSpecializationData.getName().getEn_US(), playableSpecialization.getNames().getEn_US());
+            Assertions.assertEquals(playableSpecializationData.getName().getFr_FR(), playableSpecialization.getNames().getFr_FR());
+            Assertions.assertEquals(playableSpecializationData.getPlayable_class().getId(), playableSpecialization.getPlayableClass().getId());
+            Assertions.assertEquals(playableSpecializationData.getRole().getType(), playableSpecialization.getSpecializationRole().getType());
+            Assertions.assertEquals(playableSpecializationData.getRole().getName().getEn_US(), playableSpecialization.getSpecializationRole().getNames().getEn_US());
+            Assertions.assertEquals(playableSpecializationData.getRole().getName().getFr_FR(), playableSpecialization.getSpecializationRole().getNames().getFr_FR());
         }
 
         final List<PlayableClass> listPlayableClass = this.playableClassRepository.findAll();
@@ -88,7 +88,7 @@ public class UpdateDataTest extends MotherBlizzardGameDataTest {
 
         this.prepareDatas();
 
-        this.prepareDTOMock();
+        this.prepareDataMock();
 
         this.blizzardGameData.updateData();
 

@@ -3,7 +3,7 @@ package fr.opendoha.myguild.server.model.blizzard;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import fr.opendoha.myguild.server.dto.blizzard.LocalizedValuesDTO;
+import fr.opendoha.myguild.server.data.blizzardgamedata.LocalizedValuesData;
 
 /**
  * Embeddable model used for the internationalization
@@ -36,9 +36,9 @@ public class LocalizedString {
     /**
      * Method used to get the value from the DRO
      */
-    public void builderFromDTO(final LocalizedValuesDTO localizedValuesDTO) {
-        this.en_US = localizedValuesDTO.getEn_US();
-        this.fr_FR = localizedValuesDTO.getFr_FR();
+    public void builderFromData(final LocalizedValuesData localizedValuesData) {
+        this.en_US = localizedValuesData.getEn_US();
+        this.fr_FR = localizedValuesData.getFr_FR();
     }
 
     @Override

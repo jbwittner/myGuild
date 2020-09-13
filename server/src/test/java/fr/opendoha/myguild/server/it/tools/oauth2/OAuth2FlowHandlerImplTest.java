@@ -108,8 +108,8 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
      * @throws IOException
      */
     @Test
-    public void testGetNotExpiredTokenOk() throws NoSuchFieldException, IOException {
-        final String token = "myCachedToken";
+    public void testGetNotExpireDatakenOk() throws NoSuchFieldException, IOException {
+        final String token = "myCacheDataken";
         // Cached token condition and setting the token
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), token);
@@ -122,7 +122,7 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
      * @throws NoSuchFieldException
      */
     @Test
-    public void testIsTokenInvalidWithValidTokenOk() throws NoSuchFieldException {
+    public void testIsTokenInvalidWithValiDatakenOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assert.assertFalse(blizzardOAuth2FlowHandler.isTokenInvalid());
@@ -144,7 +144,7 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
      * @throws NoSuchFieldException
      */
     @Test
-    public void testIsTokenInvalidExpiredTokenExpiryOk() throws NoSuchFieldException {
+    public void testIsTokenInvalidExpireDatakenExpiryOk() throws NoSuchFieldException {
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.EPOCH);
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assert.assertTrue(blizzardOAuth2FlowHandler.isTokenInvalid());
