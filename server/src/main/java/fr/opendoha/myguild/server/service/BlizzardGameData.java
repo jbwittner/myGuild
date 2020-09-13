@@ -231,10 +231,10 @@ public class BlizzardGameData implements IBlizzardGameData{
             specializationRole = new SpecializationRole();
             Integer index;
 
-            if(this.specializationRoleRepository.finDatapByOrderByIdDesc() == null){
+            if(this.specializationRoleRepository.findTopByOrderByIdDesc() == null){
                 index = 0;
             } else {
-                index = this.specializationRoleRepository.finDatapByOrderByIdDesc().getId();
+                index = this.specializationRoleRepository.findTopByOrderByIdDesc().getId();
             }
             index = index + 1;
             specializationRole.setId(index);
