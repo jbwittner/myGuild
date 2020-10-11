@@ -1,4 +1,4 @@
-Application:
+application:
   db-param:
     host: localhost
     port: 3306
@@ -8,6 +8,9 @@ Application:
   blizzard:
     wow:
       delay-ms: 11
+      profile:
+        base-uri: https://eu.api.blizzard.com/profile
+        namespace: profile-eu
       game-data:
         base-uri: https://eu.api.blizzard.com/data/wow
         namespace: static-eu
@@ -15,13 +18,20 @@ Application:
 logging:
   level:
     fr.opendoha.myguild.server:
+      tools.HttpHelper: INFO
       MyGuildApplication: INFO
+      service:
+        BlizzardGameData: INFO
+        BlizzardProfile: INFO
+        oauth2:
+          BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 
-        GeneralInterceptor: ERROR
+        GeneralInterceptor: INFO
         ServiceInterceptor: INFO
     org:
       apache: INFO
       springframework:
+        web.client.RestTemplate: INFO
         security: INFO
         data: INFO
 
@@ -35,7 +45,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
   datasource:
-    url: jdbc:h2:mem:${application.db-param.db-name};DB_CLOSE_ON_EXIT=false
+    url: jdbc:h2:mem:${application.db-param.db-name};DB_CLOSE_DELAY=false;DB_CLOSE_ON_EXIT=false;DATABASE_TO_UPPER=false;INIT=RUNSCRIPT FROM 'classpath:init.sql'
     databaseName: ${application.db-param.db-name}
     username: ${application.db-param.user}
     password: ${application.db-param.password}
@@ -44,13 +54,13 @@ spring:
     oauth2:
       client:
         registration:
-          oauth-blizard:
+          oauth-blizzard:
             client-id: 154f1ea2fa934b02a608eb6027cf527e
             client-secret: ARdKjDop8uMrjlnjzBfEOiK69lUeFB9e
             client-name: testpourmanagementdeguilde
             provider: blizzard
             scope: wow.profile
-            redirect-uri: "${application.server.url}:${application.server.port}/login/oauth2/code/oauth-blizard"
+            redirect-uri: "${application.server.url}:${application.server.port}/login/oauth2/code/oauth-blizzard"
             client-authentication-method: basic
             authorization-grant-type: authorization_code 
         provider:

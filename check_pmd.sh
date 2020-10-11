@@ -7,4 +7,5 @@ then
     exit 1
 else
 	echo "$file not found."
+	  exit 0
 fi

@@ -9,20 +9,16 @@ import java.net.URL;
 public interface IHttpHelper {
 
     /**
-     * Generate url with a uri
-     * @param uri 
+     * Methode to get URL
+     * @param uri of the url
      * @return URL
-     * @throws IOException
      */
     URL getUrl(final String uri) throws MalformedURLException;
 
     /**
-     * Method to make a http get
-     * @param url Url who want to call
-     * @param responseType Type of Data
-     * @param uriVariables Url variables
-     * @return Object with the response of the call
+     * Methode to encapsulate the getForObject from RestTemplate
+     * @return object from the get
      */
     <T> T getForObject(final String url, final Class<T> responseType, final Object... uriVariables);
-    
+
 }

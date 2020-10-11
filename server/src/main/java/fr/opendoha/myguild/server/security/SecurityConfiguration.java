@@ -17,11 +17,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(final HttpSecurity http) throws Exception {
 
         http
-            .antMatcher("/**").authorizeRequests()
-            .antMatchers("/", "/test").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .oauth2Login();
+                .antMatcher("/**").authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login();
     }
-        
+
 }

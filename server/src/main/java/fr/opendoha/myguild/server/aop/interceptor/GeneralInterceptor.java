@@ -14,21 +14,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneralInterceptor extends MotherInterceptor {
 
-    Logger logger = LoggerFactory.getLogger(GeneralInterceptor.class);
+    final Logger logger = LoggerFactory.getLogger(GeneralInterceptor.class);
 
     /**
      * Log interceptor to log the method, the time to proceed and the arguments of
      * repositories methods
+     *
      * @param joinPoint Event intercepted by the aop
      * @return Proceed of the event
-     * @throws Throwable
+     * @throws Throwable exception
      */
-    @Around("execution(* fr.opendoha.myguild.server.*.*.*(..))")
+    @Around("execution(* fr.opendoha.myguild.server.*.*.*(..))" +
+            "&& !execution(* org.springframework.data.repository.CrudRepository.*(..))" +
+            "&& !execution(* org.springframework.data.jpa.repository.JpaRepository.*(..))")
     public Object logInterceptor(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-        final Object proceed = this.logExecutionTime(joinPoint, this.logger);
-
-        return proceed;
+        return this.logExecutionTime(joinPoint, this.logger);
     }
 
 }

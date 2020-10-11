@@ -1,13 +1,13 @@
 package fr.opendoha.myguild.server.tools;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Implementation of IHttpHelper
@@ -15,18 +15,25 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class HttpHelper implements IHttpHelper {
 
-    protected Logger logger = LoggerFactory.getLogger(HttpHelper.class);
+    protected final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
 
-    protected RestTemplate restTemplate = new RestTemplate();
+    protected RestTemplate restTemplate;
 
     @Value("${application.blizzard.wow.delay-ms}")
-    protected long DELAY_CALL_MS_BLIZZARD = 11;
+    protected final long DELAY_CALL_MS_BLIZZARD = 11;
+
+    /**
+     * Constructor
+     */
+    public HttpHelper(){
+        this.restTemplate = new RestTemplate();
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public URL getUrl(final String uri) throws MalformedURLException{
+    public URL getUrl(final String uri) throws MalformedURLException {
         return new URL(uri);
     }
 
@@ -38,12 +45,12 @@ public class HttpHelper implements IHttpHelper {
 
         this.logger.info("Call : " + url);
 
-        try{
+        try {
             Thread.sleep(DELAY_CALL_MS_BLIZZARD);
-        }catch(InterruptedException e){
+        } catch (InterruptedException e) {
             this.logger.error("Error during the sleep");
         }
-        
+
         final T getObject = this.restTemplate.getForObject(url, responseType, uriVariables);
 
         return getObject;

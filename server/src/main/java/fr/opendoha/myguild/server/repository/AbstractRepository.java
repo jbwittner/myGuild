@@ -11,9 +11,10 @@ public interface AbstractRepository<E, K> extends JpaRepository<E, K> {
 
     /**
      * Method to delete a entity
+     *
      * @param E Entity to delete
      */
     @Override
     void delete(E E);
-    
+
 }

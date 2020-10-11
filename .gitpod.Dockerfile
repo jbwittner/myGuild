@@ -1,4 +1,4 @@
-FROM gitpod/workspace-mysql
+FROM gitpod/workspace-postgres
 
 # Install custom tools, runtimes, etc.
 # For example "bastet", a command-line tetris clone:

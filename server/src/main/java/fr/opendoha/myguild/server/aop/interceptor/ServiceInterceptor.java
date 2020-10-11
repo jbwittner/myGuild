@@ -14,16 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceInterceptor extends MotherInterceptor {
 
-    Logger logger = LoggerFactory.getLogger(ServiceInterceptor.class);
+    protected final Logger logger = LoggerFactory.getLogger(ServiceInterceptor.class);
 
     /**
      * Interceptor used to check the input data validity
+     *
      * @param joinPoint Event intercepted by the aop
-     * @return Proceed of the event
-     * @throws Throwable
      */
     @Before("execution(* fr.opendoha.myguild.server.service.*.*(..))")
-    public void test(final JoinPoint joinPoint) throws Throwable {
+    public void validationInterceptor(final JoinPoint joinPoint) {
 
         this.validationInputData(joinPoint, this.logger);
 

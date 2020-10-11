@@ -1,22 +1,22 @@
 package fr.opendoha.myguild.server.validation;
 
-import java.util.Set;
+import fr.opendoha.myguild.server.exception.ValidationDataException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
-import fr.opendoha.myguild.server.exception.ValidationDataException;
+import java.util.Set;
 
 /**
  * Validator to validate input data
+ *
  * @param <T> class of the object to validate
  */
 public class InputServiceValidator<T> {
 
-    ValidatorFactory validatorFactory;
-    Validator validator;
+    protected final ValidatorFactory validatorFactory;
+    protected final Validator validator;
 
     /**
      * Constructor
@@ -28,20 +28,26 @@ public class InputServiceValidator<T> {
 
     /**
      * Validation method
+     *
      * @param object object to validate
      */
-    public void validate(final T object){
+    public void validate(final T object) {
         final Set<ConstraintViolation<T>> constraintViolations = validator.validate(object);
-        
+
         if (!constraintViolations.isEmpty()) {
-            String message = "";
-            
-            for (final ConstraintViolation<T> contraintes : constraintViolations) {
-                message = message + contraintes.getRootBeanClass().getSimpleName()+ "." + contraintes.getPropertyPath() + " " + contraintes.getMessage();
+            final StringBuilder message = new StringBuilder();
+
+            for (final ConstraintViolation<T> constraints : constraintViolations) {
+                message.append(constraints.getRootBeanClass().getSimpleName())
+                        .append('.')
+                        .append(constraints.getPropertyPath())
+                        .append(' ')
+                        .append(constraints.getMessage())
+                        .append(' ');
             }
 
-            throw new ValidationDataException(message);
+            throw new ValidationDataException(message.toString());
         }
     }
-    
+
 }

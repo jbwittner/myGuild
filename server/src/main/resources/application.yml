@@ -10,18 +10,22 @@ application:
     password: MyGuildPass2020
   blizzard:
     wow:
-      delay-ms: 11
+      delay-ms: 1
+      profile:
+        base-uri: https://eu.api.blizzard.com/profile
+        namespace: profile-eu
       game-data:
         base-uri: https://eu.api.blizzard.com/data/wow
         namespace: static-eu
 
-
 logging:
   level:
     fr.opendoha.myguild.server:
+      tools.HttpHelper: DEBUG
       MyGuildApplication: INFO
       service:
         BlizzardGameData: DEBUG
+        BlizzardProfile: DEBUG
         oauth2:
           BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 
@@ -39,7 +43,7 @@ server:
 
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
     database-platform : org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create-drop
@@ -50,13 +54,13 @@ spring:
     oauth2:
       client:
         registration:
-          oauth-blizard:
+          oauth-blizzard:
             client-id: 154f1ea2fa934b02a608eb6027cf527e
             client-secret: ARdKjDop8uMrjlnjzBfEOiK69lUeFB9e
             client-name: testpourmanagementdeguilde
             provider: blizzard
             scope: wow.profile
-            redirect-uri: "${application.server.url}:${application.server.port}/login/oauth2/code/oauth-blizard"
+            redirect-uri: "${application.server.url}:${application.server.port}/login/oauth2/code/oauth-blizzard"
             client-authentication-method: basic
             authorization-grant-type: authorization_code 
         provider:
@@ -69,7 +73,6 @@ spring:
   
   datasource:
     url: jdbc:mysql://${application.db-param.host}:${application.db-param.port}/${application.db-param.db-name}
-    databaseName: ${application.db-param.db-name}
     username: ${application.db-param.user}
     password: ${application.db-param.password}
     driverClassName: com.mysql.cj.jdbc.Driver

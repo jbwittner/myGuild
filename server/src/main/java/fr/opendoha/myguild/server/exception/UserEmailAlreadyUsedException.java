@@ -10,7 +10,6 @@ public final class UserEmailAlreadyUsedException extends RuntimeException {
 
     /**
      * Exception to signal a email already used
-     * @param userRegistrationParameter userRegistrationParameter who throw the exception
      */
     public UserEmailAlreadyUsedException(final UserRegistrationParameter userRegistrationParameter) {
         super("The email " + userRegistrationParameter.getEmail() + " is already used by a another account");

@@ -1,10 +1,6 @@
 package fr.opendoha.myguild.server.model;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 /**
  * Abstract part of models
@@ -13,12 +9,13 @@ import javax.persistence.MappedSuperclass;
 public abstract class AbstractModel {
 
     @Id
-    @Column(name = "ID", nullable = false, updatable = false, insertable = false)
+    @Column(name = "id", nullable = false, updatable = false, insertable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
     /**
      * Getter of id
+     *
      * @return id
      */
     public Integer getId() {
@@ -27,6 +24,7 @@ public abstract class AbstractModel {
 
     /**
      * Override of toString method
+     *
      * @return String representation of the model
      */
     @Override
