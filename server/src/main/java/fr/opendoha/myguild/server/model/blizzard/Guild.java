@@ -1,7 +1,10 @@
 package fr.opendoha.myguild.server.model.blizzard;
 
+import fr.opendoha.myguild.server.data.blizzardgamedata.FactionData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.RealmData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,5 +26,9 @@ public class Guild extends AbstractBlizzardModel {
 
     @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
     private List<Character> characterList;
+
+    @ManyToOne
+    @JoinColumn(name = "realm_id")
+    private Realm realm;
 
 }

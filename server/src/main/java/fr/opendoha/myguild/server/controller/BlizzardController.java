@@ -56,18 +56,14 @@ public class BlizzardController extends MotherController {
     }
 
     /**
-     * random method
+     * Method
      */
-    @GetMapping("/addingGuild")
-    public boolean addingGuild(final OAuth2AuthenticationToken authentication,
-                               final AddingGuildParameter addingGuildParameter){
+    @GetMapping("/fetchAccountCharacter")
+    public void fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        addingGuildParameter.setToken(blizzardAccountParameter.getToken());
-        addingGuildParameter.setBlizzardId(blizzardAccountParameter.getBlizzardId());
-
-        return true;
+        this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
     }
 
 }

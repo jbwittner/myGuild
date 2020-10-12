@@ -31,7 +31,16 @@ public class Character extends AbstractBlizzardModel {
     private Guild guild;
 
     @ManyToOne
+    @JoinColumn(name = "realm_id")
+    private Realm realm;
+
+    @ManyToOne
     @JoinColumn(name = "guild_rank_id")
     private GuildRank guildRank;
+
+    private Integer averageItemLevel;
+    private Integer equippedItemLevel;
+    private Long lastLoginTimestamp;
+
 
 }

@@ -4,7 +4,7 @@ import fr.opendoha.myguild.server.model.blizzard.Guild;
 import fr.opendoha.myguild.server.repository.AbstractRepository;
 
 /**
- * Repository for PlayableRace
+ * Repository for Guild
  */
 public interface GuildRepository extends AbstractRepository<Guild, Integer> {
 
