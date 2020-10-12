@@ -14,12 +14,14 @@ public class TestObjectFactory {
     public static final Integer NUMBER_MAX = 20_000;
     public static final Integer NUMBER_MAX_BLIZZARD_ID = 20_000_000;
 
+    public static final int LENGTH_STANDARD = 20;
     public static final int LENGTH_URI = 15;
     public static final int LENGTH_EMAIL_NAME = 10;
     public static final int LENGTH_DOMAIN = 10;
 
     public static final int LENGTH_BATTLETAG = 15;
     public static final int LENGTH_NICKNAME = 10;
+    public static final int LENGTH_TOCKEN = 10;
 
     private List<String> listRandomString = new ArrayList<>();
     private List<String> listRandomEmail = new ArrayList<>();
@@ -55,6 +57,24 @@ public class TestObjectFactory {
 
         while (isNotUnique){
             randomString = RandomStringUtils.randomAlphanumeric(length);
+            isNotUnique = listRandomString.contains(randomString);
+        }
+
+        listRandomString.add(randomString);
+
+        return randomString;
+    }
+
+    /**
+     * Method to get a unique random alphanumeric string
+     */
+    public String getUniqueRandomAlphanumericString(){
+
+        boolean isNotUnique = true;
+        String randomString = "";
+
+        while (isNotUnique){
+            randomString = RandomStringUtils.randomAlphanumeric(LENGTH_STANDARD);
             isNotUnique = listRandomString.contains(randomString);
         }
 

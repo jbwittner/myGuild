@@ -2,29 +2,23 @@ package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.model.UserAccount;
-import fr.opendoha.myguild.server.model.blizzard.AbstractBlizzardModel;
 import fr.opendoha.myguild.server.model.blizzard.Character;
+import fr.opendoha.myguild.server.model.blizzard.Faction;
 import fr.opendoha.myguild.server.model.blizzard.Guild;
 import fr.opendoha.myguild.server.model.blizzard.Realm;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
-import fr.opendoha.myguild.server.repository.blizzard.CharacterRepository;
-import fr.opendoha.myguild.server.repository.blizzard.GuildRankRepository;
-import fr.opendoha.myguild.server.repository.blizzard.GuildRepository;
-import fr.opendoha.myguild.server.repository.blizzard.RealmRepository;
+import fr.opendoha.myguild.server.repository.blizzard.*;
 import fr.opendoha.myguild.server.tools.HttpHelper;
 import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.ReactiveTransaction;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -48,6 +42,7 @@ public class BlizzardService implements IBlizzardService {
     protected final CharacterRepository characterRepository;
     protected final GuildRankRepository guildRankRepository;
     protected final RealmRepository realmRepository;
+    protected final FactionRepository factionRepository;
     protected final HttpHelper httpHelper;
 
     /**
@@ -61,6 +56,7 @@ public class BlizzardService implements IBlizzardService {
             final GuildRepository guildRepository,
             final GuildRankRepository guildRankRepository,
             final RealmRepository realmRepository,
+            final FactionRepository factionRepository,
             final HttpHelper httpHelper
     ) {
 
@@ -70,6 +66,7 @@ public class BlizzardService implements IBlizzardService {
         this.guildRepository = guildRepository;
         this.guildRankRepository = guildRankRepository;
         this.realmRepository = realmRepository;
+        this.factionRepository = factionRepository;
         this.httpHelper = httpHelper;
     }
 
@@ -118,17 +115,16 @@ public class BlizzardService implements IBlizzardService {
             character.setEquippedItemLevel(characterData.getEquippedItemLevel());
             character.setLastLoginTimestamp(characterData.getLastLoginTimestamp());
 
-            Realm realm = this.fetchRealmFromCharacter(characterData);
-            character.setRealm(realm);
+            character.setRealm(this.fetchRealmFromCharacter(characterData));
+            character.setFaction(this.fetchFactionFromCharacter(characterData));
 
-            Guild guild = this.fetchGuildFromCharacter(characterData);
-            character.setGuild(guild);
+            character.setGuild(this.fetchGuildFromCharacter(characterData));
 
             this.characterRepository.save(character);
 
-            System.out.println(character);
+            this.logger.debug(character.toString());
         } catch (HttpClientErrorException e){
-            System.out.println(e);
+            this.logger.debug(e.getMessage());
         }
 
     }
@@ -151,10 +147,15 @@ public class BlizzardService implements IBlizzardService {
 
             Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
 
-            if(optionalRealm.isPresent()){
-                Realm realm = optionalRealm.get();
-                guild.setRealm(realm);
-            }
+            Realm realm = optionalRealm.get();
+
+            guild.setRealm(realm);
+
+            Optional<Faction> optionalFaction =
+                    this.factionRepository.findByType(guildIndexData.getFactionData().getType());
+
+            Faction faction = optionalFaction.get();
+            guild.setFaction(faction);
 
             guild.setIsUpdatedTrue();
 
@@ -168,29 +169,46 @@ public class BlizzardService implements IBlizzardService {
     }
 
     private Realm fetchRealmFromCharacter(final CharacterData characterData){
-        Realm realm = null;
+        Realm realm;
 
         RealmData realmData = characterData.getRealmData();
 
-        if(realmData != null){
+        Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
 
-            Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
-
-            if(optionalRealm.isPresent()){
-                realm = optionalRealm.get();
-            }else {
-                realm = new Realm();
-            }
-
-            realm.setIsUpdatedTrue();
-
-            realm.updateLocalizedValue(realmData.getLocalizedStringData());
-            realm.setSlug(realmData.getSlug());
-
-            realm = this.realmRepository.save(realm);
+        if(optionalRealm.isPresent()){
+            realm = optionalRealm.get();
+        }else {
+            realm = new Realm();
+            realm.setId(realmData.getId());
         }
 
+        realm.setIsUpdatedTrue();
+
+        realm.updateLocalizedValue(realmData.getLocalizedStringData());
+        realm.setSlug(realmData.getSlug());
+
+        realm = this.realmRepository.save(realm);
+
         return realm;
+
+    }
+
+    private Faction fetchFactionFromCharacter(final CharacterData characterData){
+
+        FactionData factionData = characterData.getFactionData();
+
+        Optional<Faction> optionalFaction = this.factionRepository.findByType(characterData.getFactionData().getType());
+
+        Faction faction = optionalFaction.orElseGet(Faction::new);
+
+        faction.setIsUpdatedTrue();
+
+        faction.updateLocalizedValue(factionData.getLocalizedStringData());
+        faction.setType(factionData.getType());
+
+        faction = this.factionRepository.save(faction);
+
+        return faction;
 
     }
 

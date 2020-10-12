@@ -11,11 +11,22 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode()
 @Data
 @Entity
-@Table(name = "realms")
-public class Realm extends AbstractBlizzardModel{
+@Table(name = "factions")
+public class Faction{
 
-    @Column(name = "slug",  nullable = false, unique = true)
-    private String slug;
+    @Id
+    @Column(name = "id", nullable = false, updatable = false, insertable = false, unique = true)
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    protected Integer id;
+
+    @Column(name = "is_updated", nullable = false)
+    protected Boolean isUpdated = true;
+
+    @UpdateTimestamp
+    protected LocalDateTime updateTime;
+
+    @Column(name = "type",  nullable = false, unique = true)
+    private String type;
 
     @Embedded
     private LocalizedModel localizedModel;
@@ -28,14 +39,18 @@ public class Realm extends AbstractBlizzardModel{
         localizedModel.setItIT(localizedStringData.getItIT());
     }
 
+    public void setIsUpdatedTrue(){
+        this.isUpdated = true;
+    }
+
     @Override
     public String toString() {
-        return "Realm{" +
-                "slug='" + slug + '\'' +
-                ", localizedModel=" + localizedModel +
-                ", id=" + id +
+        return "Faction{" +
+                "id=" + id +
                 ", isUpdated=" + isUpdated +
                 ", updateTime=" + updateTime +
+                ", type='" + type + '\'' +
+                ", localizedModel=" + localizedModel +
                 '}';
     }
 }

@@ -31,4 +31,18 @@ public class Guild extends AbstractBlizzardModel {
     @JoinColumn(name = "realm_id")
     private Realm realm;
 
+    @ManyToOne
+    @JoinColumn(name = "faction_id")
+    private Faction faction;
+
+    @Override
+    public String toString() {
+        return "Guild{" +
+                "name='" + name + '\'' +
+                ", useApplication=" + useApplication +
+                ", id=" + id +
+                ", isUpdated=" + isUpdated +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

@@ -24,8 +24,7 @@ logging:
       tools.HttpHelper: DEBUG
       MyGuildApplication: INFO
       service:
-        BlizzardGameData: DEBUG
-        BlizzardProfile: DEBUG
+        BlizzardService: DEBUG
         oauth2:
           BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 

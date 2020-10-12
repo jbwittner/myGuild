@@ -38,9 +38,25 @@ public class Character extends AbstractBlizzardModel {
     @JoinColumn(name = "guild_rank_id")
     private GuildRank guildRank;
 
+    @ManyToOne
+    @JoinColumn(name = "faction_id")
+    private Faction faction;
+
     private Integer averageItemLevel;
     private Integer equippedItemLevel;
     private Long lastLoginTimestamp;
 
-
+    @Override
+    public String toString() {
+        return "Character{" +
+                "name='" + name + '\'' +
+                ", level=" + level +
+                ", averageItemLevel=" + averageItemLevel +
+                ", equippedItemLevel=" + equippedItemLevel +
+                ", lastLoginTimestamp=" + lastLoginTimestamp +
+                ", id=" + id +
+                ", isUpdated=" + isUpdated +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

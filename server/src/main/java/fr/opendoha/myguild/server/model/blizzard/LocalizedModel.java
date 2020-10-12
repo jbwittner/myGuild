@@ -23,4 +23,13 @@ public class LocalizedModel {
     @Column(name ="it_IT")
     private String itIT;
 
+    @Override
+    public String toString() {
+        return "LocalizedModel{" +
+                "enUS='" + enUS + '\'' +
+                ", esES='" + esES + '\'' +
+                ", frFR='" + frFR + '\'' +
+                ", itIT='" + itIT + '\'' +
+                '}';
+    }
 }
