@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Class representation of wow account
+ */
 @Data
 public class WowAccountData {
 

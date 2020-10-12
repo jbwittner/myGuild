@@ -70,17 +70,20 @@ public class BlizzardService implements IBlizzardService {
         this.httpHelper = httpHelper;
     }
 
+    @Override
     public void fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
 
-        String url = this.baseUriProfile + "/user/wow?namespace=" + this.namespaceProfile + "&access_token=" + blizzardAccountParameter.getToken();
+        final String url = this.baseUriProfile + "/user/wow?namespace=" +
+                this.namespaceProfile + "&access_token=" + blizzardAccountParameter.getToken();
 
-        UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
+        final UserAccount userAccount =
+                this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
 
-        AccountProfileSummaryBlizzardData accountProfileSummaryBlizzardData =
+        final AccountProfileSummaryBlizzardData accountProfileSummaryBlizzardData =
                 this.httpHelper.getForObject(url, AccountProfileSummaryBlizzardData.class);
 
-        for(WowAccountData wowAccountData : accountProfileSummaryBlizzardData.getWowAccountsData()){
-            for(CharacterSummaryData characterSummaryData : wowAccountData.getCharacterSummaryData()){
+        for(final WowAccountData wowAccountData : accountProfileSummaryBlizzardData.getWowAccountsData()){
+            for(final CharacterSummaryData characterSummaryData : wowAccountData.getCharacterSummaryData()){
                 this.fetchCharacterFromAccount(characterSummaryData, userAccount, blizzardAccountParameter.getToken());
             }
         }
@@ -90,14 +93,14 @@ public class BlizzardService implements IBlizzardService {
                                            final UserAccount userAccount,
                                            final String token){
 
-        String url = characterSummaryData.getCharacterHrefData().getHref() + "&access_token=" + token;
+        final String url = characterSummaryData.getCharacterHrefData().getHref() + "&access_token=" + token;
 
         try{
-            CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
+            final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
 
-            Character character;
+            final Character character;
 
-            Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
+            final Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
 
             if(optionalCharacter.isPresent()){
                 character = optionalCharacter.get();
@@ -132,11 +135,11 @@ public class BlizzardService implements IBlizzardService {
     private Guild fetchGuildFromCharacter(final CharacterData characterData){
         Guild guild = null;
 
-        GuildIndexData guildIndexData = characterData.getGuildIndexData();
+        final GuildIndexData guildIndexData = characterData.getGuildIndexData();
 
         if(guildIndexData != null){
 
-            Optional<Guild> optionalGuild = this.guildRepository.findById(guildIndexData.getId());
+            final Optional<Guild> optionalGuild = this.guildRepository.findById(guildIndexData.getId());
 
             if(optionalGuild.isPresent()){
                 guild = optionalGuild.get();
@@ -145,16 +148,16 @@ public class BlizzardService implements IBlizzardService {
                 guild.setId(guildIndexData.getId());
             }
 
-            Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
+            final Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
 
-            Realm realm = optionalRealm.get();
+            final Realm realm = optionalRealm.get();
 
             guild.setRealm(realm);
 
-            Optional<Faction> optionalFaction =
+            final Optional<Faction> optionalFaction =
                     this.factionRepository.findByType(guildIndexData.getFactionData().getType());
 
-            Faction faction = optionalFaction.get();
+            final Faction faction = optionalFaction.get();
             guild.setFaction(faction);
 
             guild.setIsUpdatedTrue();
@@ -171,9 +174,9 @@ public class BlizzardService implements IBlizzardService {
     private Realm fetchRealmFromCharacter(final CharacterData characterData){
         Realm realm;
 
-        RealmData realmData = characterData.getRealmData();
+        final RealmData realmData = characterData.getRealmData();
 
-        Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
+        final Optional<Realm> optionalRealm = this.realmRepository.findBySlug(characterData.getRealmData().getSlug());
 
         if(optionalRealm.isPresent()){
             realm = optionalRealm.get();
@@ -195,9 +198,10 @@ public class BlizzardService implements IBlizzardService {
 
     private Faction fetchFactionFromCharacter(final CharacterData characterData){
 
-        FactionData factionData = characterData.getFactionData();
+        final FactionData factionData = characterData.getFactionData();
 
-        Optional<Faction> optionalFaction = this.factionRepository.findByType(characterData.getFactionData().getType());
+        final Optional<Faction> optionalFaction =
+                this.factionRepository.findByType(characterData.getFactionData().getType());
 
         Faction faction = optionalFaction.orElseGet(Faction::new);
 

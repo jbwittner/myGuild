@@ -27,7 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
+/**
+ * Test of FetchAccountCharacter
+ */
+public class FetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
     @Value("${application.blizzard.wow.profile.base-uri}")
     protected String baseUriProfile;
@@ -106,18 +109,18 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
         String url;
 
-        List<CharacterSummaryData> characterSummaryDataList = new ArrayList<>();
+        final List<CharacterSummaryData> characterSummaryDataList = new ArrayList<>();
 
         for(int index = 0; index <= NUMBER_CHARACTER; index ++){
 
             url = this.factory.getUniqueRandomURI();
 
-            CharacterSummaryData characterSummaryData = new CharacterSummaryData();
+            final CharacterSummaryData characterSummaryData = new CharacterSummaryData();
 
-            HrefData hrefData = new HrefData();
+            final HrefData hrefData = new HrefData();
             hrefData.setHref(url);
 
-            CharacterData characterData = this.getCharacterData();
+            final CharacterData characterData = this.getCharacterData();
 
             characterSummaryData.setCharacterHrefData(hrefData);
             characterSummaryData.setId(characterData.getId());
@@ -126,29 +129,32 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
             url = url + "&access_token=" + blizzardAccountParameter.getToken();
 
-            if(index != NUMBER_CHARACTER){
+            if(index == NUMBER_CHARACTER){
+                Mockito.when(this.httpHelper.getForObject(url, CharacterData.class))
+                        .thenThrow(HttpClientErrorException.class);
+            } else {
                 characterDataList.add(characterData);
 
                 Mockito.when(this.httpHelper.getForObject(url, CharacterData.class))
                         .thenReturn(characterData);
-            } else {
-                Mockito.when(this.httpHelper.getForObject(url, CharacterData.class))
-                        .thenThrow(HttpClientErrorException.class);
             }
 
         }
 
-        WowAccountData wowAccountData = new WowAccountData();
+        final WowAccountData wowAccountData = new WowAccountData();
         wowAccountData.setCharacterSummaryData(characterSummaryDataList);
 
-        List<WowAccountData> wowAccountDataList = new ArrayList<>();
+        final List<WowAccountData> wowAccountDataList = new ArrayList<>();
         wowAccountDataList.add(wowAccountData);
 
-        AccountProfileSummaryBlizzardData accountProfileSummaryBlizzardData = new AccountProfileSummaryBlizzardData();
+        final AccountProfileSummaryBlizzardData accountProfileSummaryBlizzardData = new AccountProfileSummaryBlizzardData();
         accountProfileSummaryBlizzardData.setWowAccountsData(wowAccountDataList);
 
-        FieldSetter.setField(this.blizzardService, this.blizzardService.getClass().getDeclaredField("baseUriProfile"), this.baseUriProfile);
-        FieldSetter.setField(this.blizzardService, this.blizzardService.getClass().getDeclaredField("namespaceProfile"), this.namespaceProfile);
+        FieldSetter.setField(this.blizzardService,
+                this.blizzardService.getClass().getDeclaredField("baseUriProfile"), this.baseUriProfile);
+
+        FieldSetter.setField(this.blizzardService,
+                this.blizzardService.getClass().getDeclaredField("namespaceProfile"), this.namespaceProfile);
 
         // Mock of the get account
         url = this.baseUriProfile + "/user/wow?namespace=" +
@@ -167,14 +173,14 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
             realmData.setSlug(this.factory.getUniqueRandomAlphanumericString());
 
-            HrefData hrefData = new HrefData();
+            final HrefData hrefData = new HrefData();
 
             hrefData.setHref(this.factory.getUniqueRandomURI());
             realmData.setKeyHrefData(hrefData);
 
             realmData.setId(this.factory.getUniqueRandomInteger());
 
-            LocalizedStringData localizedStringData = new LocalizedStringData();
+            final LocalizedStringData localizedStringData = new LocalizedStringData();
 
             localizedStringData.setItIT(this.factory.getUniqueRandomAlphanumericString());
             localizedStringData.setFrFR(this.factory.getUniqueRandomAlphanumericString());
@@ -195,7 +201,7 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
             factionData.setType(this.factory.getUniqueRandomAlphanumericString());
 
-            LocalizedStringData localizedStringData = new LocalizedStringData();
+            final LocalizedStringData localizedStringData = new LocalizedStringData();
 
             localizedStringData.setItIT(this.factory.getUniqueRandomAlphanumericString());
             localizedStringData.setFrFR(this.factory.getUniqueRandomAlphanumericString());
@@ -214,21 +220,21 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
         for(int index = 0; index < NUMBER_FACTION; index++){
             guildIndexData = new GuildIndexData();
 
-            int indexRealmData = this.factory.getRandomInteger(NUMBER_REALM);
-            RealmData realmData = this.realmDataList.get(indexRealmData);
+            final int indexRealmData = this.factory.getRandomInteger(NUMBER_REALM);
+            final RealmData realmData = this.realmDataList.get(indexRealmData);
 
             guildIndexData.setRealmData(realmData);
 
             guildIndexData.setName(this.factory.getUniqueRandomAlphanumericString());
 
-            HrefData hrefData = new HrefData();
+            final HrefData hrefData = new HrefData();
             hrefData.setHref(this.factory.getUniqueRandomURI());
             guildIndexData.setKeyHrefData(hrefData);
 
             guildIndexData.setId(this.factory.getUniqueRandomInteger());
 
-            int indexFactionData = this.factory.getRandomInteger(NUMBER_FACTION);
-            FactionData factionData = this.factionDataList.get(indexFactionData);
+            final int indexFactionData = this.factory.getRandomInteger(NUMBER_FACTION);
+            final FactionData factionData = this.factionDataList.get(indexFactionData);
             guildIndexData.setFactionData(factionData);
 
             this.guildIndexDataList.add(guildIndexData);
@@ -236,25 +242,25 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
     }
 
     private CharacterData getCharacterData(){
-        CharacterData characterData = new CharacterData();
+        final CharacterData characterData = new CharacterData();
         characterData.setLevel(this.factory.getUniqueRandomInteger());
 
         int index;
 
         if(this.factory.getRandomBoolean()){
             index = this.factory.getRandomInteger(NUMBER_GUILD);
-            GuildIndexData guildIndexData = this.guildIndexDataList.get(index);
+            final GuildIndexData guildIndexData = this.guildIndexDataList.get(index);
             characterData.setGuildIndexData(guildIndexData);
 
             characterData.setFactionData(guildIndexData.getFactionData());
             characterData.setRealmData(guildIndexData.getRealmData());
         }else{
             index = this.factory.getRandomInteger(NUMBER_FACTION);
-            FactionData factionData = this.factionDataList.get(index);
+            final FactionData factionData = this.factionDataList.get(index);
             characterData.setFactionData(factionData);
 
             index = this.factory.getRandomInteger(NUMBER_REALM);
-            RealmData realmData = this.realmDataList.get(index);
+            final RealmData realmData = this.realmDataList.get(index);
             characterData.setRealmData(realmData);
         }
 
@@ -275,13 +281,13 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
         // Check guilds
         Assertions.assertEquals(NUMBER_GUILD, this.guildRepository.count());
 
-        for(GuildIndexData guildIndexData : this.guildIndexDataList){
+        for(final GuildIndexData guildIndexData : this.guildIndexDataList){
 
-            Optional<Guild> optionalGuild = this.guildRepository.findById(guildIndexData.getId());
+            final Optional<Guild> optionalGuild = this.guildRepository.findById(guildIndexData.getId());
 
             Assertions.assertTrue(optionalGuild.isPresent());
 
-            Guild guild = optionalGuild.get();
+            final Guild guild = optionalGuild.get();
 
             Assertions.assertEquals(guildIndexData.getId(), guild.getId());
             Assertions.assertEquals(guildIndexData.getName(), guild.getName());
@@ -292,13 +298,13 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
         // Check factions
         Assertions.assertEquals(NUMBER_FACTION, this.factionRepository.count());
 
-        for(FactionData factionData : this.factionDataList){
+        for(final FactionData factionData : this.factionDataList){
 
-            Optional<Faction> optionalFaction = this.factionRepository.findByType(factionData.getType());
+            final Optional<Faction> optionalFaction = this.factionRepository.findByType(factionData.getType());
 
             Assertions.assertTrue(optionalFaction.isPresent());
 
-            Faction faction = optionalFaction.get();
+            final Faction faction = optionalFaction.get();
 
             Assertions.assertEquals(factionData.getType(), faction.getType());
         }
@@ -306,13 +312,13 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
         // Check realms
         Assertions.assertEquals(NUMBER_REALM, this.realmRepository.count());
 
-        for(RealmData realmData : this.realmDataList){
+        for(final RealmData realmData : this.realmDataList){
 
-            Optional<Realm> optionalRealm = this.realmRepository.findBySlug(realmData.getSlug());
+            final Optional<Realm> optionalRealm = this.realmRepository.findBySlug(realmData.getSlug());
 
             Assertions.assertTrue(optionalRealm.isPresent());
 
-            Realm realm = optionalRealm.get();
+            final Realm realm = optionalRealm.get();
 
             Assertions.assertEquals(realmData.getId(), realm.getId());
             Assertions.assertEquals(realmData.getSlug(), realm.getSlug());
@@ -321,20 +327,20 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
         // Check characters
         Assertions.assertEquals(NUMBER_CHARACTER, this.characterRepository.count());
 
-        for(CharacterData characterData : this.characterDataList){
+        for(final CharacterData characterData : this.characterDataList){
 
-            Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
+            final Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
 
             Assertions.assertTrue(optionalCharacter.isPresent());
 
-            Character character = optionalCharacter.get();
+            final Character character = optionalCharacter.get();
 
             Assertions.assertNull(character.getGuildRank());
 
-            if(character.getGuild() != null){
-                Assertions.assertEquals(characterData.getGuildIndexData().getId() ,character.getGuild().getId());
-            }else {
+            if(character.getGuild() == null){
                 Assertions.assertNull(character.getGuild());
+            }else {
+                Assertions.assertEquals(characterData.getGuildIndexData().getId() ,character.getGuild().getId());
             }
 
             Assertions.assertEquals(characterData.getRealmData().getId(), character.getRealm().getId());
@@ -350,6 +356,9 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
     }
 
+    /**
+     * Test to fetch one time the data
+     */
     @Test
     public void TestOneFetch(){
 
@@ -359,6 +368,9 @@ public class fetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
     }
 
+    /**
+     * Test to fetch two time the data
+     */
     @Test
     public void TestTwoFetch(){
 

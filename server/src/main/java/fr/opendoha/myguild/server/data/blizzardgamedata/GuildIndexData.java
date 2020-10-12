@@ -3,6 +3,9 @@ package fr.opendoha.myguild.server.data.blizzardgamedata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Class representation of guild index
+ */
 @Data
 public class GuildIndexData {
 

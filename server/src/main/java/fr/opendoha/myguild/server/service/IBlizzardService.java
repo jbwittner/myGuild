@@ -7,6 +7,9 @@ import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
  */
 public interface IBlizzardService {
 
+    /**
+     * Method to fetch character data from a blizzard account
+     */
     void fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter);
 
 }

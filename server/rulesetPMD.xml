@@ -170,7 +170,7 @@
     </rule>
     <rule ref="category/java/design.xml/TooManyFields">
         <properties>
-            <property name="maxfields" value="15" />
+            <property name="maxfields" value="30" />
         </properties>
     </rule>
     <!-- Design -->

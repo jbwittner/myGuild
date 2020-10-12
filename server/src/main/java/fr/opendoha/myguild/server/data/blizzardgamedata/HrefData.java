@@ -1,8 +1,10 @@
 package fr.opendoha.myguild.server.data.blizzardgamedata;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Class representation of href
+ */
 @Data
 public class HrefData {
 

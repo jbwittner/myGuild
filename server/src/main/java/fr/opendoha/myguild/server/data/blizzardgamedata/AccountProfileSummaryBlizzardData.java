@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Class representation of account profile summary
+ */
 @Data
 public class AccountProfileSummaryBlizzardData {
 

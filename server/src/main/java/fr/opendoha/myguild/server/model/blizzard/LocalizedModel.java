@@ -1,12 +1,13 @@
 package fr.opendoha.myguild.server.model.blizzard;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.opendoha.myguild.server.data.blizzardgamedata.LocalizedStringData;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ * Embeddable model
+ */
 @Data
 @Embeddable
 public class LocalizedModel {

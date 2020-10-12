@@ -1,8 +1,5 @@
 package fr.opendoha.myguild.server.model.blizzard;
 
-import com.vladmihalcea.hibernate.type.array.IntArrayType;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import org.hibernate.annotations.TypeDef;
@@ -34,6 +31,9 @@ public class AbstractBlizzardModel {
     @UpdateTimestamp
     protected LocalDateTime updateTime;
 
+    /**
+     * Method to set directly the value of isUpdated
+     */
     public void setIsUpdatedTrue(){
         this.isUpdated = true;
     }

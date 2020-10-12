@@ -3,11 +3,12 @@ package fr.opendoha.myguild.server.model.blizzard;
 import fr.opendoha.myguild.server.data.blizzardgamedata.LocalizedStringData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
+/**
+ * Model for the factions
+ */
 @EqualsAndHashCode()
 @Data
 @Entity
@@ -22,16 +23,16 @@ public class Faction{
     @Column(name = "is_updated", nullable = false)
     protected Boolean isUpdated = true;
 
-    @UpdateTimestamp
-    protected LocalDateTime updateTime;
-
     @Column(name = "type",  nullable = false, unique = true)
     private String type;
 
     @Embedded
     private LocalizedModel localizedModel;
 
-    public void updateLocalizedValue(LocalizedStringData localizedStringData){
+    /**
+     * Method to update the values of localizedModel
+     */
+    public void updateLocalizedValue(final LocalizedStringData localizedStringData){
         localizedModel = new LocalizedModel();
         localizedModel.setEnUS(localizedStringData.getEnUS());
         localizedModel.setEsES(localizedStringData.getEsES());
@@ -39,6 +40,9 @@ public class Faction{
         localizedModel.setItIT(localizedStringData.getItIT());
     }
 
+    /**
+     * Method to set directly the value of isUpdated
+     */
     public void setIsUpdatedTrue(){
         this.isUpdated = true;
     }
@@ -48,7 +52,6 @@ public class Faction{
         return "Faction{" +
                 "id=" + id +
                 ", isUpdated=" + isUpdated +
-                ", updateTime=" + updateTime +
                 ", type='" + type + '\'' +
                 ", localizedModel=" + localizedModel +
                 '}';
