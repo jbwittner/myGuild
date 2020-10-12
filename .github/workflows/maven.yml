@@ -37,10 +37,10 @@ jobs:
           ${{ runner.os }}-maven-
           
     - name: Generation PMD report
-        run: mvn -B pmd:pmd
+      run: mvn -B pmd:pmd
 
     - name: Check PMD report
-        run: mvn -B pmd:check
+      run: mvn -B pmd:check
     
   build:
     needs: [check]
