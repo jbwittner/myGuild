@@ -36,10 +36,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
           
-    - name: PMD check
-      run: |
-        mvn -B pmd:pmd
-        ./check_pmd.sh
+    - name: Generation PMD report
+        run: mvn -B pmd:pmd
+
+    - name: Check PMD report
+        run: mvn -B pmd:check
     
   build:
     needs: [check]
