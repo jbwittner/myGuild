@@ -63,7 +63,6 @@
             <property name="checkAll" value="true" />
         </properties>
     </rule>
-    <rule ref="category/java/bestpractices.xml/UnusedImports" />
     <rule ref="category/java/bestpractices.xml/UnusedLocalVariable" />
     <rule ref="category/java/bestpractices.xml/UnusedPrivateField" />
     <rule ref="category/java/bestpractices.xml/UseAssertEqualsInsteadOfAssertTrue" />

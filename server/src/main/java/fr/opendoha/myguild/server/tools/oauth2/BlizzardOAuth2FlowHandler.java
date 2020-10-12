@@ -58,7 +58,7 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
     /**
      * @param httpHelper the httpHelper to set
      */
-    public void setHttpHelper(HttpHelper httpHelper) {
+    public void setHttpHelper(final HttpHelper httpHelper) {
         this.httpHelper = httpHelper;
     }
 
