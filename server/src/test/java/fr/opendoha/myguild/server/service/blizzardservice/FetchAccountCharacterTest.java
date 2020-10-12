@@ -99,7 +99,7 @@ public class FetchAccountCharacterTest extends AbstractMotherIntegrationTest {
 
         this.blizzardAccountParameter.setBlizzardId(this.userAccount.getBlizzardId());
         this.blizzardAccountParameter.setToken(
-                this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_TOCKEN));
+                this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_TOKEN));
 
 
         // Creation of realm list

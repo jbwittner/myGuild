@@ -21,7 +21,7 @@ public class TestObjectFactory {
 
     public static final int LENGTH_BATTLETAG = 15;
     public static final int LENGTH_NICKNAME = 10;
-    public static final int LENGTH_TOCKEN = 10;
+    public static final int LENGTH_TOKEN = 10;
 
     private List<String> listRandomString = new ArrayList<>();
     private List<String> listRandomEmail = new ArrayList<>();
