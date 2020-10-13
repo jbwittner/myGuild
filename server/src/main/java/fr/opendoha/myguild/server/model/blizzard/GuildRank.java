@@ -41,8 +41,6 @@ public class GuildRank {
                 ", rank=" + rank +
                 ", isUpdated=" + isUpdated +
                 ", name='" + name + '\'' +
-                ", guild=" + guild +
-                ", characterList=" + characterList +
                 '}';
     }
 

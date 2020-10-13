@@ -21,8 +21,7 @@ logging:
       tools.HttpHelper: INFO
       MyGuildApplication: INFO
       service:
-        BlizzardGameData: INFO
-        BlizzardProfile: INFO
+        BlizzardService: INFO
         oauth2:
           BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 

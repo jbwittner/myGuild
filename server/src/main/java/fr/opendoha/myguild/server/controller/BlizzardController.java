@@ -1,8 +1,8 @@
 package fr.opendoha.myguild.server.controller;
 
-import fr.opendoha.myguild.server.parameters.AddingGuildParameter;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.service.BlizzardService;
+import fr.opendoha.myguild.server.service.IBlizzardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("blizzard")
 public class BlizzardController extends MotherController {
 
-    protected final BlizzardService blizzardService;
+    protected final IBlizzardService blizzardService;
     protected final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     /**
@@ -56,18 +56,14 @@ public class BlizzardController extends MotherController {
     }
 
     /**
-     * random method
+     * Method
      */
-    @GetMapping("/addingGuild")
-    public boolean addingGuild(final OAuth2AuthenticationToken authentication,
-                               final AddingGuildParameter addingGuildParameter){
+    @GetMapping("/fetchAccountCharacter")
+    public void fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        addingGuildParameter.setToken(blizzardAccountParameter.getToken());
-        addingGuildParameter.setBlizzardId(blizzardAccountParameter.getBlizzardId());
-
-        return true;
+        this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
     }
 
 }

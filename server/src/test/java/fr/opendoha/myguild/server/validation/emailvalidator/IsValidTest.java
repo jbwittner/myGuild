@@ -35,9 +35,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
         final EmailTest emailTest = new EmailTest();
         emailTest.setEmail(this.factory.getUniqueRandomAlphanumericString(10));
 
-        Assertions.assertThrows(ValidationDataException.class, () -> {
-            validator.validate(emailTest);
-        });
+        Assertions.assertThrows(ValidationDataException.class, () -> validator.validate(emailTest));
     }
 
     /**
@@ -48,9 +46,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
         final EmailTest emailTest = new EmailTest();
         emailTest.setEmail(null);
 
-        Assertions.assertThrows(ValidationDataException.class, () -> {
-            validator.validate(emailTest);
-        });
+        Assertions.assertThrows(ValidationDataException.class, () -> validator.validate(emailTest));
     }
 
 }

@@ -4,7 +4,7 @@ import fr.opendoha.myguild.server.model.blizzard.GuildRank;
 import fr.opendoha.myguild.server.repository.AbstractRepository;
 
 /**
- * Repository for PlayableRace
+ * Repository for GuildRank
  */
 public interface GuildRankRepository extends AbstractRepository<GuildRank, Integer> {
 

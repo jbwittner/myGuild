@@ -5,7 +5,7 @@ import fr.opendoha.myguild.server.repository.AbstractRepository;
 
 
 /**
- * Repository for PlayableRace
+ * Repository for Character
  */
 public interface CharacterRepository extends AbstractRepository<Character, Integer> {
 

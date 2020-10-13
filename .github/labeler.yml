@@ -1,5 +1,5 @@
 configuration:
-- any: ['Vagrantfile','check_pmd.sh','docker-compose.yml','./**/pom.xml','./**/.gitingore','./**/.github/**/*']
+- any: ['Vagrantfile','docker-compose.yml','./**/pom.xml','./**/.gitingore','./**/.github/**/*']
 
 documentation:
 - any: ['./LICENSE', './SECURITY.md', './README.md']

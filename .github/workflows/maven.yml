@@ -36,10 +36,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
           
-    - name: PMD check
-      run: |
-        mvn -B pmd:pmd
-        ./check_pmd.sh
+    - name: Generation PMD report
+      run: mvn -B pmd:pmd -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+    - name: Check PMD report
+      run: mvn -B pmd:check -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
     
   build:
     needs: [check]
@@ -67,7 +68,7 @@ jobs:
           ${{ runner.os }}-maven-
     
     - name: Build java part
-      run: mvn -B compile --file pom.xml
+      run: mvn -B compile --file pom.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
   
   test:
     needs: [build]
@@ -94,12 +95,7 @@ jobs:
           ${{ runner.os }}-maven-
       
     - name: Test with Maven
-      run: mvn -B test --file pom.xml
+      run: mvn -B test --file pom.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
-  coverage:
-    needs: [test]
-    runs-on: ubuntu-18.04
-    
-    steps:
-      - uses: actions/checkout@master
-      - uses: codecov/codecov-action@v1
+    - name: Coverage
+      uses: codecov/codecov-action@v1

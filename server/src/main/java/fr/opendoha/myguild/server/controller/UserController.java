@@ -3,6 +3,7 @@ package fr.opendoha.myguild.server.controller;
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
 import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
+import fr.opendoha.myguild.server.service.IUserService;
 import fr.opendoha.myguild.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("user")
 public class UserController extends MotherController {
 
-    protected final UserService userService;
+    protected final IUserService userService;
 
     /**
      * Constructor

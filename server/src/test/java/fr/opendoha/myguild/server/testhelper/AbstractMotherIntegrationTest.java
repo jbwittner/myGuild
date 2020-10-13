@@ -20,7 +20,7 @@ public abstract class AbstractMotherIntegrationTest {
      * Method launch before each test
      */
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() throws Exception {
         this.initDataBeforeEach();
     }
 
@@ -35,6 +35,6 @@ public abstract class AbstractMotherIntegrationTest {
     /**
      * Method used to prepare the data of tests
      */
-    abstract protected void initDataBeforeEach();
+    abstract protected void initDataBeforeEach() throws NoSuchFieldException;
 
 }
