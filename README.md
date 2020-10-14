@@ -23,10 +23,12 @@ Finally, a vagrant file are available to prepare a VM with docker and the databa
 
 * Java = 11
 * Maven >= 3.6.3
+* Node = V12.19.0
+* NPM = 6.14.8
 
 ## Requirements (run)
 
-* postgres = 9.6.19
+* MySQL = 8.0.20
 
 ## Build
 
@@ -37,8 +39,12 @@ To build used the command : `mvn package`
 When you create a pull request, a series of actions will launch.
 To merge the pull request all actions need to passe.
 
-One of the action is a static check of the code. We used PMD (https://pmd.github.io/).
+One of the action is a static check of the code. We used PMD (https://pmd.github.io/), ESlint and Prettier.
 
-To check the code, run the command `mvn pmd:pmd` and check if the file pmd.html on the folder `target/site` exist. **All remarks must be taken into account**
+To check the code :
+- frontend : run the command `npm run lint` and `prettier:check`
+- server : run the command `mvn pmd:pmd` and check if the file pmd.html on the folder `target/site` exist.
+
+**All remarks must be taken into account**
 
 Finally, a manual validation of the pull request is necessary.

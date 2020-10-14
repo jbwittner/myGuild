@@ -18,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "index.html", "/favicon.ico", "/*manifest.json", "workbox-*/*.js", "/*.js", "/*.png", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login();

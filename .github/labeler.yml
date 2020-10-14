@@ -24,3 +24,10 @@ backend-test:
 
 backend-resources:
 - any: ['server/src/main/**/resources/*','server/src/test/**/resources/*']
+
+frontend-source:
+- any: ['frontend/src']
+
+frontend-public:
+- any: ['frontend/public']
+
