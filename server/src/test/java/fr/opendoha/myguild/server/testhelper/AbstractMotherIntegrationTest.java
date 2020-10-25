@@ -35,6 +35,6 @@ public abstract class AbstractMotherIntegrationTest {
     /**
      * Method used to prepare the data of tests
      */
-    abstract protected void initDataBeforeEach() throws NoSuchFieldException;
+    abstract protected void initDataBeforeEach() throws Exception;
 
 }

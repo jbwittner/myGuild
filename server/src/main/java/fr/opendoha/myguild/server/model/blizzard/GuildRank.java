@@ -9,30 +9,40 @@ import java.util.List;
  * Model for the guild ranks
  */
 @Entity
-@Table(name = "guild_ranks")
+@Table(name = "GUILD_RANKS")
 @Data
 public class GuildRank {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false, insertable = false, unique = true)
+    @Column(name = "ID", nullable = false, updatable = false, insertable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "guild_rank")
+    @Column(name = "GUILD_RANK")
     private Integer rank;
 
-    @Column(name = "is_updated", nullable = false)
+    @Column(name = "IS_UPDATED", nullable = false)
     private Boolean isUpdated = true;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "guild_id")
-    private Guild guild;
 
     @OneToMany(mappedBy = "guildRank", fetch = FetchType.LAZY)
     private List<Character> characterList;
+
+    /**
+     * Method to set directly the value of isUpdated
+     */
+    public void setIsUpdatedFalse(){
+        this.isUpdated = false;
+    }
+
+    /**
+     * Method to set directly the value of isUpdated
+     */
+    public void setIsUpdatedTrue(){
+        this.isUpdated = true;
+    }
 
     @Override
     public String toString() {

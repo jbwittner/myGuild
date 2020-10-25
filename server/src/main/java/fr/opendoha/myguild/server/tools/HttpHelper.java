@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of IHttpHelper
@@ -43,15 +44,17 @@ public class HttpHelper implements IHttpHelper {
     @Override
     public <T> T getForObject(final String url, final Class<T> responseType, final Object... uriVariables) {
 
-        this.logger.info("Call : " + url);
-
         try {
             Thread.sleep(DELAY_CALL_MS_BLIZZARD);
         } catch (InterruptedException e) {
             this.logger.error("Error during the sleep");
         }
 
-        final T getObject = this.restTemplate.getForObject(url, responseType, uriVariables);
+        final String urlDecoded = java.net.URLDecoder.decode(url, StandardCharsets.UTF_8);
+
+        this.logger.info("Call urlDecoded : " + urlDecoded);
+
+        final T getObject = this.restTemplate.getForObject(urlDecoded, responseType, uriVariables);
 
         return getObject;
 

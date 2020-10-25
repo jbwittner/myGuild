@@ -6,6 +6,11 @@ package fr.opendoha.myguild.server.exception;
 public class UserAccountNotExistedException extends RuntimeException {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = 6753551758001742394L;
+
+    /**
      * Exception used when the user account doesn't exist
      */
     public UserAccountNotExistedException(final Integer blizzardId) {

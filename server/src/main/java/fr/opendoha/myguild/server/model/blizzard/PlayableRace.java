@@ -7,26 +7,20 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 
 /**
- * Model for the guild realms
+ * Model for the playable race
  */
-@EqualsAndHashCode()
-@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "REALMS")
-public class Realm{
-
-    @Id
-    @Column(name = "ID", nullable = false, updatable = false, insertable = false, unique = true)
-    protected Integer id;
-
-    @Column(name = "IS_UPDATED", nullable = false)
-    protected Boolean isUpdated = true;
-
-    @Column(name = "SLUG",  nullable = false, unique = true)
-    private String slug;
+@Table(name = "PLAYABLE_RACES")
+@Data
+public class PlayableRace extends AbstractBlizzardModel{
 
     @Embedded
     private LocalizedModel localizedModel;
+
+    @ManyToOne
+    @JoinColumn(name = "FACTION_ID")
+    private Faction faction;
 
     /**
      * Method to set value of localizedModel with localizedStringData
@@ -36,18 +30,10 @@ public class Realm{
         this.localizedModel.updateLocalizedValue(localizedStringData);
     }
 
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedTrue(){
-        this.isUpdated = true;
-    }
-
     @Override
     public String toString() {
-        return "Realm{" +
-                "slug='" + slug + '\'' +
-                ", localizedModel=" + localizedModel +
+        return "PlayableRace{" +
+                "localizedModel=" + localizedModel +
                 ", id=" + id +
                 ", isUpdated=" + isUpdated +
                 '}';

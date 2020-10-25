@@ -12,34 +12,38 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "guilds")
+@Table(name = "GUILDS")
 public class Guild extends AbstractBlizzardModel {
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "application_is_used", nullable = false)
-    private Boolean useApplication = false;
 
     @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
     private List<Character> characterList;
 
+    @Column(name = "MEMBER_COUNT")
+    private Integer memberCount;
+
+    @Column(name = "ACHIEVEMENT_POINTS")
+    private Integer achievementPoints;
+
     @ManyToOne
-    @JoinColumn(name = "realm_id")
+    @JoinColumn(name = "REALM_ID")
     private Realm realm;
 
     @ManyToOne
-    @JoinColumn(name = "faction_id")
+    @JoinColumn(name = "FACTION_ID")
     private Faction faction;
+
+    @Column(name = "IS_MAIN_GUILD")
+    private Boolean isMainGuild;
 
     @Override
     public String toString() {
         return "Guild{" +
                 "name='" + name + '\'' +
-                ", useApplication=" + useApplication +
                 ", id=" + id +
                 ", isUpdated=" + isUpdated +
-                ", updateTime=" + updateTime +
                 '}';
     }
 }

@@ -156,7 +156,7 @@
     <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
     <rule ref="category/java/design.xml/ExcessiveParameterList">
         <properties>
-            <property name="minimum" value="10.0" />
+            <property name="minimum" value="20.0" />
         </properties>
     </rule>
     <rule ref="category/java/design.xml/LogicInversion" />

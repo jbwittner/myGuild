@@ -2,28 +2,27 @@ package fr.opendoha.myguild.server.model.blizzard;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.LocalizedStringData;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 /**
- * Model for the guild realms
+ * Model for the specialization role
  */
-@EqualsAndHashCode()
-@Data
 @Entity
-@Table(name = "REALMS")
-public class Realm{
+@Table(name = "SPECIALIZATION_ROLES")
+@Data
+public class SpecializationRole {
 
     @Id
     @Column(name = "ID", nullable = false, updatable = false, insertable = false, unique = true)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     protected Integer id;
 
     @Column(name = "IS_UPDATED", nullable = false)
     protected Boolean isUpdated = true;
 
-    @Column(name = "SLUG",  nullable = false, unique = true)
-    private String slug;
+    @Column(name = "TYPE",  nullable = false, unique = true)
+    private String type;
 
     @Embedded
     private LocalizedModel localizedModel;
@@ -43,13 +42,11 @@ public class Realm{
         this.isUpdated = true;
     }
 
-    @Override
-    public String toString() {
-        return "Realm{" +
-                "slug='" + slug + '\'' +
-                ", localizedModel=" + localizedModel +
-                ", id=" + id +
-                ", isUpdated=" + isUpdated +
-                '}';
+    /**
+     * Method to set directly the value of isUpdated
+     */
+    public void setIsUpdatedFalse(){
+        this.isUpdated = false;
     }
+
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 /**
  * Controller used to manage blizzard data
  */
@@ -56,7 +58,7 @@ public class BlizzardController extends MotherController {
     }
 
     /**
-     * Method
+     * Method used to fetch account characters
      */
     @GetMapping("/fetchAccountCharacter")
     public void fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
@@ -64,6 +66,30 @@ public class BlizzardController extends MotherController {
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
         this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
+    }
+
+    /**
+     * Method used to fetch all static data (playable class, playable race, etc...)
+     */
+    @GetMapping("/fetchStaticData")
+    public void fetchStaticData() throws IOException {
+        this.blizzardService.fetchStaticData();
+    }
+
+    /**
+     * Method used to fetch all data
+     */
+    @GetMapping("/fetchAllData")
+    public void fetchAllData() throws IOException {
+        this.blizzardService.fetchAllData();
+    }
+
+    /**
+     * Method used to fetch all data characters
+     */
+    @GetMapping("/fetchAllDataCharacters")
+    public void fetchAllDataCharacters() throws IOException {
+        this.blizzardService.fetchAllDataCharacters();
     }
 
 }

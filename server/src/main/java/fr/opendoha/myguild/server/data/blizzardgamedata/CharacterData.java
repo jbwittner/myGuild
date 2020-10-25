@@ -31,6 +31,15 @@ public class CharacterData {
     @JsonProperty("equipped_item_level")
     private Integer equippedItemLevel;
 
+    @JsonProperty("race")
+    private IndexData raceIndexData;
+
+    @JsonProperty("character_class")
+    private IndexData classIndexData;
+
+    @JsonProperty("media")
+    private HrefData mediaHrefData;
+
     private Integer level;
 
 }

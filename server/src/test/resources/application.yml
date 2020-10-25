@@ -1,4 +1,7 @@
 application:
+  guild:
+    slug: peypouze
+    realm: archimonde
   db-param:
     host: localhost
     port: 3306
@@ -18,15 +21,15 @@ application:
 logging:
   level:
     fr.opendoha.myguild.server:
-      tools.HttpHelper: INFO
-      MyGuildApplication: INFO
+      tools.HttpHelper: WARN
+      MyGuildApplication: WARN
       service:
-        BlizzardService: INFO
+        BlizzardService: WARN
         oauth2:
-          BlizzardOAuth2FlowHandler: INFO
+          BlizzardOAuth2FlowHandler: WARN
       aop.interceptor: 
-        GeneralInterceptor: INFO
-        ServiceInterceptor: INFO
+        GeneralInterceptor: WARN
+        ServiceInterceptor: WARN
     org:
       apache: INFO
       springframework:

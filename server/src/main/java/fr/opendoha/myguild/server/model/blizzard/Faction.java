@@ -12,18 +12,18 @@ import javax.persistence.*;
 @EqualsAndHashCode()
 @Data
 @Entity
-@Table(name = "factions")
+@Table(name = "FACTIONS")
 public class Faction{
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false, insertable = false, unique = true)
+    @Column(name = "ID", nullable = false, updatable = false, insertable = false, unique = true)
     @GeneratedValue(strategy=GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name = "is_updated", nullable = false)
+    @Column(name = "IS_UPDATED", nullable = false)
     protected Boolean isUpdated = true;
 
-    @Column(name = "type",  nullable = false, unique = true)
+    @Column(name = "TYPE",  nullable = false, unique = true)
     private String type;
 
     @Embedded
@@ -33,11 +33,19 @@ public class Faction{
      * Method to update the values of localizedModel
      */
     public void updateLocalizedValue(final LocalizedStringData localizedStringData){
-        localizedModel = new LocalizedModel();
-        localizedModel.setEnUS(localizedStringData.getEnUS());
-        localizedModel.setEsES(localizedStringData.getEsES());
-        localizedModel.setFrFR(localizedStringData.getFrFR());
-        localizedModel.setItIT(localizedStringData.getItIT());
+        this.localizedModel = new LocalizedModel();
+        this.localizedModel.setItIT(localizedStringData.getItIT());
+        this.localizedModel.setFrFR(localizedStringData.getFrFR());
+        this.localizedModel.setEsES(localizedStringData.getEsES());
+        this.localizedModel.setEnUS(localizedStringData.getEnUS());
+        this.localizedModel.setDeDE(localizedStringData.getDeDE());
+        this.localizedModel.setEnGB(localizedStringData.getEnGB());
+        this.localizedModel.setEsMX(localizedStringData.getEsMX());
+        this.localizedModel.setKoKR(localizedStringData.getKoKR());
+        this.localizedModel.setPtBR(localizedStringData.getPtBR());
+        this.localizedModel.setRuRU(localizedStringData.getRuRU());
+        this.localizedModel.setZhCN(localizedStringData.getZhCN());
+        this.localizedModel.setZhTW(localizedStringData.getZhTW());
     }
 
     /**
@@ -45,6 +53,13 @@ public class Faction{
      */
     public void setIsUpdatedTrue(){
         this.isUpdated = true;
+    }
+
+    /**
+     * Method to set directly the value of isUpdated
+     */
+    public void setIsUpdatedFalse(){
+        this.isUpdated = false;
     }
 
     @Override

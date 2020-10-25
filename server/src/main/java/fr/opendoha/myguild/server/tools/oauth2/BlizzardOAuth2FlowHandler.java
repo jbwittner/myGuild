@@ -70,7 +70,7 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
         if (isTokenInvalid()) {
             logger.info("Fetching/Creating token.");
 
-            final String encodedCredentials = Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
+            final String encodedCredentials =Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
 
             // ------------------------------------------------- Allows testing/mocking of the URL connection object
             HttpURLConnection con = null;

@@ -11,10 +11,10 @@ import java.util.Random;
  */
 public class TestObjectFactory {
 
-    public static final Integer NUMBER_MAX = 20_000;
+    public static final Integer NUMBER_MAX = 20_000_000;
     public static final Integer NUMBER_MAX_BLIZZARD_ID = 20_000_000;
 
-    public static final int LENGTH_STANDARD = 20;
+    public static final int LENGTH_STANDARD = 30;
     public static final int LENGTH_URI = 15;
     public static final int LENGTH_EMAIL_NAME = 10;
     public static final int LENGTH_DOMAIN = 10;
@@ -74,13 +74,21 @@ public class TestObjectFactory {
         String randomString = "";
 
         while (isNotUnique){
-            randomString = RandomStringUtils.randomAlphanumeric(LENGTH_STANDARD);
+            randomString = this.getRandomAlphanumericString();
             isNotUnique = listRandomString.contains(randomString);
         }
 
         listRandomString.add(randomString);
 
         return randomString;
+    }
+
+    /**
+     * Method to get a random alphanumeric string
+     */
+    public String getRandomAlphanumericString(){
+
+        return RandomStringUtils.randomAlphanumeric(LENGTH_STANDARD);
     }
 
     /**
