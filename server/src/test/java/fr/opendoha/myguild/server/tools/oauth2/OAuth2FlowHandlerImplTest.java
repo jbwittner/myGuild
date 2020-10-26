@@ -104,7 +104,9 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
     public void testGetNotExpiredTokenOk() throws NoSuchFieldException, IOException {
         final String token = "myCachedToken";
         // Cached token condition and setting the token
-        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
+        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"),
+            Instant.now().plus(BlizzardOAuth2FlowHandler.MINUTES_MARGIN + 1, ChronoUnit.MINUTES));
+
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), token);
 
         Assertions.assertEquals(token, blizzardOAuth2FlowHandler.getToken());
@@ -115,9 +117,23 @@ public class OAuth2FlowHandlerImplTest extends AbstractMotherIntegrationTest {
      */
     @Test
     public void testIsTokenInvalidWithValidTokenOk() throws NoSuchFieldException {
-        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"), Instant.now().plus(5, ChronoUnit.MINUTES));
+        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"),
+            Instant.now().plus(BlizzardOAuth2FlowHandler.MINUTES_MARGIN + 1, ChronoUnit.MINUTES));
+
         FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
         Assertions.assertFalse(blizzardOAuth2FlowHandler.isTokenInvalid());
+    }
+
+    /**
+     * Test to check if the token is valid because it has not expired 
+     */
+    @Test
+    public void testIsTokenInvalidWithInValidTokenOk() throws NoSuchFieldException {
+        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("tokenExpiry"),
+            Instant.now().plus(BlizzardOAuth2FlowHandler.MINUTES_MARGIN - 1, ChronoUnit.MINUTES));
+
+        FieldSetter.setField(blizzardOAuth2FlowHandler, blizzardOAuth2FlowHandler.getClass().getDeclaredField("token"), "SomeSampleToken");
+        Assertions.assertTrue(blizzardOAuth2FlowHandler.isTokenInvalid());
     }
 
     /**
