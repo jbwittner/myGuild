@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.controller;
 
+import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.service.BlizzardService;
 import fr.opendoha.myguild.server.service.IBlizzardService;
@@ -24,6 +25,17 @@ public class BlizzardController extends MotherController {
     protected final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     /**
+     * Constructor
+     */
+    @Autowired
+    public BlizzardController(final BlizzardService blizzardService,
+                              final OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+        super();
+        this.blizzardService = blizzardService;
+        this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
+    }
+    
+    /**
      * Method used to get the blizzard account information
      */
     protected BlizzardAccountParameter getBlizzardAccountParameter(final OAuth2AuthenticationToken authentication){
@@ -47,17 +59,6 @@ public class BlizzardController extends MotherController {
     }
 
     /**
-     * Constructor
-     */
-    @Autowired
-    public BlizzardController(final BlizzardService blizzardService,
-                              final OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
-        super();
-        this.blizzardService = blizzardService;
-        this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
-    }
-
-    /**
      * Method used to fetch account characters
      */
     @GetMapping("/fetchAccountCharacter")
@@ -77,19 +78,15 @@ public class BlizzardController extends MotherController {
     }
 
     /**
-     * Method used to fetch all data
+     * Method to get all guilds who the account have a character 
      */
-    @GetMapping("/fetchAllData")
-    public void fetchAllData() throws IOException {
-        this.blizzardService.fetchAllData();
-    }
+    @GetMapping("/getGuildsAccount")
+    public GuildsAccountDTO getGuildsAccount(final OAuth2AuthenticationToken authentication) throws IOException {
 
-    /**
-     * Method used to fetch all data characters
-     */
-    @GetMapping("/fetchAllDataCharacters")
-    public void fetchAllDataCharacters() throws IOException {
-        this.blizzardService.fetchAllDataCharacters();
+        final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
+
+        return this.blizzardService.getGuildsAccount(blizzardAccountParameter);
+
     }
 
 }

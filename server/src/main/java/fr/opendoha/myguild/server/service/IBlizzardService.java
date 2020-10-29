@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.service;
 
+import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 
 import java.io.IOException;
@@ -10,23 +11,18 @@ import java.io.IOException;
 public interface IBlizzardService {
 
     /**
-     * Method to fetch character data from a blizzard account
+     * Method to fetch the characters from a blizzard account
      */
-    void fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter);
+    void fetchAccountCharacter(BlizzardAccountParameter blizzardAccountParameter);
 
     /**
-     * Method to fetch all the static data
+     * Method to fetch all static data (playable class, race, etc...)
      */
     void fetchStaticData() throws IOException;
 
     /**
-     * Method to fetch all the data
+     * Method to get all guilds who the account have a character
      */
-    void fetchAllData() throws IOException;
-
-    /**
-     * Method to fetch all data characters
-     */
-    void fetchAllDataCharacters() throws IOException;
+    GuildsAccountDTO getGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
 }

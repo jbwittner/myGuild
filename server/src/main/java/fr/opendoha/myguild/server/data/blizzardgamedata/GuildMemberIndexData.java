@@ -10,7 +10,7 @@ import lombok.Data;
 public class GuildMemberIndexData {
 
     @JsonProperty("character")
-    GuildMemberData guildMemberData;
+    private GuildMemberData guildMemberData;
 
-    Integer rank;
+    private Integer rank;
 }

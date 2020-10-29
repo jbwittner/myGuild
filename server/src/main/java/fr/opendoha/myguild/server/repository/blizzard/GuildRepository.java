@@ -8,9 +8,4 @@ import fr.opendoha.myguild.server.repository.AbstractRepository;
  */
 public interface GuildRepository extends AbstractRepository<Guild, Integer> {
 
-    /**
-     * Get the main guild
-     */
-    Guild findByIsMainGuildTrue();
-
 }

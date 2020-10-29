@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * DTO used to send the user account information
+ * DTO for user account
  */
 @Data
 public class UserAccountDTO {
@@ -19,7 +19,7 @@ public class UserAccountDTO {
     private LocalDateTime updateTime;
 
     /**
-     * Builder to get DTO from model
+     * DTO Builder
      */
     public void builderDTO(final UserAccount userAccount) {
         this.battleTag = userAccount.getBattleTag();

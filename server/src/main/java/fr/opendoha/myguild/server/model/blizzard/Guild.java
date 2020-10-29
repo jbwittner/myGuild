@@ -35,8 +35,8 @@ public class Guild extends AbstractBlizzardModel {
     @JoinColumn(name = "FACTION_ID")
     private Faction faction;
 
-    @Column(name = "IS_MAIN_GUILD")
-    private Boolean isMainGuild;
+    @Column(name = "USE_APPLICATION")
+    private Boolean useApplication;
 
     @Override
     public String toString() {

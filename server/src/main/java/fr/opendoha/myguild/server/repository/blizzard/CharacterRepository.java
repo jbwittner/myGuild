@@ -25,6 +25,11 @@ public interface CharacterRepository extends AbstractRepository<Character, Integ
     /**
      * 
      */
+    List<Character> findByUserAccountAndGuildIsNotNull(UserAccount userAccount);
+
+    /**
+     * 
+     */
     List<Character> findByUserAccountAndIsUpdatedFalse(UserAccount userAccount);
 
 }
