@@ -35,8 +35,9 @@ public class UserService implements IUserService {
      */
     @Transactional
     @Override
-    public void registerNewUserAccount(final UserRegistrationParameter userRegistrationParameter) throws
-            UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException {
+    public void registerNewUserAccount(final UserRegistrationParameter userRegistrationParameter)
+            throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
+            UserBlizzardIdAlreadyUsedException {
 
         this.checkEmailAndNickNameUser(userRegistrationParameter);
 
@@ -55,11 +56,10 @@ public class UserService implements IUserService {
      * Method used to check if the email and the nick name are already used
      *
      * @param userRegistrationParameter Parameter of the new account
-     * @throws UserEmailAlreadyUsedException    if the email is already used
-     * @throws UserNickNameAlreadyUsedException if the nick name is already used
      */
-    private void checkEmailAndNickNameUser(final UserRegistrationParameter userRegistrationParameter) throws
-            UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException {
+    private void checkEmailAndNickNameUser(final UserRegistrationParameter userRegistrationParameter)
+            throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
+            UserBlizzardIdAlreadyUsedException {
 
         if (this.userAccountRepository.existsByEmail(userRegistrationParameter.getEmail())) {
             throw new UserEmailAlreadyUsedException(userRegistrationParameter);

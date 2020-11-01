@@ -30,20 +30,30 @@ public class InputServiceValidator<T> {
      * Validation method
      *
      * @param object object to validate
+     * @throws ValidationDataException
      */
-    public void validate(final T object) {
+    public void validate(final T object) throws ValidationDataException {
         final Set<ConstraintViolation<T>> constraintViolations = validator.validate(object);
 
         if (!constraintViolations.isEmpty()) {
             final StringBuilder message = new StringBuilder();
+
+            int size = constraintViolations.size();
+            int index = 0;
 
             for (final ConstraintViolation<T> constraints : constraintViolations) {
                 message.append(constraints.getRootBeanClass().getSimpleName())
                         .append('.')
                         .append(constraints.getPropertyPath())
                         .append(' ')
-                        .append(constraints.getMessage())
-                        .append(' ');
+                        .append(constraints.getMessage());
+                
+                index++;
+                
+                if(index < size){
+                    message.append(',').append(' ');
+                }
+
             }
 
             throw new ValidationDataException(message.toString());

@@ -62,7 +62,8 @@ public class RegisterNewUserAccountTest extends AbstractMotherIntegrationTest {
      * Test with a new account
      */
     @Test
-    public void testWithNewAccountOk(){
+    public void testWithNewAccountOk() throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException,
+            UserBattleTagAlreadyUsedException, UserBlizzardIdAlreadyUsedException {
         final UserRegistrationParameter userRegistrationParameter = this.getUserRegistrationParameter();
 
         this.userService.registerNewUserAccount(userRegistrationParameter);

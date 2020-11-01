@@ -20,8 +20,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatcher("/**").authorizeRequests()
                 .antMatchers("/", "index.html", "/favicon.ico", "/*manifest.json", "workbox-*/*.js", "/*.js", "/*.png", "/static/**").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .oauth2Login();
+                .and().logout().logoutSuccessUrl("/")
+                .and().oauth2Login();
     }
 
 }

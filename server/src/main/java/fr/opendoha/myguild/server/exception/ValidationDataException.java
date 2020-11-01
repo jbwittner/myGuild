@@ -4,7 +4,7 @@ package fr.opendoha.myguild.server.exception;
  * Exception to signal a violation of data validation
  */
 @SuppressWarnings("serial")
-public class ValidationDataException extends RuntimeException {
+public class ValidationDataException extends FunctionalException {
 
     /**
      * Exception to signal a violation of data validation

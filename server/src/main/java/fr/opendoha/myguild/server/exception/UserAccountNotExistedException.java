@@ -3,7 +3,7 @@ package fr.opendoha.myguild.server.exception;
 /**
  * Exception used when the user account doesn't exist
  */
-public class UserAccountNotExistedException extends RuntimeException {
+public class UserAccountNotExistedException extends FunctionalException {
 
     /**
      *

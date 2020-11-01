@@ -24,7 +24,9 @@ application:
 logging:
   level:
     fr.opendoha.myguild.server:
-      tools.HttpHelper: DEBUG
+      tools:
+        HttpHelper: DEBUG
+        handler.GlobalExceptionHandler: INFO
       MyGuildApplication: INFO
       service:
         BlizzardService: DEBUG

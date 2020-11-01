@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.aop.interceptor;
 
+import fr.opendoha.myguild.server.exception.ValidationDataException;
 import fr.opendoha.myguild.server.validation.InputServiceValidator;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -63,8 +64,9 @@ public class MotherInterceptor {
      *
      * @param joinPoint Event intercepted by the aop
      * @param logger    Logger used to log information's
+     * @throws ValidationDataException
      */
-    public void validationInputData(final JoinPoint joinPoint, final Logger logger) {
+    public void validationInputData(final JoinPoint joinPoint, final Logger logger) throws ValidationDataException {
 
         final List<Object> list = Arrays.asList(joinPoint.getArgs());
         final Iterator<Object> iterator = list.iterator();

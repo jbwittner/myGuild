@@ -6,7 +6,7 @@ import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
  * Exception to signal a BlizzardId already used
  */
 @SuppressWarnings("serial")
-public final class UserBlizzardIdAlreadyUsedException extends RuntimeException {
+public final class UserBlizzardIdAlreadyUsedException extends FunctionalException {
 
     /**
      * Exception to signal a BlizzardId already used
