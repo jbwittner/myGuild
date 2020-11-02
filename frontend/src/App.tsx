@@ -1,17 +1,24 @@
 import { ThemeProvider } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
+import { GeneralContext } from './services/common/Context'
 import { theme } from './services/common/Theme'
-import Login from './services/login/Login'
+import MainRouteur from './services/routeur/MainRouteur'
 
 function App() {
+
+    const [isSignedIn, setIsSignedIn] = useState(false)
 
     return (
         <div className="App">
             <header className="App-header">
 
                 <ThemeProvider theme={theme}>
-                    <Login/>
+                    <GeneralContext.Provider value={{
+                        isSignedIn, setIsSignedIn
+                    }}>
+                        <MainRouteur/>
+                    </GeneralContext.Provider>
                 </ThemeProvider>
                                 
             </header>

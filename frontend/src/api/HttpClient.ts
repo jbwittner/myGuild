@@ -3,12 +3,17 @@ import { ApiError } from "./ApiError";
 
 export class HttpClient {
 
+    public static readonly FOUND_STATUS = 403;
     public static readonly UNAUTHORIZED_ERROR_STATUS = 401;
     public static readonly FORBIDDEN_ERROR_STATUS = 403;
     public static readonly INTERNAL_SERVER_ERROR_STATUS = 501;
     public static readonly INTERNAL_SERVER_ERROR_MESSAGE = "An internal server error occured";
 
-    constructor(private redirectIfUnauthorized: boolean = true){}
+    private redirectIfUnauthorized: boolean;
+
+    constructor(redirectIfUnauthorized: boolean = true){
+        this.redirectIfUnauthorized = redirectIfUnauthorized;
+    }
 
     protected async get(apiUrl: string, queryParams?: {[key: string]: any}, headers?: {[key: string]: any}){
         return await this.manageErrors(() =>
@@ -17,6 +22,14 @@ export class HttpClient {
                 headers: this.buildHeader(headers)
             })
         );
+    }
+
+    protected async post(apiUrl: string, data: any, headers?: {[key: string]: any}){
+        return await this.manageErrors(() =>
+            Axios.post(apiUrl, data, {
+                headers: this.buildHeader(headers)
+            })
+        )
     }
 
     private buildHeader(headers?: {[key: string]: any}): {[key: string]: any} {
