@@ -1,6 +1,8 @@
 package fr.opendoha.myguild.server.controller;
 
+import fr.opendoha.myguild.server.dto.CharactersAccountDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
+import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.service.BlizzardService;
 import fr.opendoha.myguild.server.service.IBlizzardService;
@@ -62,11 +64,11 @@ public class BlizzardController extends MotherController {
      * Method used to fetch account characters
      */
     @GetMapping("/fetchAccountCharacter")
-    public void fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
+    public CharactersAccountDTO fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
+        return this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
     }
 
     /**
@@ -75,6 +77,11 @@ public class BlizzardController extends MotherController {
     @GetMapping("/fetchStaticData")
     public void fetchStaticData() throws IOException {
         this.blizzardService.fetchStaticData();
+    }
+
+    @GetMapping("/getStaticData")
+    public StaticDataDTO getStaticData(){
+        return this.blizzardService.getStaticData();
     }
 
     /**

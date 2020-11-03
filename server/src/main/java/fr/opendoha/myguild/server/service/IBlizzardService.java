@@ -1,6 +1,8 @@
 package fr.opendoha.myguild.server.service;
 
+import fr.opendoha.myguild.server.dto.CharactersAccountDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
+import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 
 import java.io.IOException;
@@ -13,7 +15,7 @@ public interface IBlizzardService {
     /**
      * Method to fetch the characters from a blizzard account
      */
-    void fetchAccountCharacter(BlizzardAccountParameter blizzardAccountParameter);
+    CharactersAccountDTO fetchAccountCharacter(BlizzardAccountParameter blizzardAccountParameter);
 
     /**
      * Method to fetch all static data (playable class, race, etc...)
@@ -24,5 +26,8 @@ public interface IBlizzardService {
      * Method to get all guilds who the account have a character
      */
     GuildsAccountDTO getGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
+
+
+    StaticDataDTO getStaticData();
 
 }

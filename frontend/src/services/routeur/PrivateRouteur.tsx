@@ -1,14 +1,17 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { GeneralContext } from '../common/Context';
 
 interface PrivateRouteProps extends RouteProps {
     component: any;
-    isSignedIn: boolean;
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
 
-    const {component: Component, isSignedIn, ...rest} = props;
+    const {component: Component, ...rest} = props;
+
+    const {isSignedIn} = React.useContext(GeneralContext);
+
     console.log("route : " + isSignedIn)
 
     return (

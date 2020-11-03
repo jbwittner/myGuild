@@ -1,4 +1,4 @@
-import { AddUserParameter } from "./Entities";
+import { AddUserParameter } from "./../Entities";
 import { HttpClient } from "./HttpClient"
 
 export class UserHttpClient extends HttpClient {

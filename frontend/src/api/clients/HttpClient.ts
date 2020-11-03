@@ -1,5 +1,5 @@
 import Axios, { AxiosError, AxiosResponse } from "axios";
-import { ApiError } from "./ApiError";
+import { ApiError } from "./../ApiError";
 
 export class HttpClient {
 

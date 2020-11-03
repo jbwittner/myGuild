@@ -1,8 +1,16 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
-import fr.opendoha.myguild.server.dto.GuildInformationsDTO;
+import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
+import fr.opendoha.myguild.server.dto.CharactersAccountDTO;
+import fr.opendoha.myguild.server.dto.FactionDTO;
+import fr.opendoha.myguild.server.dto.GuildDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
+import fr.opendoha.myguild.server.dto.PlayableClassDTO;
+import fr.opendoha.myguild.server.dto.PlayableRaceDTO;
+import fr.opendoha.myguild.server.dto.PlayableSpecializationDTO;
+import fr.opendoha.myguild.server.dto.SpecializationRoleDTO;
+import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.model.UserAccount;
 import fr.opendoha.myguild.server.model.blizzard.*;
 import fr.opendoha.myguild.server.model.blizzard.Character;
@@ -240,7 +248,7 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public void fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
+    public CharactersAccountDTO fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
 
         final UserAccount userAccount =
                 this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
@@ -261,11 +269,26 @@ public class BlizzardService implements IBlizzardService {
             }
         }
 
-        characters = this.characterRepository.findByUserAccountAndIsUpdatedFalse(userAccount);
+        characters = this.characterRepository.findByUserAccount(userAccount);
+
+        final List<CharacterSummaryDTO> characterDTOs = new ArrayList<>();
+        CharacterSummaryDTO characterDTO;
 
         for(final Character character : characters){
-            this.characterRepository.delete(character);
+            if(character.getIsUpdated() == false){
+                this.characterRepository.delete(character);
+            } else {
+                characterDTO = new CharacterSummaryDTO();
+                characterDTO.build(character);
+                characterDTOs.add(characterDTO);
+            }
+            
         }
+
+        final CharactersAccountDTO charactersAccountDTO = new CharactersAccountDTO();
+        charactersAccountDTO.setCharacterSummaryDTOs(characterDTOs);
+
+        return charactersAccountDTO;
     }
 
     private void fetchCharacterFromAccount(final CharacterSummaryData characterSummaryData,
@@ -417,7 +440,7 @@ public class BlizzardService implements IBlizzardService {
         final List<Character> characters = this.characterRepository.findByUserAccountAndGuildIsNotNull(userAccount);
 
         final List<Guild> guilds = new ArrayList<>();
-        final List<GuildInformationsDTO> guildInformationsDTOs = new ArrayList<>();
+        final List<GuildDTO> guildDTOs= new ArrayList<>();
 
         for(final Character character : characters){
 
@@ -426,18 +449,77 @@ public class BlizzardService implements IBlizzardService {
             if(guilds.contains(guild) == false){
                 guilds.add(guild);
                 
-                final GuildInformationsDTO guildInformationsDTO = new GuildInformationsDTO();
-                guildInformationsDTO.build(guild);
-                guildInformationsDTOs.add(guildInformationsDTO);
+                final GuildDTO guildDTO = new GuildDTO();
+                guildDTO.build(guild);
+                guildDTOs.add(guildDTO);
             }
 
         }
 
         final GuildsAccountDTO guildsAccountDTO = new GuildsAccountDTO();
-        guildsAccountDTO.setGuildInformationsDTOs(guildInformationsDTOs);
+        guildsAccountDTO.setGuildDTOs(guildDTOs);
 
         return guildsAccountDTO;
 
+    }
+
+    @Override
+    public StaticDataDTO getStaticData(){
+        
+        final List<PlayableClass> playableClasses = this.playableClassRepository.findByIsUpdatedTrue();
+        final List<PlayableClassDTO> playableClassDTOs = new ArrayList<>();
+
+        for(final PlayableClass playableClass : playableClasses){
+            PlayableClassDTO playableClassDTO = new PlayableClassDTO();
+            playableClassDTO.build(playableClass);
+            playableClassDTOs.add(playableClassDTO);
+        }
+
+        final List<PlayableRace> playableRaces = this.playableRaceRepository.findByIsUpdatedTrue();
+        final List<PlayableRaceDTO> playableRaceDTOs = new ArrayList<>();
+
+        for(final PlayableRace playableRace : playableRaces){
+            PlayableRaceDTO playableRaceDTO = new PlayableRaceDTO();
+            playableRaceDTO.build(playableRace);
+            playableRaceDTOs.add(playableRaceDTO);
+        }
+
+
+        final List<PlayableSpecialization> playableSpecializations = this.playableSpecializationRepository.findByIsUpdatedTrue();
+        final List<PlayableSpecializationDTO> playableSpecializationDTOs = new ArrayList<>();
+
+        for(final PlayableSpecialization playableSpecialization : playableSpecializations){
+            PlayableSpecializationDTO playableSpecializationDTO = new PlayableSpecializationDTO();
+            playableSpecializationDTO.build(playableSpecialization);
+            playableSpecializationDTOs.add(playableSpecializationDTO);
+        }
+
+        final List<SpecializationRole> specializationRoles = this.specializationRoleRepository.findByIsUpdatedTrue();
+        final List<SpecializationRoleDTO> specializationRoleDTOs = new ArrayList<>();
+
+        for(final SpecializationRole specializationRole : specializationRoles){
+            SpecializationRoleDTO specializationRoleDTO = new SpecializationRoleDTO();
+            specializationRoleDTO.build(specializationRole);
+            specializationRoleDTOs.add(specializationRoleDTO);
+        }
+
+        final List<Faction> factions= this.factionRepository.findByIsUpdatedTrue();
+        final List<FactionDTO> factionDTOs = new ArrayList<>();
+
+        for(final Faction faction : factions){
+            FactionDTO factionDTO = new FactionDTO();
+            factionDTO.build(faction);
+            factionDTOs.add(factionDTO);
+        }
+
+        final StaticDataDTO staticDataDTO = new StaticDataDTO();
+        staticDataDTO.setFactionDTOs(factionDTOs);
+        staticDataDTO.setPlayableClassDTOs(playableClassDTOs);
+        staticDataDTO.setPlayableRaceDTOs(playableRaceDTOs);
+        staticDataDTO.setPlayableSpecializationDTOs(playableSpecializationDTOs);
+        staticDataDTO.setSpecializationRoleDTOs(specializationRoleDTOs);
+
+        return staticDataDTO;
     }
 
 }

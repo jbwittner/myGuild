@@ -1,63 +1,52 @@
 import React, { useState } from 'react';
-import { Button, createStyles } from "@material-ui/core";
+import { Backdrop, Button, Checkbox, CircularProgress, createStyles, FormControlLabel, Snackbar } from "@material-ui/core";
 import { makeStyles,  } from '@material-ui/core/styles';
-import { SecurityHttpClient } from '../../../api/SecurityHttpClient';
-import { UserHttpClient } from '../../../api/UserHttpClient';
-//import { useForm } from 'react-hook-form';
-//import { AddUserParameter } from "../../../api/Entities";
+import { SecurityHttpClient } from '../../../api/clients/SecurityHttpClient';
+import { UserHttpClient } from '../../../api/clients/UserHttpClient';
 import { LocalStorage } from '../../storage/LocalStorage';
 import { useHistory } from 'react-router-dom';
 import { GeneralContext } from '../../common/Context';
 import Registration from '../components/Registration';
+import { BlizzardHttpClient } from '../../../api/clients/BlizzardHttpClient';
+import { CharacterSummaryDTO, StaticDataDTO } from '../../../api/Entities';
+import { SessionStorage } from '../../storage/SessionStorage';
+import { Alert } from '@material-ui/lab';
 
-const useStyle = makeStyles(() =>
+const useStyle = makeStyles((theme) =>
     createStyles({
         imageButton: {
             width: '70px'
         },
         button: {
             fontFamily: 'MORPHEUS'
-        }
+        },
+        backdrop: {
+            zIndex: theme.zIndex.drawer + 1,
+            color: '#fff',
+        },
     })
 )
-
-/*
-type FormInputs = {
-    nickName: string
-    email: string
-  }
-*/
 
 export default function LoginPage() {
 
     const history = useHistory();
+    const autoLogin = LocalStorage.getItem<boolean>(LocalStorage.AUTO_LOGIN);
     const {isSignedIn, setIsSignedIn} = React.useContext(GeneralContext);
+    const [dowloadInProgress, setDownloadInProgress] = useState(false);
     const [showModalRegistration, setShowModalRegistration] = useState(false);
-
-    /*
-    const { register, handleSubmit } = useForm<FormInputs>();
-
-    const onSubmit = async (data: FormInputs) => {
-        console.log(data)
-        const userHttpClient = new UserHttpClient();
-
-        const parameter: AddUserParameter = {
-            nickName: data.nickName,
-            email: data.email
-        }
-
-        try{
-            await userHttpClient.addUserAccount(parameter);
-            setShowModalRegistration(false)
-        } catch(e){
-            console.log(e)
-        }
-
-    };
-    */
+    const [checked, setChecked] = React.useState(autoLogin !== undefined ? autoLogin : false);
 
     const onCancel = () => {
         setShowModalRegistration(false)
+    }
+
+    const onSubmit = async () => {
+        const userHttpClient = new UserHttpClient();
+        const accountIsExist = await userHttpClient.isAccountExist();
+        console.log("accountIsExist : " + accountIsExist)
+        setIsSignedIn(accountIsExist);
+        setShowModalRegistration(!accountIsExist);
+        history.push('/another');
     }
 
     const login = async () => {
@@ -67,11 +56,12 @@ export default function LoginPage() {
         try{
             await securityHttpClient.connectionTest();
             const accountIsExist = await userHttpClient.isAccountExist();
-            console.log("isSignedIn : " + isSignedIn)
-            setIsSignedIn(true);
-            console.log("isSignedIn : " + isSignedIn)
 
             accountIsExist == false ? setShowModalRegistration(true) : () =>{};
+
+            setIsSignedIn(accountIsExist);
+            LocalStorage.setItem<boolean>(LocalStorage.AUTO_LOGIN, checked);
+            history.push('/another');
 
         } catch(e){
             LocalStorage.setItem<boolean>(LocalStorage.LOGIN_CLICK, true);
@@ -79,6 +69,8 @@ export default function LoginPage() {
         }
         
     }
+    
+
 
     const isClicked = LocalStorage.getItem<boolean>(LocalStorage.LOGIN_CLICK) ;
 
@@ -87,10 +79,22 @@ export default function LoginPage() {
         login();
     }
     
-    const onClickTest = () => {
+    const onClickTest = async () => {
         console.log(history)
-        history.push('/test')
+        const blizzardHttpClient = new BlizzardHttpClient();
+
+        setDownloadInProgress(true)
+        const [staticData, accountCharacters] = await Promise.all([blizzardHttpClient.getStaticData(), blizzardHttpClient.fetchAccountCharacter()]);
+        SessionStorage.setItem<StaticDataDTO>(SessionStorage.STATIC_DATA, staticData);
+        SessionStorage.setItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS, accountCharacters);
+        setDownloadInProgress(false)
+
     }
+
+    const onChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked)
+    }
+
     const classes = useStyle();
 
     return (
@@ -100,9 +104,32 @@ export default function LoginPage() {
             } onClick={() => {login()}}>
                 Login with blizzard
             </Button>
-            <Button onClick={onClickTest}>go to test</Button>
 
-            <Registration open={showModalRegistration} onCancel={onCancel}/>
+            <FormControlLabel
+                control={
+                <Checkbox
+                    checked={checked}
+                    onChange={onChecked}
+                    name="checkedB"
+                    color="primary"
+                />
+                }
+                label="Primary"
+            />
+
+<Snackbar open={true} autoHideDuration={6000} onClose={() => {}}>
+        <Alert onClose={() => {}} severity="success">
+          This is a success message!
+        </Alert>
+      </Snackbar>
+
+            {isSignedIn && <Button onClick={onClickTest}>go to test</Button>}
+
+            <Registration open={showModalRegistration} onSubmit={onSubmit} onCancel={onCancel}/>
+
+            <Backdrop className={classes.backdrop} open={dowloadInProgress}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
 
         </React.Fragment>
     )

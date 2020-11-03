@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class FactionDTO {
     
+    private Integer index;
     private String type;
     private LocalizedStringDTO localizedStringDTO;
 
@@ -16,6 +17,7 @@ public class FactionDTO {
      * DTO Builder
      */
     public void build(final Faction faction){
+        this.index = faction.getId();
         this.type = faction.getType();
 
         this.localizedStringDTO = new LocalizedStringDTO();

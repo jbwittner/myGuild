@@ -4,12 +4,9 @@ import java.util.List;
 
 import lombok.Data;
 
-/**
- * DTO for guilds account
- */
 @Data
-public class GuildsAccountDTO {
-
-    List<GuildDTO> guildDTOs;
+public class CharactersAccountDTO {
     
+    List<CharacterSummaryDTO> characterSummaryDTOs;
+
 }

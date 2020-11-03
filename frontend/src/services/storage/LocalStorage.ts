@@ -2,6 +2,7 @@
 export class LocalStorage{
 
     public static LOGIN_CLICK: string = "MYGUILD.LOGIN_CLICK";
+    public static AUTO_LOGIN: string = "MYGUILD.AUTO_LOGIN";
 
     public static getItem<T>(key: string): T | undefined {
         let item: string | null = window.localStorage.getItem(key);

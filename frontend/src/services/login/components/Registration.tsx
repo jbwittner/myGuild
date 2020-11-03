@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@material-ui/core";
 import { AccountCircle, Email } from "@material-ui/icons";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, ValidationRules } from "react-hook-form";
 import { AddUserParameter } from "../../../api/Entities";
-import { UserHttpClient } from "../../../api/UserHttpClient";
+import { UserHttpClient } from "../../../api/clients/UserHttpClient";
 import TextFieldsWithIcone from "../../common/TextFieldWithIcone";
 
 
@@ -15,6 +15,11 @@ export interface RegistrationProps {
 
 }
 
+type RegistrationRules = {
+    nickName: ValidationRules;
+    email: ValidationRules;
+}
+
 type FormInputs = {
     nickName: string
     email: string
@@ -22,7 +27,7 @@ type FormInputs = {
 
 export default function Registration (props: RegistrationProps) {
 
-    const { register, handleSubmit } = useForm<FormInputs>();
+    const { register, handleSubmit, errors } = useForm<FormInputs>();
 
     const onSubmit = async (data: FormInputs) => {
         console.log(data)
@@ -42,6 +47,17 @@ export default function Registration (props: RegistrationProps) {
 
     };
 
+    const validationRules: RegistrationRules = {
+        nickName: {
+            required: true
+        },
+
+        email: {
+            required: true,
+            pattern: /^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$/i
+        }
+    }
+
     return(
         <Dialog open={props.open} aria-labelledby="form-dialog-title">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -52,10 +68,22 @@ export default function Registration (props: RegistrationProps) {
                         </DialogContentText>
                         <Grid container direction="column" spacing={2}>
                             <Grid item>
-                                <TextFieldsWithIcone variant="outlined" name="nickName" label="Nick name" inputRef={register} icone={<AccountCircle/>} />
+                                <TextFieldsWithIcone
+                                    variant="outlined"
+                                    name="nickName"
+                                    label="Nick name"
+                                    inputRef={register(validationRules.nickName)}
+                                    error={errors.nickName !== undefined}
+                                    icone={<AccountCircle/>} />
                             </Grid>
                             <Grid item>
-                                <TextFieldsWithIcone variant="outlined" name="email" label="Email" inputRef={register} icone={<Email />} />
+                                <TextFieldsWithIcone
+                                    variant="outlined"
+                                    name="email"
+                                    label="Email"
+                                    inputRef={register(validationRules.email)}
+                                    error={errors.email !== undefined}
+                                    icone={<Email/>} />
                             </Grid>
                         </Grid>
                     </DialogContent>

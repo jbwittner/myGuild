@@ -7,7 +7,7 @@ import lombok.Data;
  * DTO for guild informations
  */
 @Data
-public class GuildInformationsDTO {
+public class GuildDTO {
 
     private String name;
     private Integer memberCount;
