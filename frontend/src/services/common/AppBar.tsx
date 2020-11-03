@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     title: {
-      flexGrow: 1,
+      flexGrow: 1
     },
     appbar:{
 
@@ -30,9 +30,10 @@ export default function ButtonAppBar() {
 
   const {isSignedIn} = React.useContext(GeneralContext);
 
-  return (
-    <React.Fragment>
-        {isSignedIn && <div className={classes.root}>
+  const signedAppBar = () => {
+    if(isSignedIn){
+      return(
+        <div className={classes.root}>
             <AppBar position="static" className={classes.appbar}>
                 <Toolbar>
                 <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -44,7 +45,14 @@ export default function ButtonAppBar() {
                 <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
-        </div>}
+        </div>
+      )
+    }
+  }
+
+  return (
+    <React.Fragment>
+        {signedAppBar()}
     </React.Fragment>
     
   );
