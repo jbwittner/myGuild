@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { GeneralContext } from './Context';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,34 +26,29 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function ButtonAppBar() {
+export default function MainAppBar() {
   const classes = useStyles();
 
   const {isSignedIn} = React.useContext(GeneralContext);
 
-  const signedAppBar = () => {
-    if(isSignedIn){
-      return(
-        <div className={classes.root}>
+  const location = useLocation();
+
+  return (
+    <React.Fragment>
+        {
+          isSignedIn && location.pathname !== '/' &&
             <AppBar position="static" className={classes.appbar}>
-                <Toolbar>
+              <Toolbar>
                 <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
                     News
                 </Typography>
-                <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-        </div>
-      )
-    }
-  }
-
-  return (
-    <React.Fragment>
-        {signedAppBar()}
+              <Button color="inherit">Login</Button>
+            </Toolbar>
+          </AppBar>
+        }
     </React.Fragment>
     
   );

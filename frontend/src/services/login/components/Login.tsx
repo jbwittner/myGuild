@@ -7,9 +7,6 @@ import { LocalStorage } from '../../storage/LocalStorage';
 import { useHistory } from 'react-router-dom';
 import { GeneralContext } from '../../common/Context';
 import Registration from '../components/Registration';
-import { BlizzardHttpClient } from '../../../api/clients/BlizzardHttpClient';
-import { CharacterSummaryDTO, StaticDataDTO } from '../../../api/Entities';
-import { SessionStorage } from '../../storage/SessionStorage';
 import ColoredCheckBox from '../../common/ColoredCheckBox';
 
 const useStyle = makeStyles((theme) =>
@@ -41,8 +38,8 @@ export default function Login() {
 
     const history = useHistory();
     const autoLogin = LocalStorage.getItem<boolean>(LocalStorage.AUTO_LOGIN);
-    const {isSignedIn, setIsSignedIn} = React.useContext(GeneralContext);
-    const [dowloadInProgress, setDownloadInProgress] = useState(false);
+    const {setIsSignedIn} = React.useContext(GeneralContext);
+    const [dowloadInProgress] = useState(false);
     const [showModalRegistration, setShowModalRegistration] = useState(false);
     const [checked, setChecked] = React.useState(autoLogin !== undefined ? autoLogin : false);
 
@@ -99,6 +96,7 @@ export default function Login() {
         login();
     }
     
+    /*
     const onClickTest = async () => {
         console.log(history)
         const blizzardHttpClient = new BlizzardHttpClient();
@@ -110,6 +108,7 @@ export default function Login() {
         setDownloadInProgress(false)
 
     }
+    */
 
     const onChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked)
@@ -142,8 +141,6 @@ export default function Login() {
                 </Grid>
             </Grid>
             
-            {isSignedIn && <Button onClick={onClickTest}>go to test</Button>}
-
             <Registration open={showModalRegistration} onSubmit={onSubmit} onCancel={onCancel}/>
 
             <Backdrop className={classes.backdrop} open={dowloadInProgress}>
