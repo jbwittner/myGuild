@@ -12,10 +12,6 @@ const useStyle = makeStyles(() =>
             backgroundImage: 'url(../1049851.jpg)',
             backgroundPosition: 'center top',
             backgroundSize: 'cover',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-
         },
         paper:{
             width: '300px',
@@ -40,6 +36,13 @@ const useStyle = makeStyles(() =>
         },
         swipeableViews: {
             height: 'calc(100vh - 50px)'
+        },
+        boxInside: {
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+
         }
     })
 )
@@ -67,7 +70,7 @@ function TabPanel(props: TabPanelProps) {
       >
         {value === index && (
           <Box p={0} className = {classes.box}>
-            <Typography className = {classes.box}>{children}</Typography>
+            <Typography className = {classes.boxInside}>{children}</Typography>
           </Box>
         )}
       </Box>
@@ -99,6 +102,7 @@ export default function LoginPage() {
     return (
         <React.Fragment>
             <div className={classes.root}>
+            <Box className={classes.background}>
             <AppBar position="static" color="default" className={classes.appbar}>
                 <Tabs
                 className={classes.tabs}
@@ -121,7 +125,6 @@ export default function LoginPage() {
                 containerStyle={{height:'100%'}}
             >
                 <TabPanel value={value} index={0} dir={theme.direction}>
-                                <Box className={classes.background}>
                                     <Paper variant="outlined" elevation={3} className={classes.paper}>
                                         <Grid container direction="column" justify="center" alignItems="center">
                                             <Grid item>
@@ -132,16 +135,13 @@ export default function LoginPage() {
                                             </Grid>
                                         </Grid>
                                     </Paper>
-                                </Box>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                 Item Two
                 </TabPanel>
-                <TabPanel value={value} index={2} dir={theme.direction}>
-                Item Three
-                </TabPanel>
-            </SwipeableViews>
 
+            </SwipeableViews>
+            </Box>
             </div>
 
         </React.Fragment>
