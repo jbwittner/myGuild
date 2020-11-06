@@ -12,8 +12,6 @@ const PrivateRoute = (props: PrivateRouteProps) => {
 
     const {isSignedIn} = React.useContext(GeneralContext);
 
-    console.log("route : " + isSignedIn)
-
     return (
 
         // Show the component only when the user is logged in

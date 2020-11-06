@@ -12,8 +12,8 @@ const useStyle = makeStyles(() =>
             backgroundSize: 'cover',
         },
         paper:{
-            width: '300px',
             backgroundColor: '#606060',
+            padding: '30px'
         },
         logo: {
 

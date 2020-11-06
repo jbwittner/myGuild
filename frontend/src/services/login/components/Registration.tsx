@@ -30,7 +30,6 @@ export default function Registration (props: RegistrationProps) {
     const { register, handleSubmit, errors } = useForm<FormInputs>();
 
     const onSubmit = async (data: FormInputs) => {
-        console.log(data)
         const userHttpClient = new UserHttpClient();
 
         const parameter: AddUserParameter = {
@@ -59,7 +58,7 @@ export default function Registration (props: RegistrationProps) {
     }
 
     return(
-        <Dialog open={props.open} aria-labelledby="form-dialog-title">
+        <Dialog color="primary" open={props.open} onBackdropClick={props.onCancel} aria-labelledby="form-dialog-title">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <DialogTitle id="form-dialog-title">Registration</DialogTitle>
                     <DialogContent>
@@ -88,10 +87,10 @@ export default function Registration (props: RegistrationProps) {
                         </Grid>
                     </DialogContent>
                 <DialogActions>
-                <Button color="primary" type="submit">
+                <Button color="primary" type="submit" variant="contained">
                     Valid
                 </Button>
-                <Button color="primary" onClick={props.onCancel}>
+                <Button color="primary" onClick={props.onCancel} variant="contained">
                     Cancel
                 </Button>
                 </DialogActions>

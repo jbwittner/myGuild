@@ -1,6 +1,7 @@
 
 export class SessionStorage{
 
+    public static DATA_DOWNLOADED: string = "MYGUILD.DATA_DOWNLOADED";
     public static STATIC_DATA: string = "MYGUILD.STATIC_DATA";
     public static ACCOUNT_CHARACTERS: string = "MYGUILD.ACCOUNT_CHARACTERS";
 
