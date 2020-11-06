@@ -15,12 +15,15 @@ const useStyle = makeStyles((theme) =>
             height: '40px'
         },
         button: {
+            backgroundColor: '#3f51b5',
+            "&:hover": {
+                backgroundColor: "#1a237e"
+              },
             fontFamily: 'MORPHEUS',
             height: '50px'
         },
         backdrop: {
             zIndex: theme.zIndex.drawer + 1,
-            color: '#fff',
         },
         grid: {
             height: '100%'
