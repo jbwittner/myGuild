@@ -4,7 +4,7 @@ application:
     realm: archimonde
   server:
     port: 2142
-    url: http://localhost
+    url: http://192.168.1.30
   db-param:
     host: localhost
     port: 3306

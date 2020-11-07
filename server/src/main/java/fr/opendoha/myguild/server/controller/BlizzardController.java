@@ -1,6 +1,6 @@
 package fr.opendoha.myguild.server.controller;
 
-import fr.opendoha.myguild.server.dto.CharactersAccountDTO;
+import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Controller used to manage blizzard data
@@ -64,7 +65,7 @@ public class BlizzardController extends MotherController {
      * Method used to fetch account characters
      */
     @GetMapping("/fetchAccountCharacter")
-    public CharactersAccountDTO fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
+    public List<CharacterSummaryDTO> fetchAccountCharacter(final OAuth2AuthenticationToken authentication){
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 

@@ -37,6 +37,29 @@ export default function Login() {
     const [alertMessage, setAlertMessage] = useState("");
     const [showModalRegistration, setShowModalRegistration] = useState(false);
 
+    
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') { // eslint-disable-line no-use-before-define
+        const staticData = SessionStorage.getItem<StaticDataDTO>(SessionStorage.STATIC_DATA);
+        const accountCharacters = SessionStorage.getItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS);
+        if(staticData !== undefined && accountCharacters !== undefined){
+            const userHttpClient = new UserHttpClient();
+
+            userHttpClient.isAccountExist().then((accountIsExist: boolean) => {
+                setShowModalRegistration(!accountIsExist);
+    
+                if(accountIsExist){
+    
+                    setIsSignedIn(accountIsExist);
+                    history.push('/home');
+                }
+    
+            }).catch(() => {
+            })
+
+        }
+
+    } 
+
     const onRegistrationCancel = () => {
         setShowModalRegistration(false)
     }

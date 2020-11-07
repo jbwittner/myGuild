@@ -2,7 +2,6 @@ package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
-import fr.opendoha.myguild.server.dto.CharactersAccountDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
 import fr.opendoha.myguild.server.dto.GuildDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
@@ -248,7 +247,7 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public CharactersAccountDTO fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
+    public List<CharacterSummaryDTO> fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
 
         final UserAccount userAccount =
                 this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
@@ -285,10 +284,7 @@ public class BlizzardService implements IBlizzardService {
             
         }
 
-        final CharactersAccountDTO charactersAccountDTO = new CharactersAccountDTO();
-        charactersAccountDTO.setCharacterSummaryDTOs(characterDTOs);
-
-        return charactersAccountDTO;
+        return characterDTOs;
     }
 
     private void fetchCharacterFromAccount(final CharacterSummaryData characterSummaryData,
