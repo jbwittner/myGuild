@@ -18,3 +18,25 @@ export const theme = createMuiTheme({
       },
     
 })
+
+export class Faction{
+  public static HORDE: FactionConfiguration = {
+      type: "HORDE",
+      backgroundColor: "rgba(255, 0, 0, 0.5)"
+  };
+
+  public static ALIANCE: FactionConfiguration = {
+      type: "ALIANCE",
+      backgroundColor: "rgba(0, 27, 255, 0.5)"
+  };
+
+  public static NEUTRAL: FactionConfiguration ={
+      type: "NEUTRAL",
+      backgroundColor: "rgba(192, 192, 192, 0.5)"
+  };
+}
+
+export interface FactionConfiguration{
+  type: string;
+  backgroundColor: string;
+}
