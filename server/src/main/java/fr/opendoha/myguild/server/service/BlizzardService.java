@@ -436,6 +436,11 @@ public class BlizzardService implements IBlizzardService {
 
         outer: for(final GuildMemberIndexData guildMemberIndexData : guildRosterIndexData.getGuildMemberIndexDataList()){
             final GuildMemberData guildMemberData = guildMemberIndexData.getGuildMemberData();
+
+            if(guildMemberIndexData.getRank() != 0){
+                continue;
+            }
+
             final Integer guildMemberDataId = guildMemberData.getId();
             for(Character character : characters){
                 if(character.getId().equals(guildMemberDataId)){
