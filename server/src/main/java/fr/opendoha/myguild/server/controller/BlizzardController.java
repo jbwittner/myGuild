@@ -1,6 +1,7 @@
 package fr.opendoha.myguild.server.controller;
 
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
+import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
@@ -89,7 +90,7 @@ public class BlizzardController extends MotherController {
      * Method to get all guilds who the account have a character 
      */
     @GetMapping("/getGuildsAccount")
-    public GuildsAccountDTO getGuildsAccount(final OAuth2AuthenticationToken authentication) throws IOException {
+    public List<GuildSummaryDTO> getGuildsAccount(final OAuth2AuthenticationToken authentication) throws IOException {
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 

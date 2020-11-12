@@ -36,7 +36,7 @@ public class Guild extends AbstractBlizzardModel {
     private Faction faction;
 
     @Column(name = "USE_APPLICATION")
-    private Boolean useApplication;
+    private Boolean useApplication = false;
 
     @Override
     public String toString() {

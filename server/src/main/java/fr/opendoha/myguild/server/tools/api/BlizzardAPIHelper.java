@@ -153,12 +153,12 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public GuildData getGuildData() throws IOException {
+    public GuildData getGuildData(final Guild guild) throws IOException {
 
         final String token = this.oAuth2FlowHandler.getToken();
 
-        final String url = this.baseUriGameData + "/guild/" + this.guildRealm.toLowerCase()
-                + "/" + this.guildSlug.toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
+        final String url = this.baseUriGameData + "/guild/" + guild.getRealm().getSlug()
+                + "/" + guild.getName().toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
 
         final GuildData guildData = this.httpHelper.getForObject(url, GuildData.class);
 
@@ -186,7 +186,9 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public GuildRosterIndexData getGuildRosterIndexData(final Guild guild, final String token) throws IOException {
+    public GuildRosterIndexData getGuildRosterIndexData(final Guild guild) throws IOException {
+
+        final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = this.baseUriGameData + "/guild/" + guild.getRealm().getSlug().toLowerCase() + "/" + guild.getName().toLowerCase()
                 + "/roster?namespace=" + this.namespaceProfile + "&locale=&access_token=" + token;

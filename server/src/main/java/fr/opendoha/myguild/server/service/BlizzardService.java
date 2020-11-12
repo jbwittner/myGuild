@@ -4,6 +4,7 @@ import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
 import fr.opendoha.myguild.server.dto.GuildDTO;
+import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.PlayableClassDTO;
 import fr.opendoha.myguild.server.dto.PlayableRaceDTO;
@@ -428,15 +429,34 @@ public class BlizzardService implements IBlizzardService {
 
     }
 
+    private boolean checkIsGuildMaster(final Guild guild, final List<Character> characters) throws IOException {
+        boolean isGuildMaster = false;
+
+        GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(guild);
+
+        outer: for(final GuildMemberIndexData guildMemberIndexData : guildRosterIndexData.getGuildMemberIndexDataList()){
+            final GuildMemberData guildMemberData = guildMemberIndexData.getGuildMemberData();
+            final Integer guildMemberDataId = guildMemberData.getId();
+            for(Character character : characters){
+                if(character.getId().equals(guildMemberDataId)){
+                    isGuildMaster = true;
+                    break outer;
+                }
+            }
+        }
+
+        return isGuildMaster;
+    }
+
     @Override
-    public GuildsAccountDTO getGuildsAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException {
+    public List<GuildSummaryDTO> getGuildsAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException {
 
         final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
 
         final List<Character> characters = this.characterRepository.findByUserAccountAndGuildIsNotNull(userAccount);
 
         final List<Guild> guilds = new ArrayList<>();
-        final List<GuildDTO> guildDTOs= new ArrayList<>();
+        final List<GuildSummaryDTO> guildSummaryDTOs = new ArrayList<>();
 
         for(final Character character : characters){
 
@@ -445,17 +465,19 @@ public class BlizzardService implements IBlizzardService {
             if(guilds.contains(guild) == false){
                 guilds.add(guild);
                 
-                final GuildDTO guildDTO = new GuildDTO();
-                guildDTO.build(guild);
-                guildDTOs.add(guildDTO);
+                final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
+                guildSummaryDTO.build(guild);
+                
+                final boolean isGuildMaster = this.checkIsGuildMaster(guild, characters);
+                guildSummaryDTO.setIsGuildMaster(isGuildMaster);
+
+                guildSummaryDTOs.add(guildSummaryDTO);
+                
             }
 
         }
 
-        final GuildsAccountDTO guildsAccountDTO = new GuildsAccountDTO();
-        guildsAccountDTO.setGuildDTOs(guildDTOs);
-
-        return guildsAccountDTO;
+        return guildSummaryDTOs;
 
     }
 

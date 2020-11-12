@@ -4,7 +4,7 @@ application:
     realm: archimonde
   server:
     port: 2142
-    url: http://192.168.1.30
+    url: http://localhost
   db-param:
     host: localhost
     port: 3306
@@ -25,11 +25,11 @@ logging:
   level:
     fr.opendoha.myguild.server:
       tools:
-        HttpHelper: DEBUG
+        HttpHelper: INFO
         handler.GlobalExceptionHandler: INFO
       MyGuildApplication: INFO
       service:
-        BlizzardService: DEBUG
+        BlizzardService: INFO
         oauth2:
           BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 

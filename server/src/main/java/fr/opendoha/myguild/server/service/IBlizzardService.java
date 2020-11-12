@@ -1,6 +1,7 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
+import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
@@ -26,7 +27,7 @@ public interface IBlizzardService {
     /**
      * Method to get all guilds who the account have a character
      */
-    GuildsAccountDTO getGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
+    List<GuildSummaryDTO> getGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
 
     StaticDataDTO getStaticData();
