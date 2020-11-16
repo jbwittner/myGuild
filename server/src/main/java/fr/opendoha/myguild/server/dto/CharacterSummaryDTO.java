@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class CharacterSummaryDTO {
 
+    private Integer id;
     private String name;
     private Integer level;
     private String guildName;
@@ -23,6 +24,7 @@ public class CharacterSummaryDTO {
      * DTO Builder
      */
     public void build(final Character character){
+        this.id = character.getId();
         this.name = character.getName();
         this.level = character.getLevel();
 

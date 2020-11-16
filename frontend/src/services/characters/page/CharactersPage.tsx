@@ -37,8 +37,6 @@ export default function CharactersPage() {
         return array.indexOf(item) === index
       })
     
-    console.log(uniqueRealm)
-
     let toto: {realmSlug: string, realmDTO: RealmDTO, characters: CharacterSummaryDTO[]}[] = []
 
     uniqueRealm?.forEach((value) => {
@@ -47,10 +45,6 @@ export default function CharactersPage() {
             toto.push({realmSlug:value, realmDTO:result[0].realmDTO, characters:result})
         }
     })
-
-    console.log('toto')
-    console.log(toto)
-    console.log('toto')
 
     const tito = toto.map((value) => {
         const realm = value.realmDTO;

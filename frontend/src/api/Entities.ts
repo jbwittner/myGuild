@@ -59,7 +59,17 @@ export interface StaticDataDTO{
     factionDTOs: FactionDTO[];
 }
 
+export interface GuildSummaryDTO{
+    id: number;
+    name: string;
+    useApplication: boolean;
+    isGuildMaster: boolean;
+    indexFaction: number;
+    realmDTO: RealmDTO;
+}
+
 export interface CharacterSummaryDTO{
+    id: number;
     name: string;
     level: number;
     guildName: string;

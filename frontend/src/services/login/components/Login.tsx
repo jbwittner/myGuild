@@ -112,8 +112,8 @@ export default function Login() {
             
                 if(reason?.data?.path === BlizzardHttpClient.FETCH_ACCOUNT_CHARACTER_PATH) {
                     message = message + BlizzardHttpClient.FETCH_ACCOUNT_CHARACTER_PATH;
-                }else if(reason?.data?.path === BlizzardHttpClient.FETCH_STATIC_DATA_PATH){
-                    message = message + BlizzardHttpClient.FETCH_STATIC_DATA_PATH;
+                }else if(reason?.data?.path === BlizzardHttpClient.GET_STATIC_DATA_PATH){
+                    message = message + BlizzardHttpClient.GET_STATIC_DATA_PATH;
                 }else{
                     message = message + "undefined";
                 }
@@ -155,7 +155,7 @@ export default function Login() {
 
             <AlertSnackBar open={isAlertOpen} severity="error" onClose={onCloseAlert}>{alertMessage}</AlertSnackBar>
 
-                    <CircularProgressScreen open={downloadInProgress}>{"Download in progress"}</CircularProgressScreen>
+            <CircularProgressScreen open={downloadInProgress}>{"Download in progress"}</CircularProgressScreen>
 
         </React.Fragment>
     )
