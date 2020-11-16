@@ -33,6 +33,45 @@ export default function GuildsIndexPage() {
 
     console.log("render")
 
+    const plotGuilds = (data: GuildSummaryDTO[]) => {
+
+        const plot = data.map((guild) => {
+            return plotGuild(guild)
+        })
+
+        return(
+            <div>
+                {plot}
+            </div>
+        )
+
+    }
+
+    const plotGuild = (data: GuildSummaryDTO) => {
+        return(
+            <div>
+                <div>
+                    {"id :" + data.id}
+                </div>
+                <div>
+                    {"indexFaction :" + data.indexFaction}
+                </div>
+                <div>
+                    {"isGuildMaster :" + data.isGuildMaster}
+                </div>
+                <div>
+                    {"name :" + data.name}
+                </div>
+                <div>
+                    {"realmDTO.slug :" + data.realmDTO.slug}
+                </div>
+                <div>
+                    {"useApplication :" + data.useApplication}
+                </div>
+            </div>
+        )
+    }
+
     
     
     return(
@@ -41,7 +80,7 @@ export default function GuildsIndexPage() {
             <div>
                 {"jdfslkfj"}
                 {console.log(data)}
-                {(data !== null) && <div>{"coucou"}</div>}
+                {(data !== null) && plotGuilds(data)}
             </div>
             <CircularProgressScreen open={downloadInProgress}>{"Download in progress"}</CircularProgressScreen>
         </React.Fragment>
