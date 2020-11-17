@@ -1,9 +1,13 @@
-import { Accordion, AccordionDetails, AccordionSummary, createStyles, Grid, makeStyles } from '@material-ui/core';
-import React from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Button, createStyles, Grid, makeStyles } from '@material-ui/core';
+import React, { useState } from 'react'
 import { CharacterSummaryDTO, RealmDTO } from '../../../api/Entities';
 import { SessionStorage } from '../../storage/SessionStorage';
 import CharacterPaper from '../components/CharacterPaper';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ReplayIcon from '@material-ui/icons/Replay';
+import { BlizzardHttpClient } from '../../../api/clients/BlizzardHttpClient';
+import CircularProgressScreen from '../../common/CircularProgressScreen';
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -12,15 +16,23 @@ const useStyles = makeStyles(() =>
     },
     gridReal:{
         width: '100%'
+    },
+    button:{
+        margin: '10px',
+        padding: '10px',
     }
   }),
 );
 
 export default function CharactersPage() {
 
-    const classes = useStyles();
+    console.log("render CharactersPage")
 
-    const accountCharacters = SessionStorage.getItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS);
+    const [downloadInProgress, setDownloadInProgress] = useState(false);
+    const accountCharactersStorage = SessionStorage.getItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS);
+    const [accountCharacters, setAccountCharacters] = useState<CharacterSummaryDTO[] | undefined>(accountCharactersStorage)
+
+    const classes = useStyles();
 
     accountCharacters?.sort((a,b) => {
         const result: boolean = a.realmDTO.slug > b.realmDTO.slug;
@@ -58,7 +70,7 @@ export default function CharactersPage() {
         })
 
         return (
-            <Accordion key='kfdjmfqksjf'>
+            <Accordion key={realm.slug}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -78,7 +90,7 @@ export default function CharactersPage() {
 
     const list = () => {
         return (
-            <Accordion key='kfdqsddjmfqksjf' defaultExpanded={true}>
+            <Accordion key='favoris' defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -95,25 +107,45 @@ export default function CharactersPage() {
         )
     }
 
-    /*
+    const reloadData = async () => {
 
-    const tata = accountCharacters?.map((value: CharacterSummaryDTO) =>{
+        const blizzardHttpClient = new BlizzardHttpClient();
 
-        return(
-            <Grid item key={value.name} xs={12} sm={6} lg={6} xl={4}>
-                <CharacterPaper characterSummary={value}/>
-            </Grid>
-        )
-    })
-    */
-    
+        setDownloadInProgress(true);
+
+        const accountCharacters = await blizzardHttpClient.fetchAccountCharacter();
+
+        SessionStorage.setItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS, accountCharacters);
+        SessionStorage.setItem<Date>(SessionStorage.ACCOUNT_DATE_FETCH_CHARACTERS, new Date())
+
+        setAccountCharacters(accountCharacters);
+
+        setDownloadInProgress(false);
+
+    }
+
+    const sessionDate = SessionStorage.getItem<Date>(SessionStorage.ACCOUNT_DATE_FETCH_CHARACTERS)
+
+    const fetchingDate = sessionDate !== undefined ? new Date(sessionDate) : new Date()
+
 
     return(
         <div className={classes.root}>
-            {list()}
-            {tito}
+            <Grid container direction="column" alignItems="center" className={classes.root}> 
+                <Grid item>
+                    <Button className={classes.button} variant="contained" color="primary" onClick={reloadData} startIcon={<ReplayIcon />}>{"Reload Data"}</Button>
+                </Grid>
+                <Grid item>
+                    {"Last update : " + fetchingDate.toLocaleDateString() + " - " + fetchingDate.toLocaleTimeString()}
+                </Grid>
+            
+                <Grid item className={classes.root}>
+                    {list()}
+                    {tito}
+                </Grid>
+            </Grid>
+            <CircularProgressScreen open={downloadInProgress}>{"Download in progress"}</CircularProgressScreen>
         </div>
-
     )
 
 }

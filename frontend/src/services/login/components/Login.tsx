@@ -8,7 +8,7 @@ import { GeneralContext } from '../../common/Context';
 import Registration from '../components/Registration';
 import { BlizzardHttpClient } from '../../../api/clients/BlizzardHttpClient';
 import { SessionStorage } from '../../storage/SessionStorage';
-import { CharacterSummaryDTO, StaticDataDTO } from '../../../api/Entities';
+import { CharacterSummaryDTO, GuildSummaryDTO, StaticDataDTO } from '../../../api/Entities';
 import AlertSnackBar from '../../common/AlertSnackBar'
 import CircularProgressScreen from '../../common/CircularProgressScreen';
 
@@ -105,6 +105,15 @@ export default function Login() {
                 const accountCharacters = value[1]
                 SessionStorage.setItem<StaticDataDTO>(SessionStorage.STATIC_DATA, staticData);
                 SessionStorage.setItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS, accountCharacters);
+                SessionStorage.setItem<Date>(SessionStorage.ACCOUNT_DATE_FETCH_CHARACTERS, new Date())
+
+                return blizzardHttpClient.getGuildsAccount();
+                
+
+            })
+            .then((value: GuildSummaryDTO[]) => {
+                SessionStorage.setItem<GuildSummaryDTO[]>(SessionStorage.ACCOUNT_GUILDS, value);
+                SessionStorage.setItem<Date>(SessionStorage.ACCOUNT_DATE_FETCH_GUILDS, new Date())
             })
             .catch((reason) => {
 
@@ -114,6 +123,8 @@ export default function Login() {
                     message = message + BlizzardHttpClient.FETCH_ACCOUNT_CHARACTER_PATH;
                 }else if(reason?.data?.path === BlizzardHttpClient.GET_STATIC_DATA_PATH){
                     message = message + BlizzardHttpClient.GET_STATIC_DATA_PATH;
+                }else if(reason?.data?.path === BlizzardHttpClient.GET_GUILDS_ACCOUNT_PATH){
+                    message = message + BlizzardHttpClient.GET_GUILDS_ACCOUNT_PATH;
                 }else{
                     message = message + "undefined";
                 }
