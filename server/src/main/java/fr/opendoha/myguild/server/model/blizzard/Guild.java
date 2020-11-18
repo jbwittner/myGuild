@@ -4,6 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,12 +25,6 @@ public class Guild extends AbstractBlizzardModel {
     @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
     private List<Character> characterList;
 
-    @Column(name = "MEMBER_COUNT")
-    private Integer memberCount;
-
-    @Column(name = "ACHIEVEMENT_POINTS")
-    private Integer achievementPoints;
-
     @ManyToOne
     @JoinColumn(name = "REALM_ID")
     private Realm realm;
@@ -37,6 +35,10 @@ public class Guild extends AbstractBlizzardModel {
 
     @Column(name = "USE_APPLICATION")
     private Boolean useApplication = false;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DATE")
+    private Date updateDate;
 
     @Override
     public String toString() {

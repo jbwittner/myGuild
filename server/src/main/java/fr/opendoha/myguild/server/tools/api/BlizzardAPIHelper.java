@@ -33,12 +33,6 @@ import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
 @Component
 public class BlizzardAPIHelper implements IBlizzardAPIHelper {
 
-    @Value("${application.guild.realm}")
-    protected String guildRealm;
-
-    @Value("${application.guild.slug}")
-    protected String guildSlug;
-
     @Value("${application.blizzard.wow.profile.base-uri}")
     protected String baseUriProfile;
 
@@ -306,6 +300,22 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
         final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = playableSpecializationData.getMediaData().getHrefData().getHref() + "&access_token=" + token;
+
+        final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
+
+        return gameDataMediaData;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GameDataMediaData getGameDataMediaData(final String href) throws IOException {
+
+        final String token = this.oAuth2FlowHandler.getToken();
+
+        final String url = href + "&access_token=" + token;
 
         final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
 

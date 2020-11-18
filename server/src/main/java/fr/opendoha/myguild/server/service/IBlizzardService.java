@@ -17,7 +17,7 @@ public interface IBlizzardService {
     /**
      * Method to fetch the characters from a blizzard account
      */
-    List<CharacterSummaryDTO> fetchAccountCharacter(BlizzardAccountParameter blizzardAccountParameter);
+    List<CharacterSummaryDTO> fetchCharacterAccount(BlizzardAccountParameter blizzardAccountParameter);
 
     /**
      * Method to fetch all static data (playable class, race, etc...)
@@ -27,7 +27,7 @@ public interface IBlizzardService {
     /**
      * Method to get all guilds who the account have a character
      */
-    List<GuildSummaryDTO> getGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
+    List<GuildSummaryDTO> fetchGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
 
     StaticDataDTO getStaticData();

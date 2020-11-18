@@ -4,7 +4,11 @@ import fr.opendoha.myguild.server.model.UserAccount;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Model for the characters
@@ -63,6 +67,10 @@ public class Character extends AbstractBlizzardModel {
 
     @Column(name = "LAST_LOGIN_TIMESTAMP")
     private Long lastLoginTimestamp;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DATE")
+    private Date updateDate;
 
     @Override
     public String toString() {

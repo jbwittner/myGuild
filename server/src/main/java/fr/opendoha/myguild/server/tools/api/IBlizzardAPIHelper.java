@@ -108,4 +108,8 @@ interface IBlizzardAPIHelper {
      */
     GameDataMediaData getGameDataMediaData(final PlayableSpecializationData playableSpecializationData) throws IOException;
 
+    /**
+     * Get GameDataMediaData
+     */
+    GameDataMediaData getGameDataMediaData(final String href) throws IOException;
 }

@@ -70,7 +70,7 @@ public class BlizzardController extends MotherController {
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        return this.blizzardService.fetchAccountCharacter(blizzardAccountParameter);
+        return this.blizzardService.fetchCharacterAccount(blizzardAccountParameter);
     }
 
     /**
@@ -94,7 +94,7 @@ public class BlizzardController extends MotherController {
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        return this.blizzardService.getGuildsAccount(blizzardAccountParameter);
+        return this.blizzardService.fetchGuildsAccount(blizzardAccountParameter);
 
     }
 

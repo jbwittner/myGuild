@@ -1,7 +1,4 @@
 application:
-  guild:
-    slug: peypouze
-    realm: archimonde
   server:
     port: 2142
     url: http://localhost

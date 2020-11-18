@@ -248,7 +248,7 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public List<CharacterSummaryDTO> fetchAccountCharacter(final BlizzardAccountParameter blizzardAccountParameter){
+    public List<CharacterSummaryDTO> fetchCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter){
 
         final UserAccount userAccount =
                 this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
@@ -401,6 +401,7 @@ public class BlizzardService implements IBlizzardService {
 
             if(optionalGuild.isPresent()){
                 guild = optionalGuild.get();
+
             }else {
                 guild = new Guild();
                 guild.setId(guildIndexData.getId());
@@ -454,7 +455,7 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public List<GuildSummaryDTO> getGuildsAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException {
+    public List<GuildSummaryDTO> fetchGuildsAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException {
 
         final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
 
@@ -468,10 +469,15 @@ public class BlizzardService implements IBlizzardService {
             final Guild guild = character.getGuild();
 
             if(guilds.contains(guild) == false){
+
+                GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
+                final GameDataMediaData emblem = this.blizzardAPIHelper.getGameDataMediaData(guildData.getCrestData().getEmblem().getMedia().getHrefData().getHref());
+                final GameDataMediaData border = this.blizzardAPIHelper.getGameDataMediaData(guildData.getCrestData().getBorder().getMedia().getHrefData().getHref());
+
                 guilds.add(guild);
                 
                 final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
-                guildSummaryDTO.build(guild);
+                guildSummaryDTO.build(guild, guildData, emblem, border);
                 
                 final boolean isGuildMaster = this.checkIsGuildMaster(guild, characters);
                 guildSummaryDTO.setIsGuildMaster(isGuildMaster);

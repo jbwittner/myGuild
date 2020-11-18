@@ -21,8 +21,6 @@ public class GuildDTO {
      */
     public void build(final Guild guild){
         this.name = guild.getName();
-        this.memberCount = guild.getMemberCount();
-        this.achievementPoints = guild.getAchievementPoints();
         this.useApplication = guild.getUseApplication();
 
         this.factionDTO = new FactionDTO();
