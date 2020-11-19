@@ -92,7 +92,7 @@ export default function CharacterPaper(props: CharacterPaperProps){
                             {"lvl : " + characterSummary.level}
                         </Grid>
                         <Grid item>
-                            {"guildName : " + characterSummary.guildName}StarOutlineIcon
+                            {"guildName : " + characterSummary.guildName}
                         </Grid>
                         <Grid item>
                             {"averageItemLevel : " + characterSummary.averageItemLevel}
