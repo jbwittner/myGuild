@@ -30,7 +30,7 @@ interface IBlizzardAPIHelper {
     /**
      * Get CharacterData
      */
-    CharacterData getCharacterData(final CharacterSummaryData characterSummaryData, final String token) throws HttpClientErrorException;
+    CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException;
 
     /**
      * Get CharacterData

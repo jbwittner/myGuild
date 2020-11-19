@@ -19,6 +19,7 @@ public class CharacterSummaryDTO {
     private Integer averageItemLevel;
     private Integer equippedItemLevel;
     private Long lastLoginTimestamp;
+    private boolean isFavorite;
 
     /**
      * DTO Builder
@@ -44,6 +45,7 @@ public class CharacterSummaryDTO {
         this.averageItemLevel = character.getAverageItemLevel();
         this.equippedItemLevel = character.getEquippedItemLevel();
         this.lastLoginTimestamp = character.getLastLoginTimestamp();
+        this.isFavorite = character.isFavorite();
 
     }
     

@@ -11,10 +11,12 @@ import fr.opendoha.myguild.server.dto.PlayableRaceDTO;
 import fr.opendoha.myguild.server.dto.PlayableSpecializationDTO;
 import fr.opendoha.myguild.server.dto.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
+import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
 import fr.opendoha.myguild.server.model.UserAccount;
 import fr.opendoha.myguild.server.model.blizzard.*;
 import fr.opendoha.myguild.server.model.blizzard.Character;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
+import fr.opendoha.myguild.server.parameters.FavoriteCharacterParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.repository.blizzard.*;
 import fr.opendoha.myguild.server.tools.api.BlizzardAPIHelper;
@@ -248,7 +250,8 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public List<CharacterSummaryDTO> fetchCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter){
+    public List<CharacterSummaryDTO> fetchCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter)
+            throws IOException {
 
         final UserAccount userAccount =
                 this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
@@ -265,7 +268,7 @@ public class BlizzardService implements IBlizzardService {
 
         for(final WowAccountData wowAccountData : accountProfileSummaryBlizzardData.getWowAccountsData()){
             for(final CharacterSummaryData characterSummaryData : wowAccountData.getCharacterSummaryData()){
-                this.fetchCharacterFromAccount(characterSummaryData, userAccount, blizzardAccountParameter.getToken());
+                this.fetchCharacterFromAccount(characterSummaryData, userAccount);
             }
         }
 
@@ -289,51 +292,13 @@ public class BlizzardService implements IBlizzardService {
     }
 
     private void fetchCharacterFromAccount(final CharacterSummaryData characterSummaryData,
-                                           final UserAccount userAccount,
-                                           final String token){
+                                           final UserAccount userAccount) throws IOException {
 
         try{
-            final CharacterData characterData = this.blizzardAPIHelper.getCharacterData(characterSummaryData, token);
+            final CharacterData characterData = this.blizzardAPIHelper.getCharacterData(characterSummaryData);
 
-            final Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
-
-            final Character character;
-
-            if(optionalCharacter.isPresent()){
-                character = optionalCharacter.get();
-            } else {
-                character = new Character();
-                character.setId(characterData.getId());
-            }
-
-            character.setIsUpdatedTrue();
-
+            final Character character = this.updateCharacter(characterData);
             character.setUserAccount(userAccount);
-            character.setLevel(characterData.getLevel());
-            character.setName(characterData.getName());
-            character.setAverageItemLevel(characterData.getAverageItemLevel());
-            character.setEquippedItemLevel(characterData.getEquippedItemLevel());
-            character.setLastLoginTimestamp(characterData.getLastLoginTimestamp());
-
-            character.setRealm(this.fetchRealmFromCharacter(characterData));
-
-            final Faction faction = this.factionRepository.findByType(characterData.getFactionData().getType()).get();
-
-            character.setFaction(faction);
-
-            final PlayableClass playableClass =
-                    this.playableClassRepository.findById(characterData.getClassIndexData().getId()).get();
-
-            character.setPlayableClass(playableClass);
-
-            final PlayableRace playableRace =
-                    this.playableRaceRepository.findById(characterData.getRaceIndexData().getId()).get();
-
-            character.setPlayableRace(playableRace);
-
-            this.fetchCharacterMediaDataFromAccount(character, characterData, token);
-
-            character.setGuild(this.fetchGuildFromCharacter(characterData));
 
             this.characterRepository.save(character);
 
@@ -341,6 +306,50 @@ public class BlizzardService implements IBlizzardService {
             this.logger.debug(e.getMessage());
         }
 
+    }
+
+    private Character updateCharacter(final CharacterData characterData) throws HttpClientErrorException, IOException {
+        
+        final Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
+
+        final Character character;
+
+        if(optionalCharacter.isPresent()){
+            character = optionalCharacter.get();
+        } else {
+            character = new Character();
+            character.setId(characterData.getId());
+        }
+
+        character.setIsUpdatedTrue();
+
+        character.setLevel(characterData.getLevel());
+        character.setName(characterData.getName());
+        character.setAverageItemLevel(characterData.getAverageItemLevel());
+        character.setEquippedItemLevel(characterData.getEquippedItemLevel());
+        character.setLastLoginTimestamp(characterData.getLastLoginTimestamp());
+
+        character.setRealm(this.fetchRealmFromCharacter(characterData));
+
+        final Faction faction = this.factionRepository.findByType(characterData.getFactionData().getType()).get();
+
+        character.setFaction(faction);
+
+        final PlayableClass playableClass =
+                this.playableClassRepository.findById(characterData.getClassIndexData().getId()).get();
+
+        character.setPlayableClass(playableClass);
+
+        final PlayableRace playableRace =
+                this.playableRaceRepository.findById(characterData.getRaceIndexData().getId()).get();
+
+        character.setPlayableRace(playableRace);
+
+        this.fetchCharacterMediaDataFromAccount(character, characterData);
+
+        character.setGuild(this.fetchGuildFromCharacter(characterData));
+
+        return character;
     }
 
     private Realm fetchRealmFromCharacter(final CharacterData characterData){
@@ -368,9 +377,10 @@ public class BlizzardService implements IBlizzardService {
 
     }
 
-    private void fetchCharacterMediaDataFromAccount(final Character character, final CharacterData characterData, final String token) {
+    private void fetchCharacterMediaDataFromAccount(final Character character, final CharacterData characterData)
+            throws HttpClientErrorException, IOException {
 
-        final CharacterMediaData characterMediaData = this.blizzardAPIHelper.getCharacterMediaData(characterData, token);
+        final CharacterMediaData characterMediaData = this.blizzardAPIHelper.getCharacterMediaData(characterData);
 
         if(characterMediaData.getBustUrl() == null){
 
@@ -470,14 +480,12 @@ public class BlizzardService implements IBlizzardService {
 
             if(guilds.contains(guild) == false){
 
-                GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
-                final GameDataMediaData emblem = this.blizzardAPIHelper.getGameDataMediaData(guildData.getCrestData().getEmblem().getMedia().getHrefData().getHref());
-                final GameDataMediaData border = this.blizzardAPIHelper.getGameDataMediaData(guildData.getCrestData().getBorder().getMedia().getHrefData().getHref());
+                final GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
 
                 guilds.add(guild);
                 
                 final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
-                guildSummaryDTO.build(guild, guildData, emblem, border);
+                guildSummaryDTO.build(guild, guildData);
                 
                 final boolean isGuildMaster = this.checkIsGuildMaster(guild, characters);
                 guildSummaryDTO.setIsGuildMaster(isGuildMaster);
@@ -549,6 +557,31 @@ public class BlizzardService implements IBlizzardService {
         staticDataDTO.setSpecializationRoleDTOs(specializationRoleDTOs);
 
         return staticDataDTO;
+    }
+
+    @Override
+    public CharacterSummaryDTO setFavoriteCharacter(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteCharacterParameter favoriteCharacterParameter)
+            throws IOException, CharacterNotExistedException {
+
+        final Optional<Character> optionalCharacter = this.characterRepository.findById(favoriteCharacterParameter.getId());
+
+        final CharacterSummaryDTO characterSummaryDTO = new CharacterSummaryDTO();
+
+        if(optionalCharacter.isPresent()){
+
+            final Character character = optionalCharacter.get();
+
+            character.setFavorite(favoriteCharacterParameter.getIsFavorite());
+            
+            this.characterRepository.save(character);
+
+            characterSummaryDTO.build(character);
+
+        } else {
+            throw new CharacterNotExistedException(favoriteCharacterParameter.getId());
+        }
+
+        return characterSummaryDTO;
     }
 
 }

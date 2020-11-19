@@ -62,7 +62,9 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public CharacterData getCharacterData(final CharacterSummaryData characterSummaryData, final String token) throws HttpClientErrorException{
+    public CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException {
+
+        final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = characterSummaryData.getCharacterHrefData().getHref() + "&access_token=" + token;
 
@@ -80,7 +82,7 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
         final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = this.baseUriProfile + "/wow/character/" + character.getRealm().getSlug()
-                + "/" + character.getName() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
+                + "/" + character.getName().toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
 
         final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
 

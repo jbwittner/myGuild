@@ -66,6 +66,27 @@ export interface GuildSummaryDTO{
     isGuildMaster: boolean;
     indexFaction: number;
     realmDTO: RealmDTO;
+    achievementPoints: number;
+    createdTimestamp: number;
+    memberCount: number;
+}
+
+export interface CrestDTO{
+    emblem: CrestPartDTO;
+    border: CrestPartDTO;
+    background: ColorDTO;
+}
+
+export interface CrestPartDTO{
+    url: string;
+    color: ColorDTO;
+}
+
+export interface ColorDTO{
+    r: number;
+    g: number;
+    b: number;
+    a: number;
 }
 
 export interface CharacterSummaryDTO{
@@ -82,5 +103,5 @@ export interface CharacterSummaryDTO{
     averageItemLevel: number;
     equippedItemLevel: number;
     lastLoginTimestamp: number;
-
+    favorite: boolean;
 }

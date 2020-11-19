@@ -31,8 +31,37 @@ export default function CharactersPage() {
     const [downloadInProgress, setDownloadInProgress] = useState(false);
     const accountCharactersStorage = SessionStorage.getItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS);
     const [accountCharacters, setAccountCharacters] = useState<CharacterSummaryDTO[] | undefined>(accountCharactersStorage)
+    const [value, setValue] = useState<number>(0)
 
     const classes = useStyles();
+
+    const favoriteCharacters = accountCharacters?.filter(element => element.favorite === true);
+
+    const testRender = (id: number, isFavortie: boolean) => {
+        console.log(id)
+        console.log(isFavortie)
+
+        if(accountCharacters !== undefined){
+            const index = accountCharacters?.findIndex((element) => element.id === id);
+            accountCharacters[index].favorite = isFavortie;
+            const newAccountCharacters = accountCharacters;
+            setAccountCharacters(newAccountCharacters)
+
+            console.log(newAccountCharacters)
+            SessionStorage.setItem(SessionStorage.ACCOUNT_CHARACTERS, newAccountCharacters);
+
+            setValue(value + 1)
+        }
+
+    }
+
+    favoriteCharacters?.sort((a,b) => {
+        if(a.name < b.name){
+            return -1;
+        } else {
+            return 1;
+        }
+    })
 
     accountCharacters?.sort((a,b) => {
         const result: boolean = a.realmDTO.slug > b.realmDTO.slug;
@@ -60,11 +89,18 @@ export default function CharactersPage() {
 
     const tito = toto.map((value) => {
         const realm = value.realmDTO;
+        value.characters.sort((a,b) => {
+            if(a.name < b.name){
+                return -1;
+            } else {
+                return 1;
+            }
+        })
         const tttoto = value.characters.map((value: CharacterSummaryDTO) =>{
 
             return(
                 <Grid item key={value.name} sm={12} lg={6} xl={4}>
-                    <CharacterPaper characterSummary={value}/>
+                    <CharacterPaper onFavoriteToggle={testRender} characterSummary={value}/>
                 </Grid>
             )
         })
@@ -89,6 +125,18 @@ export default function CharactersPage() {
     })
 
     const list = () => {
+
+        favoriteCharacters
+
+        const favoriteCharactersPaper = favoriteCharacters?.map((element) => {
+            const key = element.realmDTO.slug + "-" + element.name;
+            return(
+                <Grid item key={key} sm={12} lg={6} xl={4}>
+                    <CharacterPaper onFavoriteToggle={testRender} characterSummary={element}/>
+                </Grid>
+            )
+        })
+
         return (
             <Accordion key='favoris' defaultExpanded={true}>
                 <AccordionSummary
@@ -100,7 +148,7 @@ export default function CharactersPage() {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container className={classes.gridReal}>
-                        {'WIP'}
+                        {favoriteCharactersPaper}
                     </Grid>
                 </AccordionDetails>
             </Accordion>

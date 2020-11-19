@@ -68,9 +68,20 @@ public class Character extends AbstractBlizzardModel {
     @Column(name = "LAST_LOGIN_TIMESTAMP")
     private Long lastLoginTimestamp;
 
+    @Column(name= "IS_FAVORITE")
+    private boolean isFavorite = false;
+
     @UpdateTimestamp
     @Column(name = "UPDATE_DATE")
     private Date updateDate;
+
+    public void setIsFavoritesTrue(){
+        this.isFavorite = true;
+    }
+
+    public void setIsFavoritesFalse(){
+        this.isFavorite = false;
+    }
 
     @Override
     public String toString() {

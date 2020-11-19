@@ -14,7 +14,6 @@ public class GuildSummaryDTO {
     private Boolean isGuildMaster;
     private Integer indexFaction;
     private RealmDTO realmDTO;
-    private CrestDTO crestDTO;
     private Integer achievementPoints;
     private Long createdTimestamp;
     private Integer memberCount;
@@ -22,7 +21,7 @@ public class GuildSummaryDTO {
     /**
      * DTO Builder
      */
-    public void build(final Guild guild, final GuildData guildData, GameDataMediaData emblem, GameDataMediaData border){
+    public void build(final Guild guild, final GuildData guildData){
         this.id = guild.getId();
 
         this.name = guild.getName();
@@ -32,9 +31,6 @@ public class GuildSummaryDTO {
 
         this.realmDTO = new RealmDTO();
         this.realmDTO.build(guild.getRealm());
-
-        this.crestDTO = new CrestDTO();
-        this.crestDTO.build(guildData.getCrestData(), emblem, border);
 
         this.achievementPoints = guildData.getAchievementPoints();
         this.createdTimestamp = guildData.getCreatedTimestamp();

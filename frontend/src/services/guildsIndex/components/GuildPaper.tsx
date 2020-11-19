@@ -71,6 +71,19 @@ export default function GuildPaper(props: GuildPaperProps){
                 <Grid item>
                     {"useApplication : " + guildSummary.useApplication}
                 </Grid>
+                <Grid item>
+                    {"achievementPoints : " + guildSummary.achievementPoints}
+                </Grid>
+                <Grid item>
+                    {"createdTimestamp : " + guildSummary.createdTimestamp}
+                </Grid>
+                <Grid item>
+                    {"Date : " + new Date(guildSummary.createdTimestamp).toLocaleDateString()}
+                </Grid>
+                <Grid item>
+                    {"memberCount : " + guildSummary.memberCount}
+                </Grid>
+                
             </Grid>
         </Paper>
     )
