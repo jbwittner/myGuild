@@ -1,8 +1,11 @@
-import { createStyles, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
-import React from 'react'
+import { Button, createStyles, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react'
 import { FactionDTO, GuildSummaryDTO } from '../../../api/Entities';
 import { getFactionFromType } from '../../common/GetterStaticData';
 import { Faction } from '../../common/Theme'
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { BlizzardHttpClient } from '../../../api/clients/BlizzardHttpClient';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,11 +36,18 @@ const useStyles = makeStyles(() =>
 
 export interface GuildPaperProps {
     guildSummary: GuildSummaryDTO;
+    onFavoriteToggle(id: number, isFavorite: boolean): any; // eslint-disable-line no-unused-vars
 }
 
 export default function GuildPaper(props: GuildPaperProps){
 
     const guildSummary: GuildSummaryDTO = props.guildSummary;
+
+    const [isFavorite, setIsFavorite] = useState(props.guildSummary.isFavorite);
+
+    useEffect(() => {
+        setIsFavorite(props.guildSummary.isFavorite);
+    }, [props]);
 
     const classes = useStyles();
 
@@ -53,8 +63,26 @@ export default function GuildPaper(props: GuildPaperProps){
         classNamePaper = classes.paperNeutral;
     }
 
+    let starIcon;
+    
+    if(isFavorite === true){
+        starIcon = <StarIcon />
+    } else {
+        starIcon = <StarBorderIcon />
+    }
+
+    const toggleFavorite = async () => {
+        setIsFavorite(!isFavorite)
+
+        const blizzardHttpClient = new BlizzardHttpClient();
+
+        await blizzardHttpClient.setFavoriteGuild(props.guildSummary.id, !isFavorite)
+
+        props.onFavoriteToggle(props.guildSummary.id, !isFavorite)
+    }
+
     return(
-        <Paper className={classNamePaper}  elevation={3} variant="outlined" >
+        <Paper className={classNamePaper}  elevation={3} variant="outlined">
             <Grid container item direction="column" xs={12} sm={6}>
                 <Grid item>
                     <Typography variant="h2" className={classes.name}>{guildSummary.name}</Typography>
@@ -83,7 +111,14 @@ export default function GuildPaper(props: GuildPaperProps){
                 <Grid item>
                     {"memberCount : " + guildSummary.memberCount}
                 </Grid>
-                
+                {guildSummary.isGuildMaster === true && guildSummary.useApplication === false &&
+                    <Grid item>
+                        <Button variant="contained" color="secondary" startIcon={starIcon} >Init application</Button>
+                    </Grid>
+                }
+                <Grid item>
+                    <Button variant="contained" color="secondary" startIcon={starIcon} onClick={toggleFavorite}>Favorite</Button>
+                </Grid>
             </Grid>
         </Paper>
     )

@@ -1,5 +1,5 @@
 import { Button, createStyles, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CharacterSummaryDTO, FactionDTO, PlayableClassDTO, PlayableRaceDTO } from '../../../api/Entities';
 import { getClassFromIndex, getFactionFromType, getRaceFromIndex } from '../../common/GetterStaticData';
 import { Faction } from '../../common/Theme'
@@ -26,6 +26,12 @@ const useStyles = makeStyles(() =>
     },
     name: {
         fontSize: '3vw'
+    },
+    image: {
+        borderRadius: '5%'
+    },
+    iconClass: {
+        borderRadius: '5%'
     }
   }),
 );
@@ -39,7 +45,11 @@ export default function CharacterPaper(props: CharacterPaperProps){
 
     const characterSummary: CharacterSummaryDTO = props.characterSummary;
 
-    const [isFavorite, setIsFavorite] = useState(props.characterSummary.favorite);
+    const [isFavorite, setIsFavorite] = useState(props.characterSummary.isFavorite);
+
+    useEffect(() => {
+        setIsFavorite(props.characterSummary.isFavorite);
+    }, [props]);
 
     const classes = useStyles();
 
@@ -80,12 +90,17 @@ export default function CharacterPaper(props: CharacterPaperProps){
     return(
         <Paper className={classNamePaper} elevation={3} variant="outlined" >
             <Grid container direction="column">
-                <Grid item>
-                    <Typography variant="h2" className={classes.name}>{characterSummary.name.substring(0,14)}</Typography>
+                <Grid container justify="space-between" alignItems="center">
+                    <Grid item>
+                        <Typography variant="h2" className={classes.name}>{characterSummary.name.substring(0,14)}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <img className={classes.iconClass} src={playableClass?.mediaURL}/>
+                    </Grid>
                 </Grid>
                 <Grid container direction="row" spacing={1} justify="flex-start" alignItems="center">
                     <Grid item >
-                        <img src={characterSummary.insertUrl} />
+                        <img className={classes.image} src={characterSummary.insertUrl}/>
                     </Grid>
                     <Grid item direction="column">
                         <Grid item>
@@ -110,18 +125,12 @@ export default function CharacterPaper(props: CharacterPaperProps){
                             {"class : " + playableClass?.localizedStringDTO.en_US}
                         </Grid>
                         <Grid item>
-                            {"lastLoginTimestamp : " + characterSummary.lastLoginTimestamp}
-                        </Grid>
-                        <Grid item>
-                            {"date : " + lastLoginDate.toLocaleDateString() + " - " + lastLoginDate.toLocaleTimeString() }
-                        </Grid>
-                        <Grid item>
-                            <img  src={playableClass?.mediaURL} />
-                        </Grid>
-                        <Grid item>
-                            <Button variant="contained" color="secondary" startIcon={starIcon} onClick={toggleFavorite}>update</Button>
+                            {"Last login time : " + lastLoginDate.toLocaleDateString() + " - " + lastLoginDate.toLocaleTimeString() }
                         </Grid>
                     </Grid>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="secondary" startIcon={starIcon} onClick={toggleFavorite}>Favorite</Button>
                 </Grid>
             </Grid>
         </Paper>

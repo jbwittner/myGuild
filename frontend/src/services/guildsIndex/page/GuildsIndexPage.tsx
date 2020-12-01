@@ -25,9 +25,8 @@ const useStyles = makeStyles(() =>
 
 export default function GuildsIndexPage() {
 
-    console.log("render GuildsIndexPage")
-
     const [downloadInProgress, setDownloadInProgress] = useState(false);
+    const [value, setValue] = useState<number>(0)
 
     const accoutGuildsStorage = SessionStorage.getItem<GuildSummaryDTO[]>(SessionStorage.ACCOUNT_GUILDS);
 
@@ -50,7 +49,20 @@ export default function GuildsIndexPage() {
 
         setDownloadInProgress(false);
 
-        console.log(accoutGuilds)
+    }
+
+    const testRender = (id: number, isFavortie: boolean) => {
+
+        if(accoutGuilds !== undefined){
+            const index = accoutGuilds?.findIndex((element) => element.id === id);
+            accoutGuilds[index].isFavorite = isFavortie;
+            const newAccoutGuilds = accoutGuilds;
+            setAccoutGuilds(newAccoutGuilds)
+
+            SessionStorage.setItem(SessionStorage.ACCOUNT_GUILDS, newAccoutGuilds);
+
+            setValue(value + 1)
+        }
 
     }
 
@@ -83,8 +95,8 @@ export default function GuildsIndexPage() {
         const tttoto = value.guilds.map((value: GuildSummaryDTO) =>{
 
             return(
-                <Grid item key={value.name} sm={12}>
-                    <GuildPaper guildSummary={value}/>
+                <Grid item key={value.name} sm={12} lg={6} xl={4}>
+                    <GuildPaper onFavoriteToggle={testRender} guildSummary={value}/>
                 </Grid>
             )
         })
@@ -109,6 +121,17 @@ export default function GuildsIndexPage() {
     })
 
     const list = () => {
+        const favoriteGuilds = accoutGuilds?.filter(element => element.isFavorite === true);
+
+        const favoriteGuildsPaper = favoriteGuilds?.map((element) => {
+            const key = element.realmDTO.slug + "-" + element.name;
+            return(
+                <Grid item key={key} sm={12} lg={6} xl={4}>
+                    <GuildPaper onFavoriteToggle={testRender} guildSummary={element}/>
+                </Grid>
+            )
+        })
+
         return (
             <Accordion key='favoris' defaultExpanded={true}>
                 <AccordionSummary
@@ -120,7 +143,7 @@ export default function GuildsIndexPage() {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container className={classes.gridReal}>
-                        {'WIP'}
+                        {favoriteGuildsPaper}
                     </Grid>
                 </AccordionDetails>
             </Accordion>

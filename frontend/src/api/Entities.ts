@@ -63,6 +63,7 @@ export interface GuildSummaryDTO{
     id: number;
     name: string;
     useApplication: boolean;
+    isFavorite: boolean;
     isGuildMaster: boolean;
     indexFaction: number;
     realmDTO: RealmDTO;
@@ -103,5 +104,10 @@ export interface CharacterSummaryDTO{
     averageItemLevel: number;
     equippedItemLevel: number;
     lastLoginTimestamp: number;
-    favorite: boolean;
+    isFavorite: boolean;
+}
+
+export interface FavoriteGuildDTO{
+    id: number;
+    isFavorite: Boolean;
 }

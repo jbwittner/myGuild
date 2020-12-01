@@ -4,8 +4,12 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import fr.opendoha.myguild.server.model.blizzard.Guild;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class of the User account
@@ -21,25 +25,31 @@ import java.time.LocalDateTime;
 public class UserAccount {
 
     @Id
-    @Column(name = "blizzard_id", nullable = false)
+    @Column(name = "BLIZZARD_ID", nullable = false)
     private Integer blizzardId;
 
-    @Column(name = "battle_tag", nullable = false, length = 60)
+    @Column(name = "BATTLE_TAG", nullable = false, length = 60)
     private String battleTag;
 
-    @Column(name = "nick_name", nullable = false, length = 60)
+    @Column(name = "NICK_NAME", nullable = false, length = 60)
     private String nickName;
 
-    @Column(name = "email", nullable = false, length = 60)
+    @Column(name = "EMAIL", nullable = false, length = 60)
     private String email;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "ENABLED", nullable = false)
     private boolean enabled;
 
     @CreationTimestamp
+    @Column(name = "CREATION_DATE_TIME", nullable = false)
     private LocalDateTime creationDateTime;
 
     @UpdateTimestamp
+    @Column(name = "UPDATE_DATE_TIME", nullable = false)
     private LocalDateTime updateDateTime;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "FAVORITE_GUILDS", joinColumns = @JoinColumn(name="USER_ACCOUNT_BLIZZARD_ID"), inverseJoinColumns = @JoinColumn(name="GUILD_ID"))
+    private List<Guild> favoriteGuilds = new ArrayList<>();
 
 }

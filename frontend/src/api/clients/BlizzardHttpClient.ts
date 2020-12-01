@@ -1,4 +1,4 @@
-import { CharacterSummaryDTO, GuildSummaryDTO, StaticDataDTO } from "../Entities"
+import { CharacterSummaryDTO, FavoriteGuildDTO, GuildSummaryDTO, StaticDataDTO } from "../Entities"
 import { HttpClient } from "./HttpClient"
 
 export class BlizzardHttpClient extends HttpClient {
@@ -7,6 +7,7 @@ export class BlizzardHttpClient extends HttpClient {
     static GET_STATIC_DATA_PATH =  "/blizzard/getStaticData";
     static GET_GUILDS_ACCOUNT_PATH =  "/blizzard/getGuildsAccount";
     static SET_FAVORITE_CHARACTER =  "/blizzard/setFavoriteCharacter";
+    static SET_FAVORITE_GUILD =  "/blizzard/setFavoriteGuild";
 
     constructor(){
         super(false)
@@ -30,6 +31,11 @@ export class BlizzardHttpClient extends HttpClient {
     public async setFavoriteCharacter(id: number, isFavorite: Boolean): Promise<CharacterSummaryDTO> {
         const response = await this.post(BlizzardHttpClient.SET_FAVORITE_CHARACTER, {id, isFavorite})
         return response.data as CharacterSummaryDTO;
+    }
+
+    public async setFavoriteGuild(id: number, isFavorite: Boolean): Promise<FavoriteGuildDTO> {
+        const response = await this.post(BlizzardHttpClient.SET_FAVORITE_GUILD, {id, isFavorite})
+        return response.data as FavoriteGuildDTO;
     }
 
 }

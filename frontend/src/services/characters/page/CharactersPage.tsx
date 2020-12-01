@@ -26,8 +26,6 @@ const useStyles = makeStyles(() =>
 
 export default function CharactersPage() {
 
-    console.log("render CharactersPage")
-
     const [downloadInProgress, setDownloadInProgress] = useState(false);
     const accountCharactersStorage = SessionStorage.getItem<CharacterSummaryDTO[]>(SessionStorage.ACCOUNT_CHARACTERS);
     const [accountCharacters, setAccountCharacters] = useState<CharacterSummaryDTO[] | undefined>(accountCharactersStorage)
@@ -35,19 +33,16 @@ export default function CharactersPage() {
 
     const classes = useStyles();
 
-    const favoriteCharacters = accountCharacters?.filter(element => element.favorite === true);
+    const favoriteCharacters = accountCharacters?.filter(element => element.isFavorite === true);
 
     const testRender = (id: number, isFavortie: boolean) => {
-        console.log(id)
-        console.log(isFavortie)
 
         if(accountCharacters !== undefined){
             const index = accountCharacters?.findIndex((element) => element.id === id);
-            accountCharacters[index].favorite = isFavortie;
+            accountCharacters[index].isFavorite = isFavortie;
             const newAccountCharacters = accountCharacters;
             setAccountCharacters(newAccountCharacters)
 
-            console.log(newAccountCharacters)
             SessionStorage.setItem(SessionStorage.ACCOUNT_CHARACTERS, newAccountCharacters);
 
             setValue(value + 1)
@@ -125,8 +120,6 @@ export default function CharactersPage() {
     })
 
     const list = () => {
-
-        favoriteCharacters
 
         const favoriteCharactersPaper = favoriteCharacters?.map((element) => {
             const key = element.realmDTO.slug + "-" + element.name;

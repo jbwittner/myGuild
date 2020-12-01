@@ -1,12 +1,15 @@
 package fr.opendoha.myguild.server.controller;
 
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
+import fr.opendoha.myguild.server.dto.FavoriteGuildDTO;
 import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
+import fr.opendoha.myguild.server.exception.GuildNotExistedException;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.parameters.FavoriteCharacterParameter;
+import fr.opendoha.myguild.server.parameters.FavoriteGuildParameter;
 import fr.opendoha.myguild.server.service.BlizzardService;
 import fr.opendoha.myguild.server.service.IBlizzardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,12 +107,22 @@ public class BlizzardController extends MotherController {
     }
 
     @PostMapping("/setFavoriteCharacter")
-    public CharacterSummaryDTO setFavoriteCharacter(final OAuth2AuthenticationToken authentication,
+    public void setFavoriteCharacter(final OAuth2AuthenticationToken authentication,
             @RequestBody FavoriteCharacterParameter parameter) throws IOException, CharacterNotExistedException {
 
         final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
 
-        return this.blizzardService.setFavoriteCharacter(blizzardAccountParameter, parameter);
+        this.blizzardService.setFavoriteCharacter(blizzardAccountParameter, parameter);
+
+    }
+
+    @PostMapping("/setFavoriteGuild")
+    public void setFavoriteGuild(final OAuth2AuthenticationToken authentication,
+            @RequestBody FavoriteGuildParameter parameter) throws IOException, GuildNotExistedException {
+
+        final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
+
+        this.blizzardService.setFavoriteGuild(blizzardAccountParameter, parameter);
 
     }
 

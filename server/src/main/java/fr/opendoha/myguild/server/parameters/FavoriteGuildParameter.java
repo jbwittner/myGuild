@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class FavoriteCharacterParameter {
+public class FavoriteGuildParameter {
     
     @NotNull
     private Integer id;

@@ -3,6 +3,7 @@ package fr.opendoha.myguild.server.service;
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
+import fr.opendoha.myguild.server.dto.FavoriteGuildDTO;
 import fr.opendoha.myguild.server.dto.GuildDTO;
 import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
@@ -12,11 +13,13 @@ import fr.opendoha.myguild.server.dto.PlayableSpecializationDTO;
 import fr.opendoha.myguild.server.dto.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
+import fr.opendoha.myguild.server.exception.GuildNotExistedException;
 import fr.opendoha.myguild.server.model.UserAccount;
 import fr.opendoha.myguild.server.model.blizzard.*;
 import fr.opendoha.myguild.server.model.blizzard.Character;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.parameters.FavoriteCharacterParameter;
+import fr.opendoha.myguild.server.parameters.FavoriteGuildParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.repository.blizzard.*;
 import fr.opendoha.myguild.server.tools.api.BlizzardAPIHelper;
@@ -469,6 +472,8 @@ public class BlizzardService implements IBlizzardService {
 
         final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
 
+        final List<Guild> favoriteGuilds = userAccount.getFavoriteGuilds();
+
         final List<Character> characters = this.characterRepository.findByUserAccountAndGuildIsNotNull(userAccount);
 
         final List<Guild> guilds = new ArrayList<>();
@@ -489,6 +494,14 @@ public class BlizzardService implements IBlizzardService {
                 
                 final boolean isGuildMaster = this.checkIsGuildMaster(guild, characters);
                 guildSummaryDTO.setIsGuildMaster(isGuildMaster);
+
+                guildSummaryDTO.setIsFavorite(false);
+
+                for(final Guild guildChecked : favoriteGuilds){
+                    if(guild.getId().equals(guildChecked.getId())){
+                        guildSummaryDTO.setIsFavorite(true);
+                    }
+                }
 
                 guildSummaryDTOs.add(guildSummaryDTO);
                 
@@ -560,12 +573,10 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public CharacterSummaryDTO setFavoriteCharacter(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteCharacterParameter favoriteCharacterParameter)
+    public void setFavoriteCharacter(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteCharacterParameter favoriteCharacterParameter)
             throws IOException, CharacterNotExistedException {
 
         final Optional<Character> optionalCharacter = this.characterRepository.findById(favoriteCharacterParameter.getId());
-
-        final CharacterSummaryDTO characterSummaryDTO = new CharacterSummaryDTO();
 
         if(optionalCharacter.isPresent()){
 
@@ -575,13 +586,48 @@ public class BlizzardService implements IBlizzardService {
             
             this.characterRepository.save(character);
 
-            characterSummaryDTO.build(character);
-
         } else {
             throw new CharacterNotExistedException(favoriteCharacterParameter.getId());
         }
 
-        return characterSummaryDTO;
+    }
+
+    @Override
+    public void setFavoriteGuild(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteGuildParameter favoriteGuildParameter)
+            throws IOException, GuildNotExistedException {
+
+        final Optional<Guild> optionalGuild = this.guildRepository.findById(favoriteGuildParameter.getId());
+
+        if(optionalGuild.isPresent()){
+
+            final Guild guild = optionalGuild.get();
+
+            final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
+
+            final List<Guild> guildList = userAccount.getFavoriteGuilds().equals(null) == true ? new ArrayList<>() : userAccount.getFavoriteGuilds();
+
+            if(favoriteGuildParameter.getIsFavorite() == true){
+                boolean isPresent = false;
+                for(final Guild favoriteGuilds : guildList){
+                    if(favoriteGuildParameter.getId().equals(favoriteGuilds.getId())){
+                        isPresent = true;
+                        break;
+                    }
+                }
+
+                if(isPresent == false){
+                    guildList.add(guild);
+                }
+            } else {
+                guildList.remove(guild);
+            }
+
+            userAccount.setFavoriteGuilds(guildList);
+            this.userAccountRepository.save(userAccount);
+
+        } else {
+            throw new GuildNotExistedException(favoriteGuildParameter.getId());
+        }
     }
 
 }

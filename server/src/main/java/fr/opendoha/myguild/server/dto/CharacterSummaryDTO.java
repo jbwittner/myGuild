@@ -19,7 +19,7 @@ public class CharacterSummaryDTO {
     private Integer averageItemLevel;
     private Integer equippedItemLevel;
     private Long lastLoginTimestamp;
-    private boolean isFavorite;
+    private Boolean isFavorite;
 
     /**
      * DTO Builder
