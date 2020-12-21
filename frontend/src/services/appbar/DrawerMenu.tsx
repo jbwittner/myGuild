@@ -12,7 +12,6 @@ import { IconButton } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import PersonIcon from '@material-ui/icons/Person';
 import HomeIcon from '@material-ui/icons/Home';
-import GroupIcon from '@material-ui/icons/Group';
 
 const useStyles = makeStyles({
   list: {
@@ -70,10 +69,6 @@ export default function TemporaryDrawer() {
         <ListItem button key={"charactersPage"} onClick={() => history.push("/characters")}>
             <ListItemIcon><PersonIcon /></ListItemIcon>
             <ListItemText primary={'Characters'} />
-          </ListItem>
-          <ListItem button key={"guildsIndexPage"} onClick={() => history.push("/guildsIndex")}>
-            <ListItemIcon><GroupIcon /></ListItemIcon>
-            <ListItemText primary={'Guilds'} />
           </ListItem>
       </List>
     </div>

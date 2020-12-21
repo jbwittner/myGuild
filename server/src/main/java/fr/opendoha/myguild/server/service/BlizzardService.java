@@ -57,6 +57,12 @@ public class BlizzardService implements IBlizzardService {
     @Value("${application.blizzard.wow.game-data.namespace}")
     protected String namespaceGameData;
 
+    @Value("${application.guild.slug}")
+    protected String guildSlug;
+
+    @Value("${application.guild.realm}")
+    protected String guildRealm;
+
     protected final OAuth2FlowHandler oAuth2FlowHandler;
     protected final UserAccountRepository userAccountRepository;
     protected final GuildRepository guildRepository;
@@ -443,76 +449,6 @@ public class BlizzardService implements IBlizzardService {
 
     }
 
-    private boolean checkIsGuildMaster(final Guild guild, final List<Character> characters) throws IOException {
-        boolean isGuildMaster = false;
-
-        GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(guild);
-
-        outer: for(final GuildMemberIndexData guildMemberIndexData : guildRosterIndexData.getGuildMemberIndexDataList()){
-            final GuildMemberData guildMemberData = guildMemberIndexData.getGuildMemberData();
-
-            if(guildMemberIndexData.getRank() != 0){
-                continue;
-            }
-
-            final Integer guildMemberDataId = guildMemberData.getId();
-            for(Character character : characters){
-                if(character.getId().equals(guildMemberDataId)){
-                    isGuildMaster = true;
-                    break outer;
-                }
-            }
-        }
-
-        return isGuildMaster;
-    }
-
-    @Override
-    public List<GuildSummaryDTO> fetchGuildsAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException {
-
-        final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
-
-        final List<Guild> favoriteGuilds = userAccount.getFavoriteGuilds();
-
-        final List<Character> characters = this.characterRepository.findByUserAccountAndGuildIsNotNull(userAccount);
-
-        final List<Guild> guilds = new ArrayList<>();
-        final List<GuildSummaryDTO> guildSummaryDTOs = new ArrayList<>();
-
-        for(final Character character : characters){
-
-            final Guild guild = character.getGuild();
-
-            if(guilds.contains(guild) == false){
-
-                final GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
-
-                guilds.add(guild);
-                
-                final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
-                guildSummaryDTO.build(guild, guildData);
-                
-                final boolean isGuildMaster = this.checkIsGuildMaster(guild, characters);
-                guildSummaryDTO.setIsGuildMaster(isGuildMaster);
-
-                guildSummaryDTO.setIsFavorite(false);
-
-                for(final Guild guildChecked : favoriteGuilds){
-                    if(guild.getId().equals(guildChecked.getId())){
-                        guildSummaryDTO.setIsFavorite(true);
-                    }
-                }
-
-                guildSummaryDTOs.add(guildSummaryDTO);
-                
-            }
-
-        }
-
-        return guildSummaryDTOs;
-
-    }
-
     @Override
     public StaticDataDTO getStaticData(){
         
@@ -593,41 +529,36 @@ public class BlizzardService implements IBlizzardService {
     }
 
     @Override
-    public void setFavoriteGuild(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteGuildParameter favoriteGuildParameter)
-            throws IOException, GuildNotExistedException {
+    public void fetchPrincipalGuild() throws IOException {
+        final GuildData guildData = this.blizzardAPIHelper.getGuildData(this.guildRealm, this.guildSlug);
 
-        final Optional<Guild> optionalGuild = this.guildRepository.findById(favoriteGuildParameter.getId());
+        final Guild guild = new Guild();
 
-        if(optionalGuild.isPresent()){
+        guild.setId(guildData.getId());
 
-            final Guild guild = optionalGuild.get();
+        guild.setAchievementPoints(guildData.getAchievementPoints());
+        guild.setCreatedTimestamp(guildData.getCreatedTimestamp());
+        guild.setName(guildData.getName());
+        guild.setMemberCount(guildData.getMemberCount());
 
-            final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
+        final Faction faction = this.factionRepository.findByType(guildData.getFactionData().getType()).get();
 
-            final List<Guild> guildList = userAccount.getFavoriteGuilds().equals(null) == true ? new ArrayList<>() : userAccount.getFavoriteGuilds();
+        guild.setFaction(faction);
 
-            if(favoriteGuildParameter.getIsFavorite() == true){
-                boolean isPresent = false;
-                for(final Guild favoriteGuilds : guildList){
-                    if(favoriteGuildParameter.getId().equals(favoriteGuilds.getId())){
-                        isPresent = true;
-                        break;
-                    }
-                }
+        Realm realm = new Realm();
 
-                if(isPresent == false){
-                    guildList.add(guild);
-                }
-            } else {
-                guildList.remove(guild);
-            }
+        realm.setId(guildData.getRealmData().getId());
+        realm.setSlug(guildData.getRealmData().getSlug());
+        realm.buildLocalizedModel(guildData.getRealmData().getLocalizedStringData());
 
-            userAccount.setFavoriteGuilds(guildList);
-            this.userAccountRepository.save(userAccount);
+        realm = this.realmRepository.save(realm);
 
-        } else {
-            throw new GuildNotExistedException(favoriteGuildParameter.getId());
-        }
+        guild.setRealm(realm);
+
+        guild.setUseApplication(true);
+
+        this.guildRepository.save(guild);
+        
     }
 
 }

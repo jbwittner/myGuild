@@ -149,12 +149,12 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public GuildData getGuildData(final Guild guild) throws IOException {
+    public GuildData getGuildData(final String realmSlug, final String nameSlug) throws IOException {
 
         final String token = this.oAuth2FlowHandler.getToken();
 
-        final String url = this.baseUriGameData + "/guild/" + guild.getRealm().getSlug()
-                + "/" + guild.getName().toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
+        final String url = this.baseUriGameData + "/guild/" + realmSlug.toLowerCase()
+                + "/" + nameSlug.toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
 
         final GuildData guildData = this.httpHelper.getForObject(url, GuildData.class);
 

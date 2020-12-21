@@ -11,8 +11,6 @@ public class GuildSummaryDTO {
     private Integer id;
     private String name;
     private Boolean useApplication;
-    private Boolean isGuildMaster;
-    private Boolean isFavorite;
     private Integer indexFaction;
     private RealmDTO realmDTO;
     private Integer achievementPoints;

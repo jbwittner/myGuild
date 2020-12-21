@@ -94,18 +94,6 @@ public class BlizzardController extends MotherController {
         return this.blizzardService.getStaticData();
     }
 
-    /**
-     * Method to get all guilds who the account have a character
-     */
-    @GetMapping("/getGuildsAccount")
-    public List<GuildSummaryDTO> getGuildsAccount(final OAuth2AuthenticationToken authentication) throws IOException {
-
-        final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
-
-        return this.blizzardService.fetchGuildsAccount(blizzardAccountParameter);
-
-    }
-
     @PostMapping("/setFavoriteCharacter")
     public void setFavoriteCharacter(final OAuth2AuthenticationToken authentication,
             @RequestBody FavoriteCharacterParameter parameter) throws IOException, CharacterNotExistedException {
@@ -116,14 +104,9 @@ public class BlizzardController extends MotherController {
 
     }
 
-    @PostMapping("/setFavoriteGuild")
-    public void setFavoriteGuild(final OAuth2AuthenticationToken authentication,
-            @RequestBody FavoriteGuildParameter parameter) throws IOException, GuildNotExistedException {
-
-        final BlizzardAccountParameter blizzardAccountParameter = this.getBlizzardAccountParameter(authentication);
-
-        this.blizzardService.setFavoriteGuild(blizzardAccountParameter, parameter);
-
+    @GetMapping("/fetchPrincipalGuild")
+    public void fetchPrincipalGuild() throws IOException {
+        this.blizzardService.fetchPrincipalGuild();
     }
 
 }

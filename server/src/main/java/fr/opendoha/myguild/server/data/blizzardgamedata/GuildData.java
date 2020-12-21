@@ -34,7 +34,4 @@ public class GuildData {
     @JsonProperty("created_timestamp")
     private Long createdTimestamp;
 
-    @JsonProperty("crest")
-    private CrestData crestData;
-
 }

@@ -30,16 +30,10 @@ public interface IBlizzardService {
      */
     void fetchStaticData() throws IOException;
 
-    /**
-     * Method to get all guilds who the account have a character
-     */
-    List<GuildSummaryDTO> fetchGuildsAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
-
-
     StaticDataDTO getStaticData();
 
     void setFavoriteCharacter(BlizzardAccountParameter blizzardAccountParameter, FavoriteCharacterParameter favoriteCharacterParameter) throws IOException, CharacterNotExistedException;
 
-    void setFavoriteGuild(final BlizzardAccountParameter blizzardAccountParameter, final FavoriteGuildParameter favoriteGuildParameter) throws IOException, GuildNotExistedException;
+    void fetchPrincipalGuild() throws IOException;
 
 }
