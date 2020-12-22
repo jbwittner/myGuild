@@ -317,7 +317,7 @@ public class BlizzardService implements IBlizzardService {
 
     }
 
-    private Character updateCharacter(final CharacterData characterData) throws HttpClientErrorException, IOException {
+    private Character updateCharacterWithoutMedia(final CharacterData characterData) throws HttpClientErrorException, IOException {
         
         final Optional<Character> optionalCharacter = this.characterRepository.findById(characterData.getId());
 
@@ -354,9 +354,16 @@ public class BlizzardService implements IBlizzardService {
 
         character.setPlayableRace(playableRace);
 
-        this.fetchCharacterMediaDataFromAccount(character, characterData);
-
         character.setGuild(this.fetchGuildFromCharacter(characterData));
+
+        return character;
+    }
+
+    private Character updateCharacter(final CharacterData characterData) throws HttpClientErrorException, IOException {
+        
+        final Character character = this.updateCharacterWithoutMedia(characterData);
+
+        this.fetchCharacterMediaData(character, characterData);
 
         return character;
     }
@@ -386,7 +393,7 @@ public class BlizzardService implements IBlizzardService {
 
     }
 
-    private void fetchCharacterMediaDataFromAccount(final Character character, final CharacterData characterData)
+    private void fetchCharacterMediaData(final Character character, final CharacterData characterData)
             throws HttpClientErrorException, IOException {
 
         final CharacterMediaData characterMediaData = this.blizzardAPIHelper.getCharacterMediaData(characterData);
@@ -572,7 +579,7 @@ public class BlizzardService implements IBlizzardService {
 
         for(final GuildMemberIndexData guildMemberIndexData : guildMemberIndexDatas){
             characterData = this.blizzardAPIHelper.getCharacterData(guildMemberIndexData);
-            character = this.updateCharacter(characterData);
+            character = this.updateCharacterWithoutMedia (characterData);
 
             this.characterRepository.save(character);
         }
