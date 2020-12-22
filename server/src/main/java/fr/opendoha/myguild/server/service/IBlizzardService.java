@@ -36,4 +36,8 @@ public interface IBlizzardService {
 
     void fetchPrincipalGuild() throws IOException;
 
+    void fetchGuildMembers() throws IOException;
+
+    
+
 }

@@ -109,4 +109,9 @@ public class BlizzardController extends MotherController {
         this.blizzardService.fetchPrincipalGuild();
     }
 
+    @GetMapping("/fetchGuildMembers")
+    public void fetchGuildMembers() throws IOException {
+        this.blizzardService.fetchGuildMembers();
+    }
+
 }

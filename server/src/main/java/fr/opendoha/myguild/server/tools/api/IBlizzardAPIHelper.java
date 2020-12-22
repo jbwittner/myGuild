@@ -66,12 +66,7 @@ interface IBlizzardAPIHelper {
     /**
      * Get GuildRosterIndexData
      */
-    GuildRosterIndexData getGuildRosterIndexData(final GuildData guildData) throws IOException;
-
-    /**
-     * Get GuildRosterIndexData
-     */
-    GuildRosterIndexData getGuildRosterIndexData(final Guild guild) throws IOException;
+    GuildRosterIndexData getGuildRosterIndexData(final String realmSlug, final String nameSlug) throws IOException;
 
     /**
      * Get PlayableRacesIndexData

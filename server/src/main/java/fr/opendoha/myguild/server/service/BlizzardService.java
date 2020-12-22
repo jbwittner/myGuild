@@ -561,4 +561,23 @@ public class BlizzardService implements IBlizzardService {
         
     }
 
+    @Override
+    public void fetchGuildMembers() throws IOException {
+        final GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(this.guildRealm, this.guildSlug);
+
+        List<GuildMemberIndexData> guildMemberIndexDatas = guildRosterIndexData.getGuildMemberIndexDataList();
+
+        CharacterData characterData;
+        Character character;
+
+        for(final GuildMemberIndexData guildMemberIndexData : guildMemberIndexDatas){
+            characterData = this.blizzardAPIHelper.getCharacterData(guildMemberIndexData);
+            character = this.updateCharacter(characterData);
+
+            this.characterRepository.save(character);
+        }
+
+
+    }
+
 }
