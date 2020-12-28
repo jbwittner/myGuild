@@ -47,9 +47,5 @@ public class UserAccount {
     @UpdateTimestamp
     @Column(name = "UPDATE_DATE_TIME", nullable = false)
     private LocalDateTime updateDateTime;
-
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "FAVORITE_GUILDS", joinColumns = @JoinColumn(name="USER_ACCOUNT_BLIZZARD_ID"), inverseJoinColumns = @JoinColumn(name="GUILD_ID"))
-    private List<Guild> favoriteGuilds = new ArrayList<>();
-
+    
 }

@@ -1,7 +1,6 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
-import fr.opendoha.myguild.server.dto.FavoriteGuildDTO;
 import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
@@ -9,7 +8,6 @@ import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
 import fr.opendoha.myguild.server.exception.GuildNotExistedException;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.parameters.FavoriteCharacterParameter;
-import fr.opendoha.myguild.server.parameters.FavoriteGuildParameter;
 
 import java.io.IOException;
 import java.util.List;
