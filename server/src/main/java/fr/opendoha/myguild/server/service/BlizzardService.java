@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -62,6 +63,8 @@ public class BlizzardService implements IBlizzardService {
 
     @Value("${application.guild.realm}")
     protected String guildRealm;
+
+    protected static final long TIME_BEWTEEN_CHARACTER_OBSELET = 5184000000L;
 
     protected final OAuth2FlowHandler oAuth2FlowHandler;
     protected final UserAccountRepository userAccountRepository;
@@ -338,6 +341,13 @@ public class BlizzardService implements IBlizzardService {
         character.setEquippedItemLevel(characterData.getEquippedItemLevel());
         character.setLastLoginTimestamp(characterData.getLastLoginTimestamp());
 
+        Timestamp limitTimestamp = new Timestamp(System.currentTimeMillis() - TIME_BEWTEEN_CHARACTER_OBSELET);
+        Timestamp characterTimestamp = new Timestamp(characterData.getLastLoginTimestamp());
+
+        boolean isTooOld = limitTimestamp.after(characterTimestamp);
+
+        character.setIsTooOld(isTooOld);
+
         character.setRealm(this.fetchRealmFromCharacter(characterData));
 
         final Faction faction = this.factionRepository.findByType(characterData.getFactionData().getType()).get();
@@ -543,8 +553,6 @@ public class BlizzardService implements IBlizzardService {
 
         guild.setId(guildData.getId());
 
-        guild.setAchievementPoints(guildData.getAchievementPoints());
-        guild.setCreatedTimestamp(guildData.getCreatedTimestamp());
         guild.setName(guildData.getName());
         guild.setMemberCount(guildData.getMemberCount());
 
@@ -578,8 +586,25 @@ public class BlizzardService implements IBlizzardService {
         Character character;
 
         for(final GuildMemberIndexData guildMemberIndexData : guildMemberIndexDatas){
+
+            Integer rankInt = guildMemberIndexData.getRank();
+
+            Optional<GuildRank> optionalGuildRank = this.guildRankRepository.findByRank(rankInt);
+
+            GuildRank guildRank;
+            
+            if(optionalGuildRank.isPresent()){
+                guildRank = optionalGuildRank.get();
+            } else {
+                guildRank = new GuildRank();
+                guildRank.setRank(rankInt);
+                guildRank.setName("RANK_" + rankInt);
+                guildRank = this.guildRankRepository.save(guildRank);
+            }
+
             characterData = this.blizzardAPIHelper.getCharacterData(guildMemberIndexData);
-            character = this.updateCharacterWithoutMedia (characterData);
+            character = this.updateCharacterWithoutMedia(characterData);
+            character.setGuildRank(guildRank);
 
             this.characterRepository.save(character);
         }

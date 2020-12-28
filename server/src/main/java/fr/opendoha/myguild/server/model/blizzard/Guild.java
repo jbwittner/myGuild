@@ -22,12 +22,6 @@ public class Guild extends AbstractBlizzardModel {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name= "ACHIEVEMENT_POINTS")
-    private Integer achievementPoints;
-
-    @Column(name= "CREATED_TIMESTAMP")
-    private Long createdTimestamp;
-
     @Column(name= "MEMBER_COUNT")
     private Integer memberCount;
 

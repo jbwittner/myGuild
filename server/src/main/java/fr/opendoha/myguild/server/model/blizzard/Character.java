@@ -68,6 +68,9 @@ public class Character extends AbstractBlizzardModel {
     @Column(name = "LAST_LOGIN_TIMESTAMP")
     private Long lastLoginTimestamp;
 
+    @Column(name = "IS_TOO_OLD")
+    private Boolean isTooOld = false;
+
     @Column(name= "IS_FAVORITE")
     private boolean isFavorite = false;
 

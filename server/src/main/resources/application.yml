@@ -13,7 +13,7 @@ application:
     password: MyGuildPass2020
   blizzard:
     wow:
-      delay-ms: 1
+      delay-ms: 10
       profile:
         base-uri: https://eu.api.blizzard.com/profile
         namespace: profile-eu
