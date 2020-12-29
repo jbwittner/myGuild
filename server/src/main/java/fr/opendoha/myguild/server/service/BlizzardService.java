@@ -603,7 +603,13 @@ public class BlizzardService implements IBlizzardService {
             this.characterRepository.save(character);
         }
 
+    }
 
+    @Override
+    public List<CharacterSummaryDTO> fetchCharacterRoster() {
+
+
+        return characterDTOs;
     }
 
 }

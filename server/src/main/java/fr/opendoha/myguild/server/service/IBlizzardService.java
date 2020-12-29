@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.service;
 
+import fr.opendoha.myguild.server.dto.CharacterRosterSummaryDTO;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildsAccountDTO;
@@ -17,15 +18,10 @@ import java.util.List;
  */
 public interface IBlizzardService {
 
-    /**
-     * Method to fetch the characters from a blizzard account
-     * @throws IOException
-     */
     List<CharacterSummaryDTO> fetchCharacterAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
-    /**
-     * Method to fetch all static data (playable class, race, etc...)
-     */
+    List<CharacterRosterSummaryDTO> fetchCharacterRoster();
+
     void fetchStaticData() throws IOException;
 
     StaticDataDTO getStaticData();
