@@ -22,7 +22,6 @@ import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRaceData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRacesIndexData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
 import fr.opendoha.myguild.server.model.blizzard.Character;
-import fr.opendoha.myguild.server.model.blizzard.Guild;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.tools.HttpHelper;
 import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
@@ -32,12 +31,6 @@ import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
  */
 @Component
 public class BlizzardAPIHelper implements IBlizzardAPIHelper {
-
-    @Value("${application.guild.realm}")
-    protected String guildRealm;
-
-    @Value("${application.guild.slug}")
-    protected String guildSlug;
 
     @Value("${application.blizzard.wow.profile.base-uri}")
     protected String baseUriProfile;
@@ -68,7 +61,9 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public CharacterData getCharacterData(final CharacterSummaryData characterSummaryData, final String token) throws HttpClientErrorException{
+    public CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException {
+
+        final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = characterSummaryData.getCharacterHrefData().getHref() + "&access_token=" + token;
 
@@ -86,7 +81,7 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
         final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = this.baseUriProfile + "/wow/character/" + character.getRealm().getSlug()
-                + "/" + character.getName() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
+                + "/" + character.getName().toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
 
         final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
 
@@ -153,12 +148,12 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public GuildData getGuildData() throws IOException {
+    public GuildData getGuildData(final String realmSlug, final String nameSlug) throws IOException {
 
         final String token = this.oAuth2FlowHandler.getToken();
 
-        final String url = this.baseUriGameData + "/guild/" + this.guildRealm.toLowerCase()
-                + "/" + this.guildSlug.toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
+        final String url = this.baseUriGameData + "/guild/" + realmSlug.toLowerCase()
+                + "/" + nameSlug.toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
 
         final GuildData guildData = this.httpHelper.getForObject(url, GuildData.class);
 
@@ -170,25 +165,11 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
      * {@inheritDoc}
      */
     @Override
-    public GuildRosterIndexData getGuildRosterIndexData(final GuildData guildData) throws IOException {
+    public GuildRosterIndexData getGuildRosterIndexData(final String realmSlug, final String nameSlug) throws IOException {
 
         final String token = this.oAuth2FlowHandler.getToken();
 
-        final String url = guildData.getRosterHrefData().getHref() + "&access_token=" + token;
-
-        final GuildRosterIndexData guildRosterIndexData = this.httpHelper.getForObject(url, GuildRosterIndexData.class);
-
-        return guildRosterIndexData;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GuildRosterIndexData getGuildRosterIndexData(final Guild guild, final String token) throws IOException {
-
-        final String url = this.baseUriGameData + "/guild/" + guild.getRealm().getSlug().toLowerCase() + "/" + guild.getName().toLowerCase()
+        final String url = this.baseUriGameData + "/guild/" + realmSlug.toLowerCase() + "/" + nameSlug.toLowerCase()
                 + "/roster?namespace=" + this.namespaceProfile + "&locale=&access_token=" + token;
 
         final GuildRosterIndexData guildRosterIndexData = this.httpHelper.getForObject(url, GuildRosterIndexData.class);
@@ -304,6 +285,22 @@ public class BlizzardAPIHelper implements IBlizzardAPIHelper {
         final String token = this.oAuth2FlowHandler.getToken();
 
         final String url = playableSpecializationData.getMediaData().getHrefData().getHref() + "&access_token=" + token;
+
+        final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
+
+        return gameDataMediaData;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GameDataMediaData getGameDataMediaData(final String href) throws IOException {
+
+        final String token = this.oAuth2FlowHandler.getToken();
+
+        final String url = href + "&access_token=" + token;
 
         final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
 

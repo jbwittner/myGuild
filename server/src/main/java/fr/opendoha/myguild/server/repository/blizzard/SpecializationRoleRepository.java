@@ -3,6 +3,7 @@ package fr.opendoha.myguild.server.repository.blizzard;
 import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
 import fr.opendoha.myguild.server.repository.AbstractRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,4 +15,10 @@ public interface SpecializationRoleRepository extends AbstractRepository<Special
      * Method to find a specialization role by type
      */
     Optional<SpecializationRole> findByType(String type);
+
+    /**
+     * Method to find a specialization role by is updated
+     */
+    List<SpecializationRole> findByIsUpdatedTrue();
+
 }

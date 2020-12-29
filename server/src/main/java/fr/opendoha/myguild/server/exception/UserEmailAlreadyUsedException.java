@@ -6,7 +6,7 @@ import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
  * Exception to signal a email already used
  */
 @SuppressWarnings("serial")
-public final class UserEmailAlreadyUsedException extends RuntimeException {
+public final class UserEmailAlreadyUsedException extends FunctionalException {
 
     /**
      * Exception to signal a email already used

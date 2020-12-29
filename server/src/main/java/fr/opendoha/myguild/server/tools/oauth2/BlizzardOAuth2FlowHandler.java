@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 
@@ -24,6 +25,7 @@ import java.util.Base64;
 @Service
 public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
 
+    public static final Integer MINUTES_MARGIN = 30;
     private static final String ENCODING = "UTF-8";
     private final Object tokenLock = new Object();
     private final ObjectMapper objectMapper;
@@ -123,7 +125,8 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
             } else if (tokenExpiry == null) {
                 value = true;
             } else {
-                value = Instant.now().isAfter(tokenExpiry);
+                final Instant tokenExpiryModified = tokenExpiry.minus(MINUTES_MARGIN, ChronoUnit.MINUTES);
+                value = Instant.now().isAfter(tokenExpiryModified);
             }
             return value;
         }

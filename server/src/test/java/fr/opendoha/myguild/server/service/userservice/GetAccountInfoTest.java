@@ -27,9 +27,11 @@ public class GetAccountInfoTest extends AbstractMotherIntegrationTest {
 
     /**
      * Test with a existed account
+     * 
+     * @throws UserAccountNotExistedException
      */
     @Test
-    public void testWithExistedAccount() {
+    public void testWithExistedAccount() throws UserAccountNotExistedException {
         final UserAccount userAccount = new UserAccount();
 
         final String battleTag = this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_BATTLETAG);

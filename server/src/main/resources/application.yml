@@ -1,7 +1,7 @@
 application:
   guild:
-    slug: peypouze
-    realm: archimonde
+    slug: PeyPouZe
+    realm: Archimonde
   server:
     port: 2142
     url: http://localhost
@@ -13,7 +13,7 @@ application:
     password: MyGuildPass2020
   blizzard:
     wow:
-      delay-ms: 1
+      delay-ms: 10
       profile:
         base-uri: https://eu.api.blizzard.com/profile
         namespace: profile-eu
@@ -24,10 +24,12 @@ application:
 logging:
   level:
     fr.opendoha.myguild.server:
-      tools.HttpHelper: DEBUG
+      tools:
+        HttpHelper: INFO
+        handler.GlobalExceptionHandler: INFO
       MyGuildApplication: INFO
       service:
-        BlizzardService: DEBUG
+        BlizzardService: INFO
         oauth2:
           BlizzardOAuth2FlowHandler: INFO
       aop.interceptor: 

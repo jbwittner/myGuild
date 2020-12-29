@@ -3,8 +3,7 @@ image:
 
 tasks:
   - before : mysql -h localhost -u root < sql/prepare_db.sql &&
-              mysql -h localhost -u root myGuild_db < sql/init_tables.sql &&
-              mysql -h localhost -u root myGuild_db < sql/add_data_dev.sql
+              mysql -h localhost -u root myGuild_db < sql/myGuild_db.sql
   - command : mvn -DskipTests clean package
 
 vscode:

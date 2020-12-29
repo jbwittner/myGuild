@@ -6,7 +6,7 @@ import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
  * Exception to signal a BattleTag already used
  */
 @SuppressWarnings("serial")
-public final class UserBattleTagAlreadyUsedException extends RuntimeException {
+public final class UserBattleTagAlreadyUsedException extends FunctionalException {
 
     /**
      * Exception to signal a BattleTag already used

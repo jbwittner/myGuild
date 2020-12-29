@@ -3,6 +3,8 @@ package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
 import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
+import fr.opendoha.myguild.server.exception.UserBattleTagAlreadyUsedException;
+import fr.opendoha.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
@@ -17,9 +19,11 @@ public interface IUserService {
      * @param userRegistrationParameter Parameters of the new account
      * @throws UserEmailAlreadyUsedException    if the email is already used
      * @throws UserNickNameAlreadyUsedException if the nick name is already used
+     * @throws UserBlizzardIdAlreadyUsedException
+     * @throws UserBattleTagAlreadyUsedException
      */
     void registerNewUserAccount(UserRegistrationParameter userRegistrationParameter) throws
-            UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException;
+            UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException, UserBlizzardIdAlreadyUsedException;
 
     /**
      * Method to check if a account exist

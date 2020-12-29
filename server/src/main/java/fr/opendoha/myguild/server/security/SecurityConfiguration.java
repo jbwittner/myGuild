@@ -17,11 +17,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(final HttpSecurity http) throws Exception {
 
         http
+                .cors().and().csrf().disable()
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers("/", "index.html", "/favicon.ico", "/*manifest.json", "workbox-*/*.js", "/*.js", "/*.png", "/static/**").permitAll()
+                .antMatchers("/", "index.html", "/favicon.ico", "/*manifest.json", "workbox-*/*.js", "/*.js", "/*.png", "/static/**", "/*.svg", "/*.jpg").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .oauth2Login();
+                .and().logout().logoutSuccessUrl("/")
+                .and().oauth2Login();
     }
 
 }

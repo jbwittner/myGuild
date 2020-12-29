@@ -6,7 +6,7 @@ import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
  * Exception to signal a nick name already used
  */
 @SuppressWarnings("serial")
-public final class UserNickNameAlreadyUsedException extends RuntimeException {
+public final class UserNickNameAlreadyUsedException extends FunctionalException {
 
     /**
      * Exception to signal a nick name already used

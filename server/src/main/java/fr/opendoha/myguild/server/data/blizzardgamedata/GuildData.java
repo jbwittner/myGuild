@@ -31,4 +31,7 @@ public class GuildData {
     @JsonProperty("faction")
     private FactionData factionData;
 
+    @JsonProperty("created_timestamp")
+    private Long createdTimestamp;
+
 }

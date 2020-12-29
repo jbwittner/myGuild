@@ -1,7 +1,7 @@
 application:
   guild:
-    slug: peypouze
-    realm: archimonde
+    slug: PeyPouZe
+    realm: Archimonde
   db-param:
     host: localhost
     port: 3306
@@ -10,7 +10,7 @@ application:
     password: MyGuildPass2020
   blizzard:
     wow:
-      delay-ms: 11
+      delay-ms: 1
       profile:
         base-uri: https://eu.api.blizzard.com/profile
         namespace: profile-eu

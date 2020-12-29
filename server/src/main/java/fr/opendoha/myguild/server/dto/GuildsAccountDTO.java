@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public class GuildsAccountDTO {
 
-    List<GuildInformationsDTO> guildInformationsDTOs;
+    List<GuildDTO> guildDTOs;
     
 }

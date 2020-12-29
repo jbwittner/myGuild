@@ -4,7 +4,11 @@ import fr.opendoha.myguild.server.model.UserAccount;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Model for the characters
@@ -63,6 +67,30 @@ public class Character extends AbstractBlizzardModel {
 
     @Column(name = "LAST_LOGIN_TIMESTAMP")
     private Long lastLoginTimestamp;
+
+    @Column(name = "IS_TOO_OLD")
+    private Boolean isTooOld = false;
+
+    @Column(name= "IS_FAVORITE")
+    private boolean isFavorite = false;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DATE")
+    private Date updateDate;
+
+    /**
+     * Methode used to set is favorites to true
+     */
+    public void setIsFavoritesTrue(){
+        this.isFavorite = true;
+    }
+
+    /**
+     * Methode used to set is favorites to false
+     */
+    public void setIsFavoritesFalse(){
+        this.isFavorite = false;
+    }
 
     @Override
     public String toString() {

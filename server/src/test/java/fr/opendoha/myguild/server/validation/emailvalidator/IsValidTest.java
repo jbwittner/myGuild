@@ -20,7 +20,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
      * Test with a valid email
      */
     @Test
-    public void testWithValidEmailOk(){
+    public void testWithValidEmailOk() throws ValidationDataException {
         final EmailTest emailTest = new EmailTest();
         emailTest.setEmail(this.factory.getUniqueRandomEmail());
 

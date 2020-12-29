@@ -19,7 +19,6 @@ import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRaceData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRacesIndexData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
 import fr.opendoha.myguild.server.model.blizzard.Character;
-import fr.opendoha.myguild.server.model.blizzard.Guild;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 
 /**
@@ -30,7 +29,7 @@ interface IBlizzardAPIHelper {
     /**
      * Get CharacterData
      */
-    CharacterData getCharacterData(final CharacterSummaryData characterSummaryData, final String token) throws HttpClientErrorException;
+    CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException;
 
     /**
      * Get CharacterData
@@ -61,17 +60,12 @@ interface IBlizzardAPIHelper {
     /**
      * Get GuildData
      */
-    GuildData getGuildData() throws IOException;
+    GuildData getGuildData(final String realmSlug, final String nameSlug) throws IOException;
 
     /**
      * Get GuildRosterIndexData
      */
-    GuildRosterIndexData getGuildRosterIndexData(final GuildData guildData) throws IOException;
-
-    /**
-     * Get GuildRosterIndexData
-     */
-    GuildRosterIndexData getGuildRosterIndexData(final Guild guild, final String token) throws IOException;
+    GuildRosterIndexData getGuildRosterIndexData(final String realmSlug, final String nameSlug) throws IOException;
 
     /**
      * Get PlayableRacesIndexData
@@ -108,4 +102,8 @@ interface IBlizzardAPIHelper {
      */
     GameDataMediaData getGameDataMediaData(final PlayableSpecializationData playableSpecializationData) throws IOException;
 
+    /**
+     * Get GameDataMediaData
+     */
+    GameDataMediaData getGameDataMediaData(final String href) throws IOException;
 }
