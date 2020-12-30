@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.controller;
 
+import fr.opendoha.myguild.server.dto.CharacterGuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
@@ -118,5 +119,14 @@ public class BlizzardController extends MotherController {
     public void fetchGuildMembers() throws IOException {
         this.blizzardService.fetchGuildMembers();
     }
+
+    /**
+     * Method used to fetch all members of the guild
+     */
+    @GetMapping("/getGuildMembers")
+    public List<CharacterGuildSummaryDTO> getGuildMembers() {
+        return this.blizzardService.getGuildMembers();
+    }
+
 
 }

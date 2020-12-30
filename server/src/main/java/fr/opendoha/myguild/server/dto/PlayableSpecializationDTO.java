@@ -1,6 +1,7 @@
 package fr.opendoha.myguild.server.dto;
 
 import fr.opendoha.myguild.server.model.blizzard.PlayableSpecialization;
+import fr.opendoha.myguild.server.model.blizzard.SpecializationRole;
 import lombok.Data;
 
 /**
@@ -21,7 +22,9 @@ public class PlayableSpecializationDTO {
         this.index = playableSpecialization.getId();
         this.mediaURL = playableSpecialization.getUrlMedia();
 
-        this.specializationRoleType = playableSpecialization.getSpecializationRole().getType();
+        final SpecializationRole specializationRole = playableSpecialization.getSpecializationRole();
+
+        this.specializationRoleType = specializationRole.getType();
 
         this.localizedStringDTO = new LocalizedStringDTO();
         this.localizedStringDTO.build(playableSpecialization.getLocalizedModel());

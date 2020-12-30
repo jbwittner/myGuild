@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.service;
 
+import fr.opendoha.myguild.server.dto.CharacterGuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.exception.CharacterNotExistedException;
@@ -43,5 +44,10 @@ public interface IBlizzardService {
      * Method used to fetch all members of the guild
      */
     void fetchGuildMembers() throws IOException;
+
+    /**
+     * Method used to get all members of the guild
+     */
+    List<CharacterGuildSummaryDTO> getGuildMembers();
 
 }

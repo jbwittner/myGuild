@@ -1,6 +1,7 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
+import fr.opendoha.myguild.server.dto.CharacterGuildSummaryDTO;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
 import fr.opendoha.myguild.server.dto.PlayableClassDTO;
@@ -612,6 +613,28 @@ public class BlizzardService implements IBlizzardService {
             this.characterRepository.save(character);
         }
 
+    }
+
+    @Override
+    public List<CharacterGuildSummaryDTO> getGuildMembers() {
+        
+        final List<CharacterGuildSummaryDTO> characterGuildSummaryDTOs = new ArrayList<>();
+
+        final Realm realm = this.realmRepository.findBySlug(this.guildRealm).get();
+
+        final Guild guild = this.guildRepository.findByNameAndRealm(this.guildSlug, realm).get();
+
+        final List<Character> characters = this.characterRepository.findByGuild(guild);
+
+        CharacterGuildSummaryDTO characterGuildSummaryDTO;
+
+        for(final Character character : characters){
+            characterGuildSummaryDTO = new CharacterGuildSummaryDTO();
+            characterGuildSummaryDTO.build(character);
+            characterGuildSummaryDTOs.add(characterGuildSummaryDTO);
+        }
+
+        return characterGuildSummaryDTOs;
 
     }
 
