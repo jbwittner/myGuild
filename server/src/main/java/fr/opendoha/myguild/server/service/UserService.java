@@ -1,100 +1,42 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
-import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
-import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
+import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.exception.UserBattleTagAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
-import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
-import fr.opendoha.myguild.server.model.UserAccount;
+import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
+import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
-import fr.opendoha.myguild.server.repository.UserAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 /**
- * Implementation of the user service interface
+ * Interface of the user service
  */
-@Service
-public class UserService implements IUserService {
-
-    private final UserAccountRepository userAccountRepository;
+public interface UserService {
 
     /**
-     * Constructor of the user service
+     * Method to register a new user account
+     * @param userRegistrationParameter Parameters of the new account
+     * @throws UserEmailAlreadyUsedException    if the email is already used
+     * @throws UserNickNameAlreadyUsedException if the nick name is already used
+     * @throws UserBlizzardIdAlreadyUsedException
+     * @throws UserBattleTagAlreadyUsedException
      */
-    @Autowired
-    public UserService(final UserAccountRepository userAccountRepository) {
-        this.userAccountRepository = userAccountRepository;
-    }
+    void registerNewUserAccount(UserRegistrationParameter userRegistrationParameter) throws
+            UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException, UserBlizzardIdAlreadyUsedException;
 
     /**
-     * {@inheritDoc}
+     * Method to check if a account exist
+     * @param blizzardId of the account
+     * @return true if the account exist, false otherwise
      */
-    @Transactional
-    @Override
-    public void registerNewUserAccount(final UserRegistrationParameter userRegistrationParameter)
-            throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
-            UserBlizzardIdAlreadyUsedException {
-
-        this.checkEmailAndNickNameUser(userRegistrationParameter);
-
-        final UserAccount user = new UserAccount();
-
-        user.setEmail(userRegistrationParameter.getEmail());
-        user.setNickName(userRegistrationParameter.getNickName());
-        user.setBattleTag(userRegistrationParameter.getBattleTag());
-        user.setBlizzardId(userRegistrationParameter.getBlizzardId());
-        user.setEnabled(true);
-
-        this.userAccountRepository.save(user);
-    }
+    Boolean checkUserAccountAlreadyExist(Integer blizzardId);
 
     /**
-     * Method used to check if the email and the nick name are already used
-     *
-     * @param userRegistrationParameter Parameter of the new account
+     * Method to get the account information
+     * @param blizzardId of the account
+     * @return DTO with the information
+     * @throws UserAccountNotExistedException if the account doesn't exist
      */
-    private void checkEmailAndNickNameUser(final UserRegistrationParameter userRegistrationParameter)
-            throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
-            UserBlizzardIdAlreadyUsedException {
+    UserAccountDTO getAccountInfo(final Integer blizzardId) throws UserAccountNotExistedException;
 
-        if (this.userAccountRepository.existsByEmail(userRegistrationParameter.getEmail())) {
-            throw new UserEmailAlreadyUsedException(userRegistrationParameter);
-        } else if (this.userAccountRepository.existsByNickName(userRegistrationParameter.getNickName())) {
-            throw new UserNickNameAlreadyUsedException(userRegistrationParameter);
-        } else if (this.userAccountRepository.existsByBattleTag(userRegistrationParameter.getBattleTag())) {
-            throw new UserBattleTagAlreadyUsedException(userRegistrationParameter);
-        } else if (this.userAccountRepository.existsByBlizzardId(userRegistrationParameter.getBlizzardId())) {
-            throw new UserBlizzardIdAlreadyUsedException(userRegistrationParameter);
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean checkUserAccountAlreadyExist(final Integer blizzardId) {
-        return this.userAccountRepository.existsByBlizzardId(blizzardId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UserAccountDTO getAccountInfo(final Integer blizzardId) throws UserAccountNotExistedException {
-
-        if(!this.userAccountRepository.existsByBlizzardId(blizzardId)){
-            throw new UserAccountNotExistedException(blizzardId);
-        }
-
-        final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardId);
-
-        final UserAccountDTO userAccountDTO = new UserAccountDTO();
-        userAccountDTO.builderDTO(userAccount);
-        return userAccountDTO;
-    }
 }
