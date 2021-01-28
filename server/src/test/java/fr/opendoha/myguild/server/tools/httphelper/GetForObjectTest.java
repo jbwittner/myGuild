@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.web.client.RestTemplate;
 
 import fr.opendoha.myguild.server.testhelper.AbstractMotherIntegrationTest;
-import fr.opendoha.myguild.server.tools.HttpHelper;
+import fr.opendoha.myguild.server.tools.helper.implementation.HttpHelperImpl;
 
 /**
  * Class to check the getForObject method of HttpHelper
@@ -22,7 +22,7 @@ public class GetForObjectTest extends AbstractMotherIntegrationTest {
     protected RestTemplate restTemplateMock;
 
     @InjectMocks
-    protected HttpHelper httpHelper;
+    protected HttpHelperImpl httpHelper;
 
     @Override
     protected void initDataBeforeEach(){}

@@ -18,9 +18,6 @@ public class SpecializationRole {
     @GeneratedValue(strategy=GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name = "IS_UPDATED", nullable = false)
-    protected Boolean isUpdated = true;
-
     @Column(name = "TYPE",  nullable = false, unique = true)
     private String type;
 
@@ -33,20 +30,6 @@ public class SpecializationRole {
     public void buildLocalizedModel(final LocalizedStringData localizedStringData){
         this.localizedModel = new LocalizedModel();
         this.localizedModel.updateLocalizedValue(localizedStringData);
-    }
-
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedTrue(){
-        this.isUpdated = true;
-    }
-
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedFalse(){
-        this.isUpdated = false;
     }
 
 }

@@ -35,7 +35,6 @@ public class PlayableRace extends AbstractBlizzardModel{
         return "PlayableRace{" +
                 "localizedModel=" + localizedModel +
                 ", id=" + id +
-                ", isUpdated=" + isUpdated +
                 '}';
     }
 }

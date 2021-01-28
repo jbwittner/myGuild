@@ -2,7 +2,8 @@ package fr.opendoha.myguild.server.tools.oauth2;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.opendoha.myguild.server.tools.HttpHelper;
+
+import fr.opendoha.myguild.server.tools.helper.HttpHelper;
 import fr.opendoha.myguild.server.tools.oauth2.models.TokenResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -69,10 +70,10 @@ public class BlizzardOAuth2FlowHandler implements OAuth2FlowHandler {
      */
     @Override
     public String getToken() throws IOException {
-        if (isTokenInvalid()) {
+        if (this.isTokenInvalid()) {
             logger.info("Fetching/Creating token.");
 
-            final String encodedCredentials =Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
+            final String encodedCredentials = Base64.getEncoder().encodeToString(String.format("%s:%s", this.clientId, this.clientSecret).getBytes(BlizzardOAuth2FlowHandler.ENCODING));
 
             // ------------------------------------------------- Allows testing/mocking of the URL connection object
             HttpURLConnection con = null;

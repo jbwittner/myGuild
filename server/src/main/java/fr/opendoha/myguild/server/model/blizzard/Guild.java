@@ -5,9 +5,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,11 +19,11 @@ public class Guild extends AbstractBlizzardModel {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name= "MEMBER_COUNT")
-    private Integer memberCount;
-
     @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
     private List<Character> characterList;
+
+    @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
+    private List<GuildRank> guildRankList;
 
     @ManyToOne
     @JoinColumn(name = "REALM_ID")
@@ -39,16 +36,11 @@ public class Guild extends AbstractBlizzardModel {
     @Column(name = "USE_APPLICATION")
     private Boolean useApplication = false;
 
-    @UpdateTimestamp
-    @Column(name = "UPDATE_DATE")
-    private Date updateDate;
-
     @Override
     public String toString() {
         return "Guild{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
-                ", isUpdated=" + isUpdated +
                 '}';
     }
 }

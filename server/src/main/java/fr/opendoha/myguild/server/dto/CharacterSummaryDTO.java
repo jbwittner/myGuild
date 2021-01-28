@@ -17,10 +17,10 @@ public class CharacterSummaryDTO {
     private Integer indexPlayableClass;
     private Integer indexPlayableRace;
     private Integer indexFaction;
-    private String avatarUrl;
-    private String insertUrl;
     private Integer averageItemLevel;
     private Integer equippedItemLevel;
+    private Integer indexCovenant;
+    private Integer renownLevel;
     private Long lastLoginTimestamp;
     private Boolean isFavorite;
 
@@ -35,6 +35,11 @@ public class CharacterSummaryDTO {
         if(character.getGuild() != null){
             this.guildName = character.getGuild().getName();    
         }
+
+        if(character.getCovenant() != null){
+            this.renownLevel = character.getRenownLevel();
+            this.indexCovenant = character.getCovenant().getId();
+        }
         
         this.realmDTO = new RealmDTO();
         this.realmDTO.build(character.getRealm());
@@ -43,8 +48,6 @@ public class CharacterSummaryDTO {
         this.indexPlayableRace = character.getPlayableRace().getId();
 
         this.indexFaction = character.getFaction().getId();
-        this.avatarUrl = character.getAvatarUrl();
-        this.insertUrl = character.getInsetUrl();
         this.averageItemLevel = character.getAverageItemLevel();
         this.equippedItemLevel = character.getEquippedItemLevel();
         this.lastLoginTimestamp = character.getLastLoginTimestamp();

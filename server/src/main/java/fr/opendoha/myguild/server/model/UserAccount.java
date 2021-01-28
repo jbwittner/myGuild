@@ -33,15 +33,15 @@ public class UserAccount {
     @Column(name = "EMAIL", nullable = false, length = 60)
     private String email;
 
-    @Column(name = "ENABLED", nullable = false)
-    private boolean enabled;
-
     @CreationTimestamp
     @Column(name = "CREATION_DATE_TIME", nullable = false)
     private LocalDateTime creationDateTime;
 
     @UpdateTimestamp
-    @Column(name = "UPDATE_DATE_TIME", nullable = false)
-    private LocalDateTime updateDateTime;
-    
+    @Column(name = "LAST_LOGIN_DATE_TIME", nullable = false)
+    private LocalDateTime lastLoginDateTime;
+
+    @Column(name = "VERSION", nullable = false)
+    private Integer version = 0;
+
 }

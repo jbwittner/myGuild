@@ -21,35 +21,21 @@ public class GuildRank {
     @Column(name = "GUILD_RANK")
     private Integer rank;
 
-    @Column(name = "IS_UPDATED", nullable = false)
-    private Boolean isUpdated = true;
-
     @Column(name = "NAME")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "GUILD_ID")
+    private Guild guild;
+
     @OneToMany(mappedBy = "guildRank", fetch = FetchType.LAZY)
     private List<Character> characterList;
-
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedFalse(){
-        this.isUpdated = false;
-    }
-
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedTrue(){
-        this.isUpdated = true;
-    }
 
     @Override
     public String toString() {
         return "GuildRank{" +
                 "id=" + id +
                 ", rank=" + rank +
-                ", isUpdated=" + isUpdated +
                 ", name='" + name + '\'' +
                 '}';
     }

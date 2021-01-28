@@ -1,11 +1,11 @@
 package fr.opendoha.myguild.server.service;
 
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
-import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.exception.UserBattleTagAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
+import fr.opendoha.myguild.server.parameters.FetchingUserAccountParameter;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
 
 /**
@@ -32,11 +32,11 @@ public interface UserService {
     Boolean checkUserAccountAlreadyExist(Integer blizzardId);
 
     /**
-     * Method to get the account information
+     * Method to fetch the account information
      * @param blizzardId of the account
      * @return DTO with the information
      * @throws UserAccountNotExistedException if the account doesn't exist
      */
-    UserAccountDTO getAccountInfo(final Integer blizzardId) throws UserAccountNotExistedException;
+    UserAccountDTO fetchAccountInfo(FetchingUserAccountParameter fetchingUserAccountParameter);
 
 }

@@ -15,5 +15,6 @@ public class StaticDataDTO {
     private List<PlayableSpecializationDTO> playableSpecializationDTOs;
     private List<SpecializationRoleDTO> specializationRoleDTOs;
     private List<FactionDTO> factionDTOs;
+    private List<CovenantDTO> covenantDTOs;
 
 }

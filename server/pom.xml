@@ -22,7 +22,6 @@
         <java.version>11</java.version>
         <application.name>myGuild</application.name>
         <application.service>Server</application.service>
-        <junit.jupiter.version>5.6.0</junit.jupiter.version>
         <lombok.version>1.18.16</lombok.version>
         <delombok-maven-plugin.version>1.18.16.0</delombok-maven-plugin.version>
     </properties>
@@ -59,6 +58,14 @@
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- To mock final field and class -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>3.6.28</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -187,6 +194,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.2</version>
+        </dependency>
         
         <!--Tests-->
 
@@ -223,11 +236,14 @@
                         <configuration>
                             <excludes>
                                 <exclude>fr/opendoha/myguild/server/dto/*.class</exclude>
+                                <exclude>fr/opendoha/myguild/server/controller/*.class</exclude>
                                 <exclude>fr/opendoha/myguild/server/model/*.class</exclude>
                                 <exclude>fr/opendoha/myguild/server/model/**/*.class</exclude>
                                 <exclude>fr/opendoha/myguild/server/parameters/*.class</exclude>
                                 <exclude>fr/opendoha/myguild/server/data/**/*.class</exclude>
                                 <exclude>fr/opendoha/myguild/server/tools/oauth2/models/*.class</exclude>
+                                <exclude>fr/opendoha/myguild/server/tools/api/implementation/*.class</exclude>
+                                <exclude>fr/opendoha/myguild/server/tools/handler/ErrorDetails.class</exclude>
                             </excludes>
                         </configuration>
                     </execution>

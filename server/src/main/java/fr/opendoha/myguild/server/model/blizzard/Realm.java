@@ -19,9 +19,6 @@ public class Realm{
     @Column(name = "ID", nullable = false, updatable = false, insertable = false, unique = true)
     protected Integer id;
 
-    @Column(name = "IS_UPDATED", nullable = false)
-    protected Boolean isUpdated = true;
-
     @Column(name = "SLUG",  nullable = false, unique = true)
     private String slug;
 
@@ -36,20 +33,12 @@ public class Realm{
         this.localizedModel.updateLocalizedValue(localizedStringData);
     }
 
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedTrue(){
-        this.isUpdated = true;
-    }
-
     @Override
     public String toString() {
         return "Realm{" +
                 "slug='" + slug + '\'' +
                 ", localizedModel=" + localizedModel +
                 ", id=" + id +
-                ", isUpdated=" + isUpdated +
                 '}';
     }
 }

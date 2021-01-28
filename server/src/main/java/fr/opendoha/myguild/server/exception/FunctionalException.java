@@ -3,16 +3,8 @@ package fr.opendoha.myguild.server.exception;
 /**
  * Abstract functional exception used to pass the exception to the frontend
  */
+@SuppressWarnings("serial")
 public abstract class FunctionalException extends Exception{
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Default Constructeur
-     */
-    public FunctionalException() {
-        super();
-    }
 
     /**
      * Constructeur
@@ -24,11 +16,9 @@ public abstract class FunctionalException extends Exception{
 
     /**
      * Constructeur
-     * @param message the message parameter
-     * @param cause the cause parameter
      */
-    public FunctionalException(final String message, final Throwable cause){
-        super(message, cause);
+    public FunctionalException(){
+        super();
     }
     
 }

@@ -16,7 +16,7 @@ public class UserAccountDTO {
     private String nickName;
     private String email;
     private LocalDateTime creationTime;
-    private LocalDateTime updateTime;
+    private LocalDateTime lastLoginTime;
 
     /**
      * DTO Builder
@@ -27,7 +27,7 @@ public class UserAccountDTO {
         this.email = userAccount.getEmail();
         this.nickName = userAccount.getNickName();
         this.creationTime = userAccount.getCreationDateTime();
-        this.updateTime = userAccount.getUpdateDateTime();
+        this.lastLoginTime = userAccount.getLastLoginDateTime();
     }
 
 }

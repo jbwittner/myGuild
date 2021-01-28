@@ -1,7 +1,10 @@
-package fr.opendoha.myguild.server.validation;
+package fr.opendoha.myguild.server.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+
+import fr.opendoha.myguild.server.validation.EmailValidator;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

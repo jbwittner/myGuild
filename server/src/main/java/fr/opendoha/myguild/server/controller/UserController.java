@@ -1,18 +1,19 @@
 package fr.opendoha.myguild.server.controller;
 
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
-import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.exception.UserBattleTagAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
+import fr.opendoha.myguild.server.parameters.FetchingUserAccountParameter;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
 import fr.opendoha.myguild.server.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,29 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController extends MotherController {
 
     protected final UserService userService;
-    protected final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     /**
      * Constructor
      */
     @Autowired
-    public UserController(final UserService userService,
-            final OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+    public UserController(final UserService userService) {
         super();
         this.userService = userService;
-        this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
     }
 
     /**
      * Endpoint used to add a new account
-     * 
-     * @throws UserNickNameAlreadyUsedException
-     * @throws UserEmailAlreadyUsedException
-     * @throws UserBlizzardIdAlreadyUsedException
-     * @throws UserBattleTagAlreadyUsedException
      */
-    @GetMapping("/addAccount")
-    public void addingAccount(final OAuth2AuthenticationToken authentication, final UserRegistrationParameter parameter)
+    @PostMapping("/addAccount")
+    public void addingAccount(final OAuth2AuthenticationToken authentication, @RequestBody final UserRegistrationParameter parameter)
             throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
             UserBlizzardIdAlreadyUsedException {
 
@@ -73,13 +66,17 @@ public class UserController extends MotherController {
     /**
      * Endpoint used to get the account information
      */
-    @GetMapping("/getAccountInfo")
-    public UserAccountDTO getAccountInfo(final OAuth2AuthenticationToken authentication)
-            throws UserAccountNotExistedException {
+    @GetMapping("/fetchAccountInfo")
+    public UserAccountDTO fetchAccountInfo(final OAuth2AuthenticationToken authentication) {
 
         final Integer blizzardId = this.getBlizzardId(authentication);
+        final String battleTag = this.getBattleTag(authentication);
 
-        return this.userService.getAccountInfo(blizzardId);
+        final FetchingUserAccountParameter fetchingUserAccountParameter = new FetchingUserAccountParameter();
+        fetchingUserAccountParameter.setBattleTag(battleTag);
+        fetchingUserAccountParameter.setBlizzardId(blizzardId);
+
+        return this.userService.fetchAccountInfo(fetchingUserAccountParameter);
     }
 
 }

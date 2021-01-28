@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
+@Profile("!test")
 public class GeneralInterceptor extends MotherInterceptor {
 
     final Logger logger = LoggerFactory.getLogger(GeneralInterceptor.class);
@@ -28,7 +30,6 @@ public class GeneralInterceptor extends MotherInterceptor {
             "&& !execution(* org.springframework.data.repository.CrudRepository.*(..))" +
             "&& !execution(* org.springframework.data.jpa.repository.JpaRepository.*(..))")
     public Object logInterceptor(final ProceedingJoinPoint joinPoint) throws Throwable {
-
         return this.logExecutionTime(joinPoint, this.logger);
     }
 

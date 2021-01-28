@@ -20,9 +20,6 @@ public class Faction{
     @GeneratedValue(strategy=GenerationType.AUTO)
     protected Integer id;
 
-    @Column(name = "IS_UPDATED", nullable = false)
-    protected Boolean isUpdated = true;
-
     @Column(name = "TYPE",  nullable = false, unique = true)
     private String type;
 
@@ -48,25 +45,10 @@ public class Faction{
         this.localizedModel.setZhTW(localizedStringData.getZhTW());
     }
 
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedTrue(){
-        this.isUpdated = true;
-    }
-
-    /**
-     * Method to set directly the value of isUpdated
-     */
-    public void setIsUpdatedFalse(){
-        this.isUpdated = false;
-    }
-
     @Override
     public String toString() {
         return "Faction{" +
                 "id=" + id +
-                ", isUpdated=" + isUpdated +
                 ", type='" + type + '\'' +
                 ", localizedModel=" + localizedModel +
                 '}';

@@ -14,11 +14,6 @@ import java.util.List;
 public interface CharacterRepository extends AbstractRepository<Character, Integer> {
 
     /**
-     * Method to get all characters who are not updated
-     */
-    List<Character> findByIsUpdatedFalse();
-
-    /**
      * Method to get all characters from a account
      */
     List<Character> findByUserAccount(UserAccount userAccount);
@@ -29,9 +24,9 @@ public interface CharacterRepository extends AbstractRepository<Character, Integ
     List<Character> findByUserAccountAndGuildIsNotNull(UserAccount userAccount);
 
     /**
-     * Method to get all characters from a account and who is not updated
+     * Method to get all characters of a account and from the guild
      */
-    List<Character> findByUserAccountAndIsUpdatedFalse(UserAccount userAccount);
+    List<Character> findByUserAccountAndGuild(UserAccount userAccount, Guild guild);
 
     /**
      * Method to get all characters from a guild

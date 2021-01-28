@@ -38,7 +38,6 @@ public class PlayableClass extends AbstractBlizzardModel{
         return "PlayableClass{" +
                 "localizedModel=" + localizedModel +
                 ", id=" + id +
-                ", isUpdated=" + isUpdated +
                 '}';
     }
 }

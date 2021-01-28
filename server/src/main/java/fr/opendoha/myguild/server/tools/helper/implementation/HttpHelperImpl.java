@@ -1,10 +1,12 @@
-package fr.opendoha.myguild.server.tools;
+package fr.opendoha.myguild.server.tools.helper.implementation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import fr.opendoha.myguild.server.tools.helper.HttpHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,9 +16,9 @@ import java.nio.charset.StandardCharsets;
  * Implementation of IHttpHelper
  */
 @Component
-public class HttpHelper implements IHttpHelper {
+public class HttpHelperImpl implements HttpHelper {
 
-    protected final Logger logger = LoggerFactory.getLogger(HttpHelper.class);
+    protected final Logger logger = LoggerFactory.getLogger(HttpHelperImpl.class);
 
     protected RestTemplate restTemplate;
 
@@ -26,7 +28,7 @@ public class HttpHelper implements IHttpHelper {
     /**
      * Constructor
      */
-    public HttpHelper(){
+    public HttpHelperImpl(){
         this.restTemplate = new RestTemplate();
     }
 

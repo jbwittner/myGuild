@@ -23,7 +23,7 @@ public class MotherInterceptor {
      * @return Proceed of the event
      * @throws Throwable exception
      */
-    public Object logExecutionTime(final ProceedingJoinPoint joinPoint, final Logger logger) throws Throwable {
+    protected Object logExecutionTime(final ProceedingJoinPoint joinPoint, final Logger logger) throws Throwable {
         final long start = System.currentTimeMillis();
         final List<Object> list = Arrays.asList(joinPoint.getArgs());
         final Iterator<Object> iterator = list.iterator();
@@ -66,7 +66,7 @@ public class MotherInterceptor {
      * @param logger    Logger used to log information's
      * @throws ValidationDataException
      */
-    public void validationInputData(final JoinPoint joinPoint, final Logger logger) throws ValidationDataException {
+    protected void validationInputData(final JoinPoint joinPoint, final Logger logger) throws ValidationDataException {
 
         final List<Object> list = Arrays.asList(joinPoint.getArgs());
         final Iterator<Object> iterator = list.iterator();

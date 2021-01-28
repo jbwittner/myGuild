@@ -1,6 +1,13 @@
 package fr.opendoha.myguild.server.service;
 
-import fr.opendoha.myguild.server.dto.CharacterGuildSummaryDTO;
+import fr.opendoha.myguild.server.dto.GuildDTO;
+import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
+import fr.opendoha.myguild.server.exception.AreNotGuildMasterException;
+import fr.opendoha.myguild.server.exception.GuildDoesNotUseApplication;
+import fr.opendoha.myguild.server.exception.GuildNotExistedException;
+import fr.opendoha.myguild.server.exception.UnexpectedException;
+import fr.opendoha.myguild.server.parameters.AddingGuildParameter;
+import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,18 +18,18 @@ import java.util.List;
 public interface GuildService {
 
     /**
-     * Method used to fetch all data of the principal guild
+     * Method used to get all guild where are the user
      */
-    void fetchPrincipalGuild() throws IOException;
+    List<GuildSummaryDTO> getGuildFromAccount(final BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
     /**
-     * Method used to fetch all members of the guild
+     * Method used to add a guild to the application
      */
-    void fetchGuildMembers() throws IOException;
+    void addingGuild(final AddingGuildParameter addingGuildParameter) throws IOException, GuildNotExistedException, AreNotGuildMasterException, UnexpectedException;
 
     /**
-     * Method used to get all members of the guild
+     * Method used to get data from the guild using the app
      */
-    List<CharacterGuildSummaryDTO> getGuildMembers();
+    GuildDTO getGuild(final Integer guildId) throws GuildNotExistedException, GuildDoesNotUseApplication, IOException;
 
 }

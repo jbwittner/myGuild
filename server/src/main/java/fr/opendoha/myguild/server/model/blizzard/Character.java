@@ -4,11 +4,7 @@ import fr.opendoha.myguild.server.model.UserAccount;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * Model for the characters
@@ -46,6 +42,13 @@ public class Character extends AbstractBlizzardModel {
     private PlayableRace playableRace;
 
     @ManyToOne
+    @JoinColumn(name = "COVENANT_ID")
+    private Covenant covenant;
+
+    @Column(name = "RENOWN_LEVEL")
+    private Integer renownLevel;
+
+    @ManyToOne
     @JoinColumn(name = "GUILD_RANK_ID")
     private GuildRank guildRank;
 
@@ -53,11 +56,8 @@ public class Character extends AbstractBlizzardModel {
     @JoinColumn(name = "FACTION_ID")
     private Faction faction;
 
-    @Column(name = "AVATAR_URL")
-    private String avatarUrl;
-
-    @Column(name = "INSET_URL")
-    private String insetUrl;
+    @Column(name= "IS_FAVORITE")
+    private boolean isFavorite = false;
 
     @Column(name = "AVERAGE_ITEM_LEVEL")
     private Integer averageItemLevel;
@@ -67,16 +67,6 @@ public class Character extends AbstractBlizzardModel {
 
     @Column(name = "LAST_LOGIN_TIMESTAMP")
     private Long lastLoginTimestamp;
-
-    @Column(name = "IS_TOO_OLD")
-    private Boolean isTooOld = false;
-
-    @Column(name= "IS_FAVORITE")
-    private boolean isFavorite = false;
-
-    @UpdateTimestamp
-    @Column(name = "UPDATE_DATE")
-    private Date updateDate;
 
     /**
      * Methode used to set is favorites to true
@@ -97,11 +87,7 @@ public class Character extends AbstractBlizzardModel {
         return "Character{" +
                 "name='" + name + '\'' +
                 ", level=" + level +
-                ", averageItemLevel=" + averageItemLevel +
-                ", equippedItemLevel=" + equippedItemLevel +
-                ", lastLoginTimestamp=" + lastLoginTimestamp +
                 ", id=" + id +
-                ", isUpdated=" + isUpdated +
                 '}';
     }
 }

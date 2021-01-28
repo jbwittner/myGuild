@@ -2,6 +2,9 @@ package fr.opendoha.myguild.server.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import fr.opendoha.myguild.server.annotation.ValidEmail;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

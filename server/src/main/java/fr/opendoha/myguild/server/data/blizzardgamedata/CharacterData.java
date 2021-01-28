@@ -42,4 +42,7 @@ public class CharacterData {
 
     private Integer level;
 
+    @JsonProperty("covenant_progress")
+    private CovenantProgressData covenantProgressData;
+
 }

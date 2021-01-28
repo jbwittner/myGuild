@@ -1,6 +1,7 @@
 package fr.opendoha.myguild.server.service.implementation;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
+import fr.opendoha.myguild.server.dto.CovenantDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
 import fr.opendoha.myguild.server.dto.PlayableClassDTO;
 import fr.opendoha.myguild.server.dto.PlayableRaceDTO;
@@ -8,15 +9,12 @@ import fr.opendoha.myguild.server.dto.PlayableSpecializationDTO;
 import fr.opendoha.myguild.server.dto.SpecializationRoleDTO;
 import fr.opendoha.myguild.server.dto.StaticDataDTO;
 import fr.opendoha.myguild.server.model.blizzard.*;
-import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.repository.blizzard.*;
 import fr.opendoha.myguild.server.service.BlizzardService;
 import fr.opendoha.myguild.server.tools.api.BlizzardAPIHelper;
-import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,71 +31,33 @@ public class BlizzardServiceImpl implements BlizzardService {
 
     protected final Logger logger = LoggerFactory.getLogger(BlizzardService.class);
 
-    @Value("${application.blizzard.wow.profile.base-uri}")
-    protected String baseUriProfile;
-
-    @Value("${application.blizzard.wow.profile.namespace}")
-    protected String namespaceProfile;
-
-    @Value("${application.blizzard.wow.game-data.base-uri}")
-    protected String baseUriGameData;
-
-    @Value("${application.blizzard.wow.game-data.namespace}")
-    protected String namespaceGameData;
-
-    @Value("${application.guild.slug}")
-    protected String guildSlug;
-
-    @Value("${application.guild.realm}")
-    protected String guildRealm;
-
-    protected static final long TIME_BEWTEEN_CHARACTER_OBSELET = 5_184_000_000L;
-
-    protected final OAuth2FlowHandler oAuth2FlowHandler;
-    protected final UserAccountRepository userAccountRepository;
-    protected final GuildRepository guildRepository;
-    protected final CharacterRepository characterRepository;
-    protected final GuildRankRepository guildRankRepository;
-    protected final RealmRepository realmRepository;
-    protected final FactionRepository factionRepository;
-    protected final PlayableRaceRepository playableRaceRepository;
-    protected final PlayableClassRepository playableClassRepository;
-    protected final PlayableSpecializationRepository playableSpecializationRepository;
-    protected final SpecializationRoleRepository specializationRoleRepository;
-    protected final BlizzardAPIHelper blizzardAPIHelper;
-
-    public static final String AVATAR_KEY = "avatar";
-    public static final String INSET_KEY = "inset";
+    protected FactionRepository factionRepository;
+    protected PlayableRaceRepository playableRaceRepository;
+    protected PlayableClassRepository playableClassRepository;
+    protected PlayableSpecializationRepository playableSpecializationRepository;
+    protected SpecializationRoleRepository specializationRoleRepository;
+    protected CovenantRepository covenantRepository;
+    protected BlizzardAPIHelper blizzardAPIHelper;
 
     /**
      * Constructor
      */
     @Autowired
     public BlizzardServiceImpl(
-            final OAuth2FlowHandler oAuth2FlowHandler,
-            final UserAccountRepository userAccountRepository,
-            final CharacterRepository characterRepository,
-            final GuildRepository guildRepository,
-            final GuildRankRepository guildRankRepository,
-            final RealmRepository realmRepository,
             final FactionRepository factionRepository,
             final PlayableRaceRepository playableRaceRepository,
             final PlayableClassRepository playableClassRepository,
             final PlayableSpecializationRepository playableSpecializationRepository,
             final SpecializationRoleRepository specializationRoleRepository,
+            final CovenantRepository covenantRepository,
             final BlizzardAPIHelper blizzardAPIHelper
     ) {
-        this.oAuth2FlowHandler = oAuth2FlowHandler;
-        this.userAccountRepository = userAccountRepository;
-        this.characterRepository = characterRepository;
-        this.guildRepository = guildRepository;
-        this.guildRankRepository = guildRankRepository;
-        this.realmRepository = realmRepository;
         this.factionRepository = factionRepository;
         this.playableRaceRepository = playableRaceRepository;
         this.playableClassRepository = playableClassRepository;
         this.playableSpecializationRepository = playableSpecializationRepository;
         this.specializationRoleRepository = specializationRoleRepository;
+        this.covenantRepository = covenantRepository;
         this.blizzardAPIHelper = blizzardAPIHelper;
     }
 
@@ -105,6 +65,7 @@ public class BlizzardServiceImpl implements BlizzardService {
     public void fetchStaticData() throws IOException {
         this.fetchPlayableClass();
         this.fetchPlayableRaces();
+        this.fetchCovenant();
     }
 
     private void fetchPlayableRaces() throws IOException {
@@ -144,8 +105,6 @@ public class BlizzardServiceImpl implements BlizzardService {
                 this.factionRepository.findByType(factionData.getType());
 
         Faction faction = optionalFaction.orElseGet(Faction::new);
-
-        faction.setIsUpdatedTrue();
 
         faction.updateLocalizedValue(factionData.getLocalizedStringData());
         faction.setType(factionData.getType());
@@ -237,7 +196,6 @@ public class BlizzardServiceImpl implements BlizzardService {
 
         specializationRole = optionalSpecializationRole.orElseGet(SpecializationRole::new);
 
-        specializationRole.setIsUpdatedTrue();
         specializationRole.buildLocalizedModel(roleData.getLocalizedStringData());
         specializationRole.setType(roleData.getType());
 
@@ -247,10 +205,34 @@ public class BlizzardServiceImpl implements BlizzardService {
 
     }
 
+    private void fetchCovenant() throws IOException {
+        final CovenantIndexData covenantIndexData = this.blizzardAPIHelper.getCovenantIndexData();
+
+        final List<IndexData> indexDatas = covenantIndexData.getIndexDataList();
+
+        for(final IndexData indexData : indexDatas){
+            Covenant covenant;
+
+            final Optional<Covenant> optionalCovenant = this.covenantRepository.findById(indexData.getId());
+
+            if(optionalCovenant.isPresent()){
+                covenant = optionalCovenant.get();
+            } else {
+                covenant = new Covenant();
+                covenant.setId(indexData.getId());
+            }
+
+            covenant.buildLocalizedModel(indexData.getLocalizedStringData());
+
+            this.covenantRepository.save(covenant);
+
+        }
+    }
+
     @Override
     public StaticDataDTO getStaticData(){
         
-        final List<PlayableClass> playableClasses = this.playableClassRepository.findByIsUpdatedTrue();
+        final List<PlayableClass> playableClasses = this.playableClassRepository.findAll();
         final List<PlayableClassDTO> playableClassDTOs = new ArrayList<>();
 
         PlayableClassDTO playableClassDTO;
@@ -261,7 +243,7 @@ public class BlizzardServiceImpl implements BlizzardService {
             playableClassDTOs.add(playableClassDTO);
         }
 
-        final List<PlayableRace> playableRaces = this.playableRaceRepository.findByIsUpdatedTrue();
+        final List<PlayableRace> playableRaces = this.playableRaceRepository.findAll();
         final List<PlayableRaceDTO> playableRaceDTOs = new ArrayList<>();
 
         PlayableRaceDTO playableRaceDTO;
@@ -272,7 +254,7 @@ public class BlizzardServiceImpl implements BlizzardService {
             playableRaceDTOs.add(playableRaceDTO);
         }
 
-        final List<PlayableSpecialization> playableSpecializations = this.playableSpecializationRepository.findByIsUpdatedTrue();
+        final List<PlayableSpecialization> playableSpecializations = this.playableSpecializationRepository.findAll();
         final List<PlayableSpecializationDTO> playableSpecializationDTOs = new ArrayList<>();
 
         PlayableSpecializationDTO playableSpecializationDTO;
@@ -283,7 +265,7 @@ public class BlizzardServiceImpl implements BlizzardService {
             playableSpecializationDTOs.add(playableSpecializationDTO);
         }
 
-        final List<SpecializationRole> specializationRoles = this.specializationRoleRepository.findByIsUpdatedTrue();
+        final List<SpecializationRole> specializationRoles = this.specializationRoleRepository.findAll();
         final List<SpecializationRoleDTO> specializationRoleDTOs = new ArrayList<>();
 
         SpecializationRoleDTO specializationRoleDTO;
@@ -294,7 +276,7 @@ public class BlizzardServiceImpl implements BlizzardService {
             specializationRoleDTOs.add(specializationRoleDTO);
         }
 
-        final List<Faction> factions= this.factionRepository.findByIsUpdatedTrue();
+        final List<Faction> factions= this.factionRepository.findAll();
         final List<FactionDTO> factionDTOs = new ArrayList<>();
 
         FactionDTO factionDTO;
@@ -305,12 +287,24 @@ public class BlizzardServiceImpl implements BlizzardService {
             factionDTOs.add(factionDTO);
         }
 
+        final List<Covenant> covenants = this.covenantRepository.findAll();
+        final List<CovenantDTO> covenantDTOs = new ArrayList<>();
+
+        CovenantDTO covenantDTO;
+
+        for(final Covenant covenant : covenants){
+            covenantDTO = new CovenantDTO();
+            covenantDTO.build(covenant);
+            covenantDTOs.add(covenantDTO);
+        }
+
         final StaticDataDTO staticDataDTO = new StaticDataDTO();
         staticDataDTO.setFactionDTOs(factionDTOs);
         staticDataDTO.setPlayableClassDTOs(playableClassDTOs);
         staticDataDTO.setPlayableRaceDTOs(playableRaceDTOs);
         staticDataDTO.setPlayableSpecializationDTOs(playableSpecializationDTOs);
         staticDataDTO.setSpecializationRoleDTOs(specializationRoleDTOs);
+        staticDataDTO.setCovenantDTOs(covenantDTOs);
 
         return staticDataDTO;
     }

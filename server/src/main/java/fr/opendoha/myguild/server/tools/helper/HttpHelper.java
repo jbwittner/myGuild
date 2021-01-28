@@ -1,4 +1,4 @@
-package fr.opendoha.myguild.server.tools;
+package fr.opendoha.myguild.server.tools.helper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -6,7 +6,7 @@ import java.net.URL;
 /**
  * Helper for http request
  */
-public interface IHttpHelper {
+public interface HttpHelper {
 
     /**
      * Methode to get URL

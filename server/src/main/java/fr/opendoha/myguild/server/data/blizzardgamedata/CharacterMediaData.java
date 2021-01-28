@@ -1,23 +1,21 @@
 package fr.opendoha.myguild.server.data.blizzardgamedata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
+
 /**
- * Class representation of character media
+ * Class representation of character data
  */
 @Data
 public class CharacterMediaData {
 
-    @JsonProperty("avatar_url")
-    String avatarUrl;
-
-    @JsonProperty("bust_url")
-    String bustUrl;
+    @JsonProperty("character")
+    private CharacterSummaryData characterSummaryData;
 
     @JsonProperty("assets")
-    List<AssetMediaData> assetMediaDataList;
+    private List<AssetsData> assetsDatas;
 
 }

@@ -2,15 +2,12 @@ package fr.opendoha.myguild.server.tools.api;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
 import fr.opendoha.myguild.server.data.blizzardgamedata.AccountProfileSummaryBlizzardData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.CharacterData;
-import fr.opendoha.myguild.server.data.blizzardgamedata.CharacterMediaData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.CharacterSummaryData;
+import fr.opendoha.myguild.server.data.blizzardgamedata.CovenantIndexData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.GameDataMediaData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.GuildData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.GuildMemberIndexData;
@@ -22,291 +19,87 @@ import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRaceData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableRacesIndexData;
 import fr.opendoha.myguild.server.data.blizzardgamedata.PlayableSpecializationData;
 import fr.opendoha.myguild.server.model.blizzard.Character;
+import fr.opendoha.myguild.server.model.blizzard.Guild;
 import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
-import fr.opendoha.myguild.server.tools.HttpHelper;
-import fr.opendoha.myguild.server.tools.oauth2.OAuth2FlowHandler;
 
 /**
- * Help making an http call to the Blizzard API
+ * Helper for http request
  */
-@Component
-public class BlizzardAPIHelper implements IBlizzardAPIHelper {
-
-    @Value("${application.blizzard.wow.profile.base-uri}")
-    protected String baseUriProfile;
-
-    @Value("${application.blizzard.wow.profile.namespace}")
-    protected String namespaceProfile;
-
-    @Value("${application.blizzard.wow.game-data.base-uri}")
-    protected String baseUriGameData;
-
-    @Value("${application.blizzard.wow.game-data.namespace}")
-    protected String namespaceGameData;
-
-    private final OAuth2FlowHandler oAuth2FlowHandler;
-    private final HttpHelper httpHelper;
+public interface BlizzardAPIHelper {
 
     /**
-     * Constructor
+     * Get CharacterData
      */
-    @Autowired
-    public BlizzardAPIHelper(final OAuth2FlowHandler oAuth2FlowHandler,
-            final HttpHelper httpHelper){
-        this.oAuth2FlowHandler = oAuth2FlowHandler;
-        this.httpHelper = httpHelper;
-    }
+    CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get CharacterData
      */
-    @Override
-    public CharacterData getCharacterData(final CharacterSummaryData characterSummaryData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = characterSummaryData.getCharacterHrefData().getHref() + "&access_token=" + token;
-
-        final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
-        
-        return characterData;
-    }
+    CharacterData getCharacterData(final Character character) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get CharacterData
      */
-    @Override
-    public CharacterData getCharacterData(final Character character) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = this.baseUriProfile + "/wow/character/" + character.getRealm().getSlug()
-                + "/" + character.getName().toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
-
-        final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
-
-        return characterData;
-
-    }
+    CharacterData getCharacterData(final GuildMemberIndexData guildMemberIndexData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get AccountProfileSummaryBlizzardData
      */
-    @Override
-    public CharacterData getCharacterData(final GuildMemberIndexData guildMemberIndexData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = guildMemberIndexData.getGuildMemberData().getHrefData().getHref() + "&access_token=" + token;
-
-        final CharacterData characterData = this.httpHelper.getForObject(url, CharacterData.class);
-
-        return characterData;
-
-    }
+    AccountProfileSummaryBlizzardData getAccountProfileSummaryBlizzardData(final BlizzardAccountParameter blizzardAccountParameter)
+        throws HttpClientErrorException;
 
     /**
-     * {@inheritDoc}
+     * Get GuildData
      */
-    @Override
-    public AccountProfileSummaryBlizzardData getAccountProfileSummaryBlizzardData(final BlizzardAccountParameter blizzardAccountParameter)
-        throws HttpClientErrorException{
-
-            final String url = this.baseUriProfile + "/user/wow?namespace=" + this.namespaceProfile + "&access_token=" + blizzardAccountParameter.getToken();
-
-            final AccountProfileSummaryBlizzardData accountProfileSummaryBlizzardData = this.httpHelper.getForObject(url, AccountProfileSummaryBlizzardData.class);
-
-            return accountProfileSummaryBlizzardData;
-
-    }
+    GuildData getGuildData(Guild guild) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get GuildRosterIndexData
      */
-    @Override
-    public CharacterMediaData getCharacterMediaData(final CharacterData characterData, final String token) throws HttpClientErrorException{
-
-        final String url = characterData.getMediaHrefData().getHref() + "&access_token=" + token;
-
-        final CharacterMediaData characterMediaData = this.httpHelper.getForObject(url, CharacterMediaData.class);
-
-        return characterMediaData;
-    }
+    GuildRosterIndexData getGuildRosterIndexData(Guild guild) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get PlayableRacesIndexData
      */
-    @Override
-    public CharacterMediaData getCharacterMediaData(final CharacterData characterData) throws HttpClientErrorException, IOException{
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        return this.getCharacterMediaData(characterData, token);
-    }
+    PlayableRacesIndexData getPlayableRacesIndexData() throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get PlayableRaceData
      */
-    @Override
-    public GuildData getGuildData(final String realmSlug, final String nameSlug) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = this.baseUriGameData + "/guild/" + realmSlug.toLowerCase()
-                + "/" + nameSlug.toLowerCase() + "?namespace=" + this.namespaceProfile + "&access_token=" + token;
-
-        final GuildData guildData = this.httpHelper.getForObject(url, GuildData.class);
-
-        return guildData;
-
-    }
+    PlayableRaceData getPlayableRaceData(final IndexData indexData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get PlayableClassesIndexData
      */
-    @Override
-    public GuildRosterIndexData getGuildRosterIndexData(final String realmSlug, final String nameSlug) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = this.baseUriGameData + "/guild/" + realmSlug.toLowerCase() + "/" + nameSlug.toLowerCase()
-                + "/roster?namespace=" + this.namespaceProfile + "&locale=&access_token=" + token;
-
-        final GuildRosterIndexData guildRosterIndexData = this.httpHelper.getForObject(url, GuildRosterIndexData.class);
-
-        return guildRosterIndexData;
-
-    }
+    PlayableClassesIndexData getPlayableClassesIndexData() throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get PlayableClassData
      */
-    @Override
-    public PlayableRacesIndexData getPlayableRacesIndexData() throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = this.baseUriGameData + "/playable-race/index?namespace=" + this.namespaceGameData
-                + "&access_token=" + token;
-
-        final PlayableRacesIndexData playableRacesIndexData =
-                this.httpHelper.getForObject(url, PlayableRacesIndexData.class);
-
-        return playableRacesIndexData;
-    }
+    PlayableClassData getPlayableClassData(final IndexData indexData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get GameDataMediaData
      */
-    @Override
-    public PlayableRaceData getPlayableRaceData(final IndexData indexData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = indexData.getHrefData().getHref() + "&access_token=" + token;
-
-        final PlayableRaceData playableRaceData = this.httpHelper.getForObject(url, PlayableRaceData.class);
-
-        return playableRaceData;
-
-    }
+    GameDataMediaData getGameDataMediaData(final PlayableClassData playableClassData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get PlayableSpecializationData
      */
-    @Override
-    public PlayableClassesIndexData getPlayableClassesIndexData() throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = this.baseUriGameData + "/playable-class/index?namespace=" + this.namespaceGameData
-                + "&access_token=" + token;
-
-        final PlayableClassesIndexData playableClassesIndexData =
-                this.httpHelper.getForObject(url, PlayableClassesIndexData.class);
-
-        return playableClassesIndexData;
-    }
+    PlayableSpecializationData getPlayableSpecializationData(final IndexData indexData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get GameDataMediaData
      */
-    @Override
-    public PlayableClassData getPlayableClassData(final IndexData indexData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = indexData.getHrefData().getHref() + "&access_token=" + token;
-
-        final PlayableClassData playableClassData = this.httpHelper.getForObject(url, PlayableClassData.class);
-
-        return playableClassData;
-
-    }
+    GameDataMediaData getGameDataMediaData(final PlayableSpecializationData playableSpecializationData) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get GameDataMediaData
      */
-    @Override
-    public GameDataMediaData getGameDataMediaData(final PlayableClassData playableClassData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = playableClassData.getMediaHrefData().getHrefData().getHref() + "&access_token=" + token;
-
-        final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
-
-        return gameDataMediaData;
-
-    }
+    GameDataMediaData getGameDataMediaData(final String href) throws IOException;
 
     /**
-     * {@inheritDoc}
+     * Get CovenantIndexData
      */
-    @Override
-    public PlayableSpecializationData getPlayableSpecializationData(final IndexData indexData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = indexData.getHrefData().getHref() + "&access_token=" + token;
-
-        final PlayableSpecializationData playableSpecializationData = this.httpHelper.getForObject(url, PlayableSpecializationData.class);
-
-        return playableSpecializationData;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GameDataMediaData getGameDataMediaData(final PlayableSpecializationData playableSpecializationData) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = playableSpecializationData.getMediaData().getHrefData().getHref() + "&access_token=" + token;
-
-        final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
-
-        return gameDataMediaData;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GameDataMediaData getGameDataMediaData(final String href) throws IOException {
-
-        final String token = this.oAuth2FlowHandler.getToken();
-
-        final String url = href + "&access_token=" + token;
-
-        final GameDataMediaData gameDataMediaData = this.httpHelper.getForObject(url, GameDataMediaData.class);
-
-        return gameDataMediaData;
-
-    }
-
-
+    CovenantIndexData getCovenantIndexData() throws IOException;
 }

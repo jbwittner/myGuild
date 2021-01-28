@@ -17,10 +17,6 @@ public class CharacterGuildSummaryDTO {
     private Integer indexPlayableClass;
     private Integer indexPlayableRace;
     private Integer indexFaction;
-    private Integer averageItemLevel;
-    private Integer equippedItemLevel;
-    private Long lastLoginTimestamp;
-    private Boolean isTooOld;
 
     /**
      * DTO Builder
@@ -29,7 +25,6 @@ public class CharacterGuildSummaryDTO {
         this.id = character.getId();
         this.name = character.getName();
         this.level = character.getLevel();
-        this.isTooOld = character.getIsTooOld();
 
         if(character.getGuild() != null){
             this.guildName = character.getGuild().getName();    
@@ -42,9 +37,6 @@ public class CharacterGuildSummaryDTO {
         this.indexPlayableRace = character.getPlayableRace().getId();
 
         this.indexFaction = character.getFaction().getId();
-        this.averageItemLevel = character.getAverageItemLevel();
-        this.equippedItemLevel = character.getEquippedItemLevel();
-        this.lastLoginTimestamp = character.getLastLoginTimestamp();
 
     }
     

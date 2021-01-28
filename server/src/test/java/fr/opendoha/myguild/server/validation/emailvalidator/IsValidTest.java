@@ -21,7 +21,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
      */
     @Test
     public void testWithValidEmailOk() throws ValidationDataException {
-        final EmailTest emailTest = new EmailTest();
+        final InputTest emailTest = new InputTest();
         emailTest.setEmail(this.factory.getUniqueRandomEmail());
 
         validator.validate(emailTest);
@@ -32,7 +32,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
      */
     @Test
     public void testWithInvalidEmailOk(){
-        final EmailTest emailTest = new EmailTest();
+        final InputTest emailTest = new InputTest();
         emailTest.setEmail(this.factory.getUniqueRandomAlphanumericString(10));
 
         Assertions.assertThrows(ValidationDataException.class, () -> validator.validate(emailTest));
@@ -43,7 +43,7 @@ public class IsValidTest extends AbstractMotherIntegrationTest {
      */
     @Test
     public void testWithNullEmailOk(){
-        final EmailTest emailTest = new EmailTest();
+        final InputTest emailTest = new InputTest();
         emailTest.setEmail(null);
 
         Assertions.assertThrows(ValidationDataException.class, () -> validator.validate(emailTest));

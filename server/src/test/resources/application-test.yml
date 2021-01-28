@@ -1,7 +1,4 @@
 application:
-  guild:
-    slug: PeyPouZe
-    realm: Archimonde
   db-param:
     host: localhost
     port: 3306
@@ -41,7 +38,7 @@ spring:
   jpa:
     show-sql: false
     database-platform: org.hibernate.dialect.H2Dialect
-    ddl-auto: create
+    ddl-auto: none
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

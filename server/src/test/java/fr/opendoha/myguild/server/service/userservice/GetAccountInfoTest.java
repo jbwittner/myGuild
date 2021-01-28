@@ -1,8 +1,8 @@
 package fr.opendoha.myguild.server.service.userservice;
 
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
-import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.model.UserAccount;
+import fr.opendoha.myguild.server.parameters.FetchingUserAccountParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.service.UserService;
 import fr.opendoha.myguild.server.testhelper.AbstractMotherIntegrationTest;
@@ -31,13 +31,17 @@ public class GetAccountInfoTest extends AbstractMotherIntegrationTest {
      * @throws UserAccountNotExistedException
      */
     @Test
-    public void testWithExistedAccount() throws UserAccountNotExistedException {
+    public void testWithExistedAccount() {
         final UserAccount userAccount = new UserAccount();
 
         final String battleTag = this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_BATTLETAG);
         final String nickName = this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_NICKNAME);
         final Integer blizzardId = this.factory.getRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID);
         final String email = this.factory.getUniqueRandomEmail();
+
+        final FetchingUserAccountParameter fetchingUserAccountParameter = new FetchingUserAccountParameter();
+        fetchingUserAccountParameter.setBattleTag(battleTag);
+        fetchingUserAccountParameter.setBlizzardId(blizzardId);
 
         userAccount.setNickName(nickName);
         userAccount.setBlizzardId(blizzardId);
@@ -46,24 +50,13 @@ public class GetAccountInfoTest extends AbstractMotherIntegrationTest {
 
         this.userAccountRepository.saveAndFlush(userAccount);
 
-        final UserAccountDTO userAccountDTO = this.userService.getAccountInfo(blizzardId);
+        final UserAccountDTO userAccountDTO = this.userService.fetchAccountInfo(fetchingUserAccountParameter);
 
         Assertions.assertEquals(userAccount.getBattleTag(), userAccountDTO.getBattleTag());
         Assertions.assertEquals(userAccount.getBlizzardId(), userAccountDTO.getBlizzardId());
         Assertions.assertEquals(userAccount.getEmail(), userAccountDTO.getEmail());
         Assertions.assertEquals(userAccount.getNickName(), userAccountDTO.getNickName());
 
-    }
-
-    /**
-     * Test without a existed account
-     */
-    @Test
-    public void testWithoutExistedAccount() {
-        final Integer blizzardId = this.factory.getRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID);
-
-        Assertions.assertThrows(UserAccountNotExistedException.class,
-                () -> this.userService.getAccountInfo(blizzardId));
     }
 
 }

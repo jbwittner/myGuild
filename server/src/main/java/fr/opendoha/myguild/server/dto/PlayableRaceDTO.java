@@ -11,6 +11,7 @@ public class PlayableRaceDTO {
 
     private Integer index;
     private LocalizedStringDTO localizedStringDTO;
+    private Integer factionIndex;
 
     /**
      * DTO Builder
@@ -20,6 +21,8 @@ public class PlayableRaceDTO {
 
         this.localizedStringDTO = new LocalizedStringDTO();
         this.localizedStringDTO.build(playableRace.getLocalizedModel());
+
+        this.factionIndex = playableRace.getFaction().getId();
 
     }
     

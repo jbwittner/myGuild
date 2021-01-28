@@ -1,10 +1,11 @@
 package fr.opendoha.myguild.server.parameters;
 
-import fr.opendoha.myguild.server.validation.ValidEmail;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import fr.opendoha.myguild.server.annotation.ValidEmail;
 
 /**
  * Parameter used for the registration of new user account

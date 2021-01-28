@@ -1,15 +1,17 @@
 package fr.opendoha.myguild.server.service.implementation;
 
+import fr.opendoha.myguild.server.annotation.IgnoreCheckUser;
 import fr.opendoha.myguild.server.dto.UserAccountDTO;
 import fr.opendoha.myguild.server.exception.UserEmailAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserNickNameAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserBattleTagAlreadyUsedException;
 import fr.opendoha.myguild.server.exception.UserBlizzardIdAlreadyUsedException;
-import fr.opendoha.myguild.server.exception.UserAccountNotExistedException;
 import fr.opendoha.myguild.server.model.UserAccount;
+import fr.opendoha.myguild.server.parameters.FetchingUserAccountParameter;
 import fr.opendoha.myguild.server.parameters.UserRegistrationParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.service.UserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Transactional
+    @IgnoreCheckUser
     @Override
     public void registerNewUserAccount(final UserRegistrationParameter userRegistrationParameter)
             throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
@@ -53,7 +56,6 @@ public class UserServiceImpl implements UserService {
         user.setNickName(userRegistrationParameter.getNickName());
         user.setBattleTag(userRegistrationParameter.getBattleTag());
         user.setBlizzardId(userRegistrationParameter.getBlizzardId());
-        user.setEnabled(true);
 
         this.userAccountRepository.save(user);
     }
@@ -91,13 +93,15 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public UserAccountDTO getAccountInfo(final Integer blizzardId) throws UserAccountNotExistedException {
+    public UserAccountDTO fetchAccountInfo(final FetchingUserAccountParameter fetchingUserAccountParameter) {
 
-        if(!this.userAccountRepository.existsByBlizzardId(blizzardId)){
-            throw new UserAccountNotExistedException(blizzardId);
-        }
+        UserAccount userAccount = this.userAccountRepository.findByBlizzardId(fetchingUserAccountParameter.getBlizzardId());
 
-        final UserAccount userAccount = this.userAccountRepository.findByBlizzardId(blizzardId);
+        userAccount.setBattleTag(fetchingUserAccountParameter.getBattleTag());
+        userAccount.setBlizzardId(fetchingUserAccountParameter.getBlizzardId());
+        userAccount.setVersion( userAccount.getVersion() + 1);
+
+        userAccount = this.userAccountRepository.save(userAccount);
 
         final UserAccountDTO userAccountDTO = new UserAccountDTO();
         userAccountDTO.builderDTO(userAccount);

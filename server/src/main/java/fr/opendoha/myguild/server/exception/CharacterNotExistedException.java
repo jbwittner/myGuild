@@ -3,12 +3,8 @@ package fr.opendoha.myguild.server.exception;
 /**
  * Exception used when the character doesn't exist
  */
+@SuppressWarnings("serial")
 public class CharacterNotExistedException extends FunctionalException {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * Exception used when the character doesn't exist

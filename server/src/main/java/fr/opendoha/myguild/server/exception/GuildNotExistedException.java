@@ -1,14 +1,10 @@
 package fr.opendoha.myguild.server.exception;
 
 /**
- * Exception used when the guild doesn't exist
+ * Exception to signal a violation of data validation
  */
+@SuppressWarnings("serial")
 public class GuildNotExistedException extends FunctionalException {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * Exception used when the guild doesn't exist
