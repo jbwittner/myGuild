@@ -21,10 +21,10 @@ Finally, a vagrant file are available to prepare a VM with docker and the databa
 
 ## Requirements (development)
 
-* Java = 11
-* Maven >= 3.6.3
-* Node = V12.19.0
-* NPM = 6.14.8
+* Java = 11.0.2
+* Maven = 3.6.3
+* Node = V14.15.4
+* NPM = 6.14.10
 
 ## Requirements (run)
 

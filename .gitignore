@@ -320,6 +320,10 @@ frontend/coverage
 # production
 frontend/build
 
+frontend/.eslintcache
+frontend/.gitignore
+frontend/README.md
+
 # misc
 .DS_Store
 .env.local

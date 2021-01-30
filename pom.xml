@@ -23,7 +23,20 @@
         <application.service>Parent</application.service>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>CI</id>
+        </profile>
+    </profiles>
+
     <modules>
+        <module>frontend</module>
         <module>server</module>
     </modules>
 

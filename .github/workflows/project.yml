@@ -59,8 +59,35 @@ jobs:
       - name: Coverage java part
         uses: codecov/codecov-action@v1
 
+  check-build-test-frontend:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: v14.15.4 # optional
+
+      - name: Install
+        run: npm ci
+        working-directory: frontend
+
+      - name: Linter
+        run: npm run lint
+        working-directory: frontend
+
+      - name: Prettier
+        run: npm run prettier:check
+        working-directory: frontend
+
+      - name: Build
+        run: npm run build
+        working-directory: frontend
+
   package-application:
-    needs: [check-build-test-backend]
+    needs: [check-build-test-backend, check-build-test-frontend]
 
     runs-on: ubuntu-18.04
 
@@ -77,7 +104,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.2
         with:
-          node-version: v12.19.0 # optional
+          node-version: v14.15.4 # optional
 
       - name: Cache
         uses: actions/cache@v2.0.0
