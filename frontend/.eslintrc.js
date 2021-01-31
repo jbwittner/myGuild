@@ -7,7 +7,7 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'airbnb',
+    'eslint:recommended',
     'prettier',
     "prettier/react",
     "prettier/prettier",
@@ -25,21 +25,10 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
-    "object-curly-newline": ["error", { "multiline": true }],
     "semi": ["error", "never"],
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
-    "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-    ],
    'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }]
   },
   settings: {
