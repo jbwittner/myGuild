@@ -1,25 +1,32 @@
-import React from 'react'
-import logo from './logo.svg'
+import { ThemeProvider } from '@material-ui/core'
+import React, { useState } from 'react'
 import './App.css'
+import { GeneralContext } from './service/common/Context'
+import { theme } from './service/common/Theme'
+import MainRouteur from './service/routeur/MainRouteur'
 
 function App() {
+  const [isSignedIn, setIsSignedIn] = useState(false)
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          <code> src/App.tsx </code>
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ThemeProvider theme={theme}>
+          <GeneralContext.Provider
+            value={{
+              isSignedIn,
+              setIsSignedIn,
+            }}
+          >
+            <GeneralContext.Consumer>
+              {() => (
+                <React.Fragment>
+                  <MainRouteur />
+                </React.Fragment>
+              )}
+            </GeneralContext.Consumer>
+          </GeneralContext.Provider>
+        </ThemeProvider>
       </header>
     </div>
   )
