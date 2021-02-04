@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@material-ui/core'
 import React, { useState } from 'react'
-import './App.css'
 import { GeneralContext } from './service/common/Context'
 import { theme } from './service/common/Theme'
 import MainRouteur from './service/routeur/MainRouteur'
