@@ -41,7 +41,7 @@ public abstract class AbstractMotherIntegrationTest {
     public static final int NUMBER_PLAYABLE_CLASS = 20;
     public static final int NUMBER_PLAYABLE_SPECIALIZATION_PER_CLASS = 4;
     public static final int NUMBER_FACTION = 3;
-    public static final int NUMBER_PLAYABLE_RACE = 20;
+    public static final int NUMBER_PLAYABLE_RACE = 100;
     public static final int NUMBER_COVENANT = 4;
     public static final String BASE_URI = "https://www.testmock.com/";
 

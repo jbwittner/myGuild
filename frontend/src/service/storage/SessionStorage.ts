@@ -1,6 +1,6 @@
 export class SessionStorage {
   public static getItem<T>(key: string): T | undefined {
-    let item: string | null = window.sessionStorage.getItem(key)
+    const item: string | null = window.sessionStorage.getItem(key)
     if (item !== null) {
       return JSON.parse(item) as T
     } else {

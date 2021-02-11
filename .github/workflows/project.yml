@@ -45,13 +45,13 @@ jobs:
         working-directory: server
 
       - name: Build java part
-        run: mvn -B compile -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+        run: mvn -B compile -DskipCopyFront=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         working-directory: server
         env:
           CI: false
 
       - name: Test java part
-        run: mvn -B test -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+        run: mvn -B test -DskipCopyFront=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         working-directory: server
         env:
           CI: false

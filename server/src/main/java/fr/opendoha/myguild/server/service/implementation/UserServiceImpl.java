@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 /**
  * Implementation of the user service interface
  */
@@ -41,7 +39,6 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      */
-    @Transactional
     @IgnoreCheckUser
     @Override
     public void registerNewUserAccount(final UserRegistrationParameter userRegistrationParameter)
@@ -84,6 +81,7 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      */
+    @IgnoreCheckUser
     @Override
     public Boolean checkUserAccountAlreadyExist(final Integer blizzardId) {
         return this.userAccountRepository.existsByBlizzardId(blizzardId);

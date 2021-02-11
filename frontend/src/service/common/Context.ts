@@ -7,5 +7,7 @@ export interface GeneralContextContent {
 
 export const GeneralContext = React.createContext<GeneralContextContent>({
   isSignedIn: false,
-  setIsSignedIn: () => {},
+  setIsSignedIn: function () {
+    // do nothing
+  },
 })

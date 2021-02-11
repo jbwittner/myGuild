@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */ // --> OFF
+
 import Axios, { AxiosError, AxiosResponse } from 'axios'
 import ApiError from './ApiError'
 
@@ -11,7 +13,7 @@ export default class HttpClient {
 
   private redirectIfUnauthorized: boolean
 
-  constructor(redirectIfUnauthorized: boolean = true) {
+  constructor(redirectIfUnauthorized = true) {
     this.redirectIfUnauthorized = redirectIfUnauthorized
   }
 
@@ -19,7 +21,7 @@ export default class HttpClient {
     apiUrl: string,
     queryParams?: { [key: string]: any },
     headers?: { [key: string]: any },
-  ) {
+  ): Promise<AxiosResponse<any>> {
     return this.manageErrors(() =>
       Axios.get(apiUrl, {
         params: queryParams,
@@ -30,9 +32,9 @@ export default class HttpClient {
 
   protected async post(
     apiUrl: string,
-    data: any,
+    data: any, // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
     headers?: { [key: string]: any },
-  ) {
+  ): Promise<AxiosResponse<any>> {
     return this.manageErrors(() =>
       Axios.post(apiUrl, data, {
         headers: this.buildHeader(headers),

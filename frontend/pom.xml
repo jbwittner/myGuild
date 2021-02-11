@@ -38,7 +38,7 @@
                 <version>3.0.0</version>
                 <executions>
                 <execution>
-                        <id>npm ci</id>
+                        <id>npm install</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -48,7 +48,7 @@
                         <configuration>
                             <executable>npm</executable>
                             <arguments>
-                                <argument>ci</argument>
+                                <argument>install</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -102,27 +102,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <copy todir="../server/target/classes/public">
-                                    <fileset dir="${project.basedir}/build"/>
-                                </copy>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
 
         </plugins>
     </build>

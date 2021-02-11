@@ -1,6 +1,6 @@
 export class LocalStorage {
   public static getItem<T>(key: string): T | undefined {
-    let item: string | null = window.localStorage.getItem(key)
+    const item: string | null = window.localStorage.getItem(key)
     if (item !== null) {
       return JSON.parse(item) as T
     } else {

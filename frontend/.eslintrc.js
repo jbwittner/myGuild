@@ -11,6 +11,7 @@ module.exports = {
     'prettier',
     "prettier/react",
     "prettier/prettier",
+    "plugin:@typescript-eslint/recommended"
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -29,7 +30,11 @@ module.exports = {
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
-   'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }]
+    "@typescript-eslint/explicit-module-boundary-types": ["error"],
+    "@typescript-eslint/no-explicit-any": ["error"],
+   'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
+   "@typescript-eslint/no-unused-vars": "error",
+    "no-unused-vars": "off"
   },
   settings: {
     "import/resolver": {

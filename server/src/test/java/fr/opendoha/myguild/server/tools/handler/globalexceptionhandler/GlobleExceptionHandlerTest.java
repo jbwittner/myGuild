@@ -101,9 +101,12 @@ public class GlobleExceptionHandlerTest extends AbstractMotherIntegrationTest {
         final MockFunctionalException exception = new MockFunctionalException();
 
         final Date dateBefore = new Date();
+
+        Thread.sleep(1000);
+
         final ResponseEntity<?> test = globalExceptionHandler.globleExcpetionHandler(exception, fakeWebRequest);
 
-        Thread.sleep(100);
+        Thread.sleep(1000);
 
         final Date dateAfter = new Date();
 
@@ -114,8 +117,8 @@ public class GlobleExceptionHandlerTest extends AbstractMotherIntegrationTest {
         Assertions.assertEquals(MockFunctionalException.class.getSimpleName(), errorDetails.getException());
         Assertions.assertEquals(exception.getMessage(), errorDetails.getMessage());
         Assertions.assertEquals(fakeWebRequest.getDescription(false), errorDetails.getDetails());
-        Assertions.assertTrue(dateBefore.before(dateException));
-        Assertions.assertTrue(dateAfter.after(dateException));
+        Assertions.assertTrue(dateBefore.before(dateException), "dateBefore");
+        Assertions.assertTrue(dateAfter.after(dateException), "dateAfter");
         
     }
 

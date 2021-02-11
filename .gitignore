@@ -257,13 +257,6 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .flattened-pom.xml
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
@@ -297,7 +290,6 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/java,linux,maven,windows,java-web,intellij,code-java,intellij+all,intellij+iml,visualstudiocode
 
 .settings
-.vscode
 .factorypath
 .vagrant
 logs

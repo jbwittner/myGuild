@@ -16,24 +16,13 @@
     <version>0.1.0-SNAPSHOT</version>
     <name>myGuild</name>
     <packaging>pom</packaging>
-    <description>A tools to help managing a guild in wow </description>
+    <description>A tools to help managing a guild in wow</description>
 
     <properties>
+        <skipCopyFront>false</skipCopyFront>
         <application.name>myGuild</application.name>
         <application.service>Parent</application.service>
     </properties>
-
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>CI</id>
-        </profile>
-    </profiles>
 
     <modules>
         <module>frontend</module>
