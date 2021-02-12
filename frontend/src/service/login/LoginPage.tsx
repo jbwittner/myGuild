@@ -1,10 +1,14 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { StaticDataDTO } from '../../api/Entities'
+import { BlizzardHttpClient } from '../../api/httpclient/BlizzardHttpClient'
 import { SecurityHttpClient } from '../../api/httpclient/SecurityHttpClient'
 import { UserHttpClient } from '../../api/httpclient/UserHttpClient'
+import CircularProgressScreen from '../common/CircularProgressScreenProps'
 import { GeneralContext } from '../common/Context'
 import { HOME_PATH } from '../routeur/MainRouteur'
+import { SessionStorage } from '../storage/SessionStorage'
 import LoginPaper from './componants/LoginPaper'
 import Registration from './componants/Registration'
 
@@ -17,14 +21,16 @@ const useStyles = makeStyles({
 
 export default function LoginPage(): JSX.Element {
   const classes = useStyles()
-
   const history = useHistory()
+
   const [showRegistration, setShowRegistration] = useState<boolean>(false)
   const { setIsSignedIn } = useContext(GeneralContext)
+  const [downloadInProgress, setDownloadInProgress] = useState<boolean>(false)
 
   useEffect(() => {
     const securityHttpClient = new SecurityHttpClient()
     const userHttpClient = new UserHttpClient()
+    const blizzardHttpClient = new BlizzardHttpClient()
 
     securityHttpClient
       .connectionTest()
@@ -33,23 +39,53 @@ export default function LoginPage(): JSX.Element {
       })
       .then((value) => {
         if (value === true) {
-          setIsSignedIn(true)
-          history.push(HOME_PATH)
+          setDownloadInProgress(true)
+          blizzardHttpClient
+            .getStaticData()
+            .then((staticData) => {
+              SessionStorage.setItem<StaticDataDTO>(
+                SessionStorage.STATIC_DATA,
+                staticData,
+              )
+              setIsSignedIn(true)
+              history.push(HOME_PATH)
+            })
+            .finally(() => {
+              setDownloadInProgress(false)
+            })
         } else {
           setShowRegistration(true)
         }
       })
       .catch((reason) => {
         setIsSignedIn(false)
-        console.log(reason)
+        console.log('login process reason : start')
+        console.error(reason)
+        console.log('login process reason : end')
       })
   }, [])
 
   const onCloseRegistration = useCallback((registration: boolean) => {
     setShowRegistration(false)
     setIsSignedIn(registration)
+
     if (registration === true) {
-      history.push(HOME_PATH)
+      const blizzardHttpClient = new BlizzardHttpClient()
+
+      setDownloadInProgress(true)
+
+      blizzardHttpClient
+        .getStaticData()
+        .then((staticData: StaticDataDTO) => {
+          SessionStorage.setItem<StaticDataDTO>(
+            SessionStorage.STATIC_DATA,
+            staticData,
+          )
+          history.push(HOME_PATH)
+        })
+        .finally(() => {
+          setDownloadInProgress(false)
+        })
     }
   }, [])
 
@@ -64,6 +100,7 @@ export default function LoginPage(): JSX.Element {
         <LoginPaper />
       </Box>
       <Registration open={showRegistration} handleClose={onCloseRegistration} />
+      <CircularProgressScreen open={downloadInProgress} />
     </React.Fragment>
   )
 }

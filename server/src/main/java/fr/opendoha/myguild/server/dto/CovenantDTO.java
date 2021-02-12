@@ -11,7 +11,6 @@ public class CovenantDTO {
 
     private Integer index;
     private LocalizedStringDTO localizedStringDTO;
-    private Integer factionIndex;
 
     /**
      * DTO Builder
