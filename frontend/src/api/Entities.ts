@@ -10,6 +10,10 @@ export interface BackendError {
   timestamp: string
 }
 
+/*
+DTO
+*/
+
 export interface LocalizedStringDTO {
   enUS: string
   esMX: string
@@ -68,4 +72,26 @@ export interface StaticDataDTO {
   specializationRoleDTOs: SpecializationRoleDTO[]
   factionDTOs: FactionDTO[]
   covenantDTOs: CovenantDTO[]
+}
+
+export interface RealmDTO {
+  slug: string
+  localizedStringDTO: LocalizedStringDTO
+}
+
+export interface CharacterSummaryDTO {
+  id: number
+  name: string
+  level: number
+  guildName: string
+  realmDTO: RealmDTO
+  indexPlayableClass: number
+  indexPlayableRace: number
+  indexFaction: number
+  averageItemLevel: number
+  equippedItemLevel: number
+  indexCovenant: number
+  renownLevel: number
+  lastLoginTimestamp: number
+  isFavorite: boolean
 }

@@ -1,5 +1,6 @@
 package fr.opendoha.myguild.server.service.implementation;
 
+import fr.opendoha.myguild.server.annotation.IgnoreCheckUser;
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.dto.CovenantDTO;
 import fr.opendoha.myguild.server.dto.FactionDTO;
@@ -61,6 +62,7 @@ public class BlizzardServiceImpl implements BlizzardService {
         this.blizzardAPIHelper = blizzardAPIHelper;
     }
 
+    @IgnoreCheckUser
     @Override
     public void fetchStaticData() throws IOException {
         this.fetchPlayableClass();

@@ -1,8 +1,9 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { StaticDataDTO } from '../../api/Entities'
+import { StaticDataDTO, CharacterSummaryDTO } from '../../api/Entities'
 import { BlizzardHttpClient } from '../../api/httpclient/BlizzardHttpClient'
+import { CharacterHttpClient } from '../../api/httpclient/CharacterHttpClient'
 import { SecurityHttpClient } from '../../api/httpclient/SecurityHttpClient'
 import { UserHttpClient } from '../../api/httpclient/UserHttpClient'
 import CircularProgressScreen from '../common/CircularProgressScreenProps'
@@ -31,6 +32,7 @@ export default function LoginPage(): JSX.Element {
     const securityHttpClient = new SecurityHttpClient()
     const userHttpClient = new UserHttpClient()
     const blizzardHttpClient = new BlizzardHttpClient()
+    const characterHttpClient = new CharacterHttpClient()
 
     securityHttpClient
       .connectionTest()
@@ -46,6 +48,13 @@ export default function LoginPage(): JSX.Element {
               SessionStorage.setItem<StaticDataDTO>(
                 SessionStorage.STATIC_DATA,
                 staticData,
+              )
+              return characterHttpClient.fetchAccountCharacter()
+            })
+            .then((characterSummaryDTOs: CharacterSummaryDTO[]) => {
+              SessionStorage.setItem<CharacterSummaryDTO[]>(
+                SessionStorage.CHARACTERS_DATA,
+                characterSummaryDTOs,
               )
               setIsSignedIn(true)
               history.push(HOME_PATH)
@@ -71,6 +80,7 @@ export default function LoginPage(): JSX.Element {
 
     if (registration === true) {
       const blizzardHttpClient = new BlizzardHttpClient()
+      const characterHttpClient = new CharacterHttpClient()
 
       setDownloadInProgress(true)
 
@@ -80,6 +90,13 @@ export default function LoginPage(): JSX.Element {
           SessionStorage.setItem<StaticDataDTO>(
             SessionStorage.STATIC_DATA,
             staticData,
+          )
+          return characterHttpClient.fetchAccountCharacter()
+        })
+        .then((characterSummaryDTOs: CharacterSummaryDTO[]) => {
+          SessionStorage.setItem<CharacterSummaryDTO[]>(
+            SessionStorage.CHARACTERS_DATA,
+            characterSummaryDTOs,
           )
           history.push(HOME_PATH)
         })

@@ -1,5 +1,6 @@
 export class SessionStorage {
   public static STATIC_DATA = 'MYGUILD.STATIC_DATA'
+  public static CHARACTERS_DATA = 'MYGUILD.CHARACTERS_DATA'
 
   public static getItem<T>(key: string): T | undefined {
     const item: string | null = window.sessionStorage.getItem(key)
