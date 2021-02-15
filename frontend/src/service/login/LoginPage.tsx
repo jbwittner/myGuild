@@ -76,7 +76,6 @@ export default function LoginPage(): JSX.Element {
 
   const onCloseRegistration = useCallback((registration: boolean) => {
     setShowRegistration(false)
-    setIsSignedIn(registration)
 
     if (registration === true) {
       const blizzardHttpClient = new BlizzardHttpClient()
@@ -98,11 +97,14 @@ export default function LoginPage(): JSX.Element {
             SessionStorage.CHARACTERS_DATA,
             characterSummaryDTOs,
           )
+          setIsSignedIn(true)
           history.push(HOME_PATH)
         })
         .finally(() => {
           setDownloadInProgress(false)
         })
+    } else {
+      setIsSignedIn(false)
     }
   }, [])
 
