@@ -20,6 +20,11 @@ public interface CharacterService {
     List<CharacterSummaryDTO> fetchCharacterAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
 
     /**
+     * Method to get the characters from a blizzard account
+     */
+    List<CharacterSummaryDTO> getCharacterAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
+
+    /**
      * Method to set a favorite character
      */
     void setFavoriteCharacter(FavoriteCharacterParameter favoriteCharacterParameter) throws CharacterNotExistedException, IsNotCharacterAccountException;

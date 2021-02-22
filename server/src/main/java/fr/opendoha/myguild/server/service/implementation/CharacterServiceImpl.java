@@ -106,6 +106,28 @@ public class CharacterServiceImpl implements CharacterService {
         return characterDTOs;
     }
 
+    @Override
+    public List<CharacterSummaryDTO> getCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter)
+            throws IOException {
+
+        final UserAccount userAccount =
+                this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
+
+        final List<Character> characters = this.characterRepository.findByUserAccount(userAccount);
+
+        final List<CharacterSummaryDTO> characterDTOs = new ArrayList<>();
+        
+        CharacterSummaryDTO characterDTO;
+
+        for(final Character character : characters){
+            characterDTO = new CharacterSummaryDTO();
+            characterDTO.build(character);
+            characterDTOs.add(characterDTO);
+        }
+
+        return characterDTOs;
+    }
+
     private Character fetchCharacterFromAccount(final CharacterSummaryData characterSummaryData,
                                            final UserAccount userAccount) throws IOException {
 

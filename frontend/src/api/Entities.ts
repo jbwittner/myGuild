@@ -3,6 +3,11 @@ export interface AddUserParameter {
   email: string
 }
 
+export interface FavoriteCharacterParameter {
+  id: number
+  isFavorite: boolean
+}
+
 export interface BackendError {
   details: string
   exception: string
@@ -15,18 +20,18 @@ DTO
 */
 
 export interface LocalizedStringDTO {
-  enUS: string
-  esMX: string
-  ptBR: string
-  deDE: string
-  enGB: string
-  esES: string
-  frFR: string
-  itIT: string
-  ruRU: string
-  koKR: string
-  zhTW: string
-  zhCN: string
+  en_US: string
+  es_MX: string
+  pt_BR: string
+  de_DE: string
+  en_GB: string
+  es_ES: string
+  fr_FR: string
+  it_IT: string
+  ru_RU: string
+  ko_KR: string
+  zh_TW: string
+  zh_CN: string
 }
 
 export interface PlayableClassDTO {
@@ -91,6 +96,23 @@ export interface CharacterSummaryDTO {
   averageItemLevel: number
   equippedItemLevel: number
   indexCovenant: number
+  renownLevel: number
+  lastLoginTimestamp: number
+  isFavorite: boolean
+}
+
+export interface CharacterData {
+  id: number
+  name: string
+  level: number
+  guildName: string
+  realm: string
+  playableClass: PlayableClassDTO
+  playableRace: PlayableRaceDTO
+  faction: string
+  averageItemLevel: number
+  equippedItemLevel: number
+  covenant: string | undefined
   renownLevel: number
   lastLoginTimestamp: number
   isFavorite: boolean

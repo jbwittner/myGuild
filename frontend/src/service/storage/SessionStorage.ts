@@ -1,6 +1,7 @@
+import { StaticDataDTO } from '../../api/Entities'
+
 export class SessionStorage {
   public static STATIC_DATA = 'MYGUILD.STATIC_DATA'
-  public static CHARACTERS_DATA = 'MYGUILD.CHARACTERS_DATA'
 
   public static getItem<T>(key: string): T | undefined {
     const item: string | null = window.sessionStorage.getItem(key)
@@ -22,4 +23,8 @@ export class SessionStorage {
   public static clear(): void {
     window.sessionStorage.clear()
   }
+}
+
+export function getStaticData(): StaticDataDTO | undefined {
+  return SessionStorage.getItem<StaticDataDTO>(SessionStorage.STATIC_DATA)
 }

@@ -1,7 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { StaticDataDTO, CharacterSummaryDTO } from '../../api/Entities'
+import { StaticDataDTO } from '../../api/Entities'
 import { BlizzardHttpClient } from '../../api/httpclient/BlizzardHttpClient'
 import { CharacterHttpClient } from '../../api/httpclient/CharacterHttpClient'
 import { SecurityHttpClient } from '../../api/httpclient/SecurityHttpClient'
@@ -49,21 +49,16 @@ export default function LoginPage(): JSX.Element {
                 SessionStorage.STATIC_DATA,
                 staticData,
               )
-              return characterHttpClient.fetchAccountCharacter()
+              return characterHttpClient.fetchCharacterAccount()
             })
-            .then((characterSummaryDTOs: CharacterSummaryDTO[]) => {
-              SessionStorage.setItem<CharacterSummaryDTO[]>(
-                SessionStorage.CHARACTERS_DATA,
-                characterSummaryDTOs,
-              )
+            .then(() => {
               setIsSignedIn(true)
-              history.push(HOME_PATH)
-            })
-            .finally(() => {
               setDownloadInProgress(false)
+              history.push(HOME_PATH)
             })
         } else {
           setShowRegistration(true)
+          setDownloadInProgress(false)
         }
       })
       .catch((reason) => {
@@ -90,21 +85,16 @@ export default function LoginPage(): JSX.Element {
             SessionStorage.STATIC_DATA,
             staticData,
           )
-          return characterHttpClient.fetchAccountCharacter()
+          return characterHttpClient.fetchCharacterAccount()
         })
-        .then((characterSummaryDTOs: CharacterSummaryDTO[]) => {
-          SessionStorage.setItem<CharacterSummaryDTO[]>(
-            SessionStorage.CHARACTERS_DATA,
-            characterSummaryDTOs,
-          )
+        .then(() => {
           setIsSignedIn(true)
-          history.push(HOME_PATH)
-        })
-        .finally(() => {
           setDownloadInProgress(false)
+          history.push(HOME_PATH)
         })
     } else {
       setIsSignedIn(false)
+      setDownloadInProgress(false)
     }
   }, [])
 

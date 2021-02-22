@@ -34,7 +34,8 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": ["error"],
    'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
    "@typescript-eslint/no-unused-vars": "error",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "react/display-name": "off"
   },
   settings: {
     "import/resolver": {
