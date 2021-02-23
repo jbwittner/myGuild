@@ -50,7 +50,10 @@ public class UserServiceImpl implements UserService {
         final UserAccount user = new UserAccount();
 
         user.setEmail(userRegistrationParameter.getEmail());
-        user.setNickName(userRegistrationParameter.getNickName());
+
+        final String nickNameCapitalized = userRegistrationParameter.getNickName().substring(0,1).toUpperCase() + userRegistrationParameter.getNickName().substring(1);
+        user.setNickName(nickNameCapitalized);
+
         user.setBattleTag(userRegistrationParameter.getBattleTag());
         user.setBlizzardId(userRegistrationParameter.getBlizzardId());
 
@@ -66,9 +69,11 @@ public class UserServiceImpl implements UserService {
             throws UserEmailAlreadyUsedException, UserNickNameAlreadyUsedException, UserBattleTagAlreadyUsedException,
             UserBlizzardIdAlreadyUsedException {
 
+        final String nickNameCapitalized = userRegistrationParameter.getNickName().substring(0,1).toUpperCase() + userRegistrationParameter.getNickName().substring(1);
+
         if (this.userAccountRepository.existsByEmail(userRegistrationParameter.getEmail())) {
             throw new UserEmailAlreadyUsedException(userRegistrationParameter);
-        } else if (this.userAccountRepository.existsByNickName(userRegistrationParameter.getNickName())) {
+        } else if (this.userAccountRepository.existsByNickName(nickNameCapitalized)) {
             throw new UserNickNameAlreadyUsedException(userRegistrationParameter);
         } else if (this.userAccountRepository.existsByBattleTag(userRegistrationParameter.getBattleTag())) {
             throw new UserBattleTagAlreadyUsedException(userRegistrationParameter);

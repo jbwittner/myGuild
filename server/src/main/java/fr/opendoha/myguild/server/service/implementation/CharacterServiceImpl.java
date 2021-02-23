@@ -107,8 +107,7 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public List<CharacterSummaryDTO> getCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter)
-            throws IOException {
+    public List<CharacterSummaryDTO> getCharacterAccount(final BlizzardAccountParameter blizzardAccountParameter) {
 
         final UserAccount userAccount =
                 this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());

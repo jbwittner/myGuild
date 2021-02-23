@@ -54,8 +54,7 @@ public class CharacterController extends MotherController {
      * Method used to get account characters
      */
     @GetMapping("/getCharacterAccount")
-    public List<CharacterSummaryDTO> getCharacterAccount(final OAuth2AuthenticationToken authentication)
-            throws IOException {
+    public List<CharacterSummaryDTO> getCharacterAccount(final OAuth2AuthenticationToken authentication) {
 
         final BlizzardAccountParameter parameter = this.getBlizzardAccountParameter(authentication);
 

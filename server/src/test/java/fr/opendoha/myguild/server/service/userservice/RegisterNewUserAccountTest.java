@@ -74,7 +74,10 @@ public class RegisterNewUserAccountTest extends AbstractMotherIntegrationTest {
         Assertions.assertEquals(userRegistrationParameter.getBattleTag(), userAccount.getBattleTag());
         Assertions.assertEquals(userRegistrationParameter.getBlizzardId(), userAccount.getBlizzardId());
         Assertions.assertEquals(userRegistrationParameter.getEmail(), userAccount.getEmail());
-        Assertions.assertEquals(userRegistrationParameter.getNickName(), userAccount.getNickName());
+
+        final String nickNameCapitalized = userRegistrationParameter.getNickName().substring(0,1).toUpperCase() + userRegistrationParameter.getNickName().substring(1);
+
+        Assertions.assertEquals(nickNameCapitalized, userAccount.getNickName());
     }
 
     /**

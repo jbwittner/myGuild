@@ -22,7 +22,7 @@ public interface CharacterService {
     /**
      * Method to get the characters from a blizzard account
      */
-    List<CharacterSummaryDTO> getCharacterAccount(BlizzardAccountParameter blizzardAccountParameter) throws IOException;
+    List<CharacterSummaryDTO> getCharacterAccount(BlizzardAccountParameter blizzardAccountParameter);
 
     /**
      * Method to set a favorite character
