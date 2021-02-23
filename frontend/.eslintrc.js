@@ -9,7 +9,6 @@ module.exports = {
     'plugin:react/recommended',
     'eslint:recommended',
     'prettier',
-    "prettier/react",
     "prettier/prettier",
     "plugin:@typescript-eslint/recommended"
   ],
@@ -32,8 +31,8 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/explicit-module-boundary-types": ["error"],
     "@typescript-eslint/no-explicit-any": ["error"],
-   'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
-   "@typescript-eslint/no-unused-vars": "error",
+    'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
+    "@typescript-eslint/no-unused-vars": "error",
     "no-unused-vars": "off",
     "react/display-name": "off"
   },
