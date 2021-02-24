@@ -1,6 +1,6 @@
 import React from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import CharactersPage from '../character/CharactersPage'
+import AccountCharactersPage from '../accountcharacter/AccountCharactersPage'
 import ButtonAppBar from '../common/AppBar'
 import { GeneralContext } from '../common/Context'
 import HomePage from '../home/HomePage'
@@ -20,7 +20,7 @@ export default function MainRouteur(): JSX.Element {
       <Switch>
         <Route exact path={INDEX_PATH} component={LoginPage} />
         <PrivateRoute exact path={HOME_PATH} component={HomePage} />
-        <PrivateRoute exact path={CHARACTERS_PATH} component={CharactersPage} />
+        <PrivateRoute exact path={CHARACTERS_PATH} component={AccountCharactersPage} />
       </Switch>
     </HashRouter>
   )

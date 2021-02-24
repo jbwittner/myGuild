@@ -12,7 +12,7 @@ const useStyles = makeStyles(() =>
   }),
 )
 
-export default function CharactersPage(): JSX.Element {
+export default function AccountCharactersPage(): JSX.Element {
   const classes = useStyles()
 
   const characterHttpClient = new CharacterHttpClient()
