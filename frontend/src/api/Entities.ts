@@ -117,3 +117,14 @@ export interface CharacterData {
   lastLoginTimestamp: number
   isFavorite: boolean
 }
+
+export interface GuildSummaryDTO {
+  id: number
+  name: string
+  useApplication: boolean
+  indexFaction: number
+  realmDTO: RealmDTO
+  achievementPoints: number
+  createdTimestamp: number
+  memberCount: number
+}

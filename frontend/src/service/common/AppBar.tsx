@@ -5,8 +5,13 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { useHistory } from 'react-router-dom'
-import { CHARACTERS_PATH, HOME_PATH } from '../routeur/MainRouteur'
+import {
+  ACCOUNT_CHARACTERS_PATH,
+  ACCOUNT_GUILDS_PATH,
+  HOME_PATH,
+} from '../routeur/MainRouteur'
 import HomeIcon from '@material-ui/icons/Home'
+import GroupIcon from '@material-ui/icons/Group'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,7 +33,11 @@ export default function ButtonAppBar(): JSX.Element {
   const history = useHistory()
 
   const onClickCharacters = useCallback(() => {
-    history.push(CHARACTERS_PATH)
+    history.push(ACCOUNT_CHARACTERS_PATH)
+  }, [history])
+
+  const onClickGuilds = useCallback(() => {
+    history.push(ACCOUNT_GUILDS_PATH)
   }, [history])
 
   const onClickHome = useCallback(() => {
@@ -52,6 +61,13 @@ export default function ButtonAppBar(): JSX.Element {
             startIcon={<AccountCircleIcon />}
           >
             Characters
+          </Button>
+          <Button
+            color="inherit"
+            onClick={onClickGuilds}
+            startIcon={<GroupIcon />}
+          >
+            Guilds
           </Button>
         </div>
       </Toolbar>
