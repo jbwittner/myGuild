@@ -48,12 +48,13 @@ public class RegisterNewUserAccountTest extends AbstractMotherIntegrationTest {
 
         final String battleTag = this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_BATTLETAG);
         final String nickName = this.factory.getUniqueRandomAlphanumericString(TestObjectFactory.LENGTH_NICKNAME);
+        final String nickNameCapitalized = nickName.substring(0,1).toUpperCase() + nickName.substring(1);
         final Integer blizzardId = this.factory.getRandomInteger(TestObjectFactory.NUMBER_MAX_BLIZZARD_ID);
 
         userRegistrationParameter.setBattleTag(battleTag);
         userRegistrationParameter.setBlizzardId(blizzardId);
         userRegistrationParameter.setEmail(this.factory.getUniqueRandomEmail());
-        userRegistrationParameter.setNickName(nickName);
+        userRegistrationParameter.setNickName(nickNameCapitalized);
 
         return userRegistrationParameter;
     }
@@ -102,6 +103,8 @@ public class RegisterNewUserAccountTest extends AbstractMotherIntegrationTest {
         final UserRegistrationParameter userRegistrationParameter = this.getUserRegistrationParameter();
 
         userRegistrationParameter.setNickName(this.userAlreadyRegistered.getNickName());
+
+        Assertions.assertEquals(this.userAlreadyRegistered.getNickName(), userRegistrationParameter.getNickName());
 
         Assertions.assertThrows(UserNickNameAlreadyUsedException.class,
                 () -> this.userService.registerNewUserAccount(userRegistrationParameter));

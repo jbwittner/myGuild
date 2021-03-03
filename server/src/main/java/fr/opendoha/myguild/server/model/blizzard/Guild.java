@@ -22,9 +22,6 @@ public class Guild extends AbstractBlizzardModel {
     @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
     private List<Character> characterList;
 
-    @OneToMany(mappedBy = "guild", fetch = FetchType.LAZY)
-    private List<GuildRank> guildRankList;
-
     @ManyToOne
     @JoinColumn(name = "REALM_ID")
     private Realm realm;

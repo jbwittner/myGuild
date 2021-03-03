@@ -24,10 +24,6 @@ public class GuildRank {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "GUILD_ID")
-    private Guild guild;
-
     @OneToMany(mappedBy = "guildRank", fetch = FetchType.LAZY)
     private List<Character> characterList;
 

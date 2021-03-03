@@ -9,6 +9,9 @@ application:
     user: myGuild_user
     password: MyGuildPass2020
   blizzard:
+    guild:
+      name: peypouze
+      realmslug: archimonde
     wow:
       delay-ms: 10
       profile:

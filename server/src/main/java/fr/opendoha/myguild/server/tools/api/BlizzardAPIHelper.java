@@ -54,9 +54,14 @@ public interface BlizzardAPIHelper {
     GuildData getGuildData(Guild guild) throws IOException;
 
     /**
+     * Get GuildData
+     */
+    GuildData getGuildData(String realmSlug, String guildName) throws IOException;
+
+    /**
      * Get GuildRosterIndexData
      */
-    GuildRosterIndexData getGuildRosterIndexData(Guild guild) throws IOException;
+    GuildRosterIndexData getGuildRosterIndexData(String realmSlug, String guildName) throws IOException;
 
     /**
      * Get PlayableRacesIndexData

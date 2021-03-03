@@ -23,6 +23,7 @@ public class CharacterSummaryDTO {
     private Integer renownLevel;
     private Long lastLoginTimestamp;
     private Boolean isFavorite;
+    private String userNickName;
 
     /**
      * DTO Builder
@@ -39,6 +40,10 @@ public class CharacterSummaryDTO {
         if(character.getCovenant() != null){
             this.renownLevel = character.getRenownLevel();
             this.indexCovenant = character.getCovenant().getId();
+        }
+
+        if(character.getUserAccount() != null){
+            this.userNickName = character.getUserAccount().getNickName();
         }
         
         this.realmDTO = new RealmDTO();

@@ -1,18 +1,13 @@
 package fr.opendoha.myguild.server.service.implementation;
 
+import fr.opendoha.myguild.server.annotation.IgnoreCheckUser;
 import fr.opendoha.myguild.server.data.blizzardgamedata.*;
 import fr.opendoha.myguild.server.dto.CharacterSummaryDTO;
 import fr.opendoha.myguild.server.dto.GuildDTO;
 import fr.opendoha.myguild.server.dto.GuildSummaryDTO;
-import fr.opendoha.myguild.server.exception.AreNotGuildMasterException;
-import fr.opendoha.myguild.server.exception.GuildDoesNotUseApplication;
-import fr.opendoha.myguild.server.exception.GuildNotExistedException;
 import fr.opendoha.myguild.server.exception.UnexpectedException;
-import fr.opendoha.myguild.server.model.UserAccount;
 import fr.opendoha.myguild.server.model.blizzard.*;
 import fr.opendoha.myguild.server.model.blizzard.Character;
-import fr.opendoha.myguild.server.parameters.AddingGuildParameter;
-import fr.opendoha.myguild.server.parameters.BlizzardAccountParameter;
 import fr.opendoha.myguild.server.repository.UserAccountRepository;
 import fr.opendoha.myguild.server.repository.blizzard.*;
 import fr.opendoha.myguild.server.service.GuildService;
@@ -20,6 +15,7 @@ import fr.opendoha.myguild.server.tools.api.BlizzardAPIHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
@@ -37,6 +33,12 @@ public class GuildServiceImpl implements GuildService {
 
     protected final Logger logger = LoggerFactory.getLogger(GuildService.class);
 
+    @Value("${application.blizzard.guild.name}")
+    protected String guildName;
+
+    @Value("${application.blizzard.guild.realmslug}")
+    protected String realmSlug;
+
     public static final Integer RANK_GUILD_MASTER = 0;
     protected static final Integer TRY_FETCH_CHARACTER = 5;
 
@@ -48,6 +50,7 @@ public class GuildServiceImpl implements GuildService {
     protected PlayableRaceRepository playableRaceRepository;
     protected PlayableClassRepository playableClassRepository;
     protected CovenantRepository covenantRepository;
+    protected RealmRepository realmRepository;
     protected BlizzardAPIHelper blizzardAPIHelper;
 
     /**
@@ -63,6 +66,7 @@ public class GuildServiceImpl implements GuildService {
             final PlayableRaceRepository playableRaceRepository,
             final PlayableClassRepository playableClassRepository,
             final CovenantRepository covenantRepository,
+            final RealmRepository realmRepository,
             final BlizzardAPIHelper blizzardAPIHelper
     ) {
         this.userAccountRepository = userAccountRepository;
@@ -73,72 +77,155 @@ public class GuildServiceImpl implements GuildService {
         this.playableRaceRepository = playableRaceRepository;
         this.playableClassRepository = playableClassRepository;
         this.covenantRepository = covenantRepository;
+        this.realmRepository = realmRepository;
         this.blizzardAPIHelper = blizzardAPIHelper;
     }
 
+    @IgnoreCheckUser
     @Override
-    public List<GuildSummaryDTO> getGuildFromAccount(final BlizzardAccountParameter blizzardAccountParameter)
-            throws IOException {
+    public void initialize() throws IOException, UnexpectedException {
 
-        final UserAccount userAccount =
-            this.userAccountRepository.findByBlizzardId(blizzardAccountParameter.getBlizzardId());
+        final GuildData guildData = this.blizzardAPIHelper.getGuildData(this.realmSlug, this.guildName);
 
-        final List<Character> characters = this.characterRepository.findByUserAccountAndGuildIsNotNull(userAccount);
+        final Optional<Guild> guildOptional = this.guildRepository.findById(guildData.getId());
 
-        final List<Integer> guildIndex = new ArrayList<>();
-
-        final List<GuildSummaryDTO> guildSummaryDTOs = new ArrayList<>();
+        if( !guildOptional.isPresent()){
+            Guild guild = new Guild();
+            guild.setId(guildData.getId());
         
-        for(final Character character : characters){
-            final Guild guild = character.getGuild();
+            final Faction faction = this.factionRepository.findByType(guildData.getFactionData().getType()).get();
 
-            final Boolean containGuild = guildIndex.contains(guild.getId());
+            guild.setFaction(faction);
+            guild.setName(guildData.getName());
 
-            if(!containGuild){
-                guildIndex.add(guild.getId());
-                final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
-                final GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
-                guildSummaryDTO.build(guild, guildData);
-                guildSummaryDTOs.add(guildSummaryDTO);
+            Realm realm;
+            
+            final Optional<Realm> realmOptional = this.realmRepository.findBySlug(guildData.getRealmData().getSlug());
+
+            if(realmOptional.isPresent()){
+                realm = realmOptional.get();
+            } else {
+                realm = new Realm();
+                realm.setId(guildData.getRealmData().getId());
             }
-        }
 
-        return guildSummaryDTOs;
+            realm.setSlug(guildData.getRealmData().getSlug());
+            realm.buildLocalizedModel(guildData.getRealmData().getLocalizedStringData());
+
+            realm = this.realmRepository.save(realm);
+
+            guild.setRealm(realm);
+
+            guild.setUseApplication(true);
+
+            guild = this.guildRepository.save(guild);
+
+            this.fetchGuildRoster(guild);
+
+        }
 
     }
 
     @Override
-    public void addingGuild(final AddingGuildParameter addingGuildParameter) throws IOException, GuildNotExistedException,
-            AreNotGuildMasterException, UnexpectedException {
+    public GuildDTO updateGuild() throws IOException, UnexpectedException {
 
-        final UserAccount userAccount =
-            this.userAccountRepository.findByBlizzardId(addingGuildParameter.getBlizzardId());
+        final GuildData guildData = this.blizzardAPIHelper.getGuildData(this.realmSlug, this.guildName);
 
-        final Optional<Guild> guildOptional = this.guildRepository.findById(addingGuildParameter.getGuildId());
+        final Optional<Guild> guildOptional = this.guildRepository.findById(guildData.getId());
 
-        if(guildOptional.isEmpty()){
-            throw new GuildNotExistedException(addingGuildParameter.getGuildId());
+        Guild guild = guildOptional.get();
+
+        guild.setId(guildData.getId());
+        
+        final Faction faction = this.factionRepository.findByType(guildData.getFactionData().getType()).get();
+
+        guild.setFaction(faction);
+        guild.setName(guildData.getName());
+
+        Realm realm;
+        
+        final Optional<Realm> realmOptional = this.realmRepository.findBySlug(guildData.getRealmData().getSlug());
+        realm = realmOptional.get();
+
+        realm.setSlug(guildData.getRealmData().getSlug());
+        realm.buildLocalizedModel(guildData.getRealmData().getLocalizedStringData());
+
+        realm = this.realmRepository.save(realm);
+
+        guild = this.guildRepository.save(guild);
+
+        final List<Character> characters = this.fetchGuildRoster(guild);
+
+        final GuildDTO guildDTO = new GuildDTO();
+
+        final List<CharacterSummaryDTO> characterSummaryDTOs = new ArrayList<>();
+        CharacterSummaryDTO characterSummaryDTO;
+
+        for(final Character character : characters){
+            characterSummaryDTO = new CharacterSummaryDTO();
+            characterSummaryDTO.build(character);
+            characterSummaryDTOs.add(characterSummaryDTO);
         }
+
+        final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
+        guildSummaryDTO.build(guild, guildData);
+
+        guildDTO.setCharacterSummaryDTOs(characterSummaryDTOs);
+        guildDTO.setGuildSummaryDTO(guildSummaryDTO);
+
+        return guildDTO;
+
+    }
+
+    @Override
+    public List<CharacterSummaryDTO> getGuildRoster() throws IOException {
+
+        final GuildData guildData = this.blizzardAPIHelper.getGuildData(this.realmSlug, this.guildName);
+
+        final Optional<Guild> guildOptional = this.guildRepository.findById(guildData.getId());
 
         final Guild guild = guildOptional.get();
 
-        this.checkAreGuildMaster(userAccount, guild);
+        final List<Character> characters = guild.getCharacterList();
 
-        guild.setUseApplication(true);
+        final List<CharacterSummaryDTO> characterSummaryDTOs = new ArrayList<>();
+        CharacterSummaryDTO characterSummaryDTO;
 
-        this.fetchGuildRoster(guild);
+        for(final Character character : characters){
+            characterSummaryDTO = new CharacterSummaryDTO();
+            characterSummaryDTO.build(character);
+            characterSummaryDTOs.add(characterSummaryDTO);
+        }
+
+        return characterSummaryDTOs;
 
     }
 
-    private void fetchGuildRoster(final Guild guild) throws IOException, UnexpectedException {
+    @Override
+    public GuildSummaryDTO getGuildInformations() throws IOException {
+        
+        final GuildData guildData = this.blizzardAPIHelper.getGuildData(this.realmSlug, this.guildName);
 
-        final GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(guild);
+        final Optional<Guild> guildOptional = this.guildRepository.findById(guildData.getId());
+
+        final Guild guild = guildOptional.get();
+
+        final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
+        guildSummaryDTO.build(guild, guildData);
+
+        return guildSummaryDTO;
+    }
+
+    private List<Character> fetchGuildRoster(final Guild guild) throws IOException, UnexpectedException {
+
+        final GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(guild.getRealm().getSlug(), guild.getName());
         final List<GuildMemberIndexData> guildMemberIndexDatas = guildRosterIndexData.getGuildMemberIndexDataList();
+        final List<Character> characters = new ArrayList<>();
 
         for(final GuildMemberIndexData guildMemberIndexData : guildMemberIndexDatas) {
 
             final Integer memberRank = guildMemberIndexData.getRank();
-            final GuildRank guildRank = this.updateGuildRank(guild, memberRank);
+            final GuildRank guildRank = this.updateGuildRank(memberRank);
 
             Integer indexTry = 0;
             CharacterData characterData = new CharacterData();
@@ -200,115 +287,29 @@ public class GuildServiceImpl implements GuildService {
     
             character.setGuild(guild);
 
+            characters.add(character);
+
             this.characterRepository.save(character);
         }
 
+        return characters;
+
     }
 
-    private GuildRank updateGuildRank(final Guild guild, final Integer indexGuildRank) {
+    private GuildRank updateGuildRank(final Integer indexGuildRank) {
         GuildRank guildRank;
 
-        final Optional<GuildRank> guildRankOptional = this.guildRankRepository.findByRankAndGuild(indexGuildRank, guild);
+        final Optional<GuildRank> guildRankOptional = this.guildRankRepository.findByRank(indexGuildRank);
 
         if(guildRankOptional.isPresent()){
             guildRank = guildRankOptional.get();
         } else {
             guildRank = new GuildRank();
-            guildRank.setGuild(guild);
             guildRank.setName("RANK_" + indexGuildRank);
             guildRank.setRank(indexGuildRank);
             guildRank = this.guildRankRepository.save(guildRank);
         }
 
         return guildRank;
-    }
-
-    private void checkAreGuildMaster(final UserAccount userAccount, final Guild guild) throws IOException,
-            AreNotGuildMasterException {
-        Boolean areGuildMaster = false;
-
-        final GuildRosterIndexData guildRosterIndexData = this.blizzardAPIHelper.getGuildRosterIndexData(guild);
-        final List<GuildMemberIndexData> guildMemberIndexDatas = guildRosterIndexData.getGuildMemberIndexDataList();
-
-        final GuildMemberIndexData guildMasterIndex = guildMemberIndexDatas.stream().filter(item -> RANK_GUILD_MASTER.equals(item.getRank())).findFirst().get();
-        final GuildMemberData guildMasterData = guildMasterIndex.getGuildMemberData();
-
-        final List<Character> characters = this.characterRepository.findByUserAccountAndGuild(userAccount, guild);
-
-        for(final Character character : characters){
-            final Integer characterId = character.getId();
-
-            if(characterId.equals(guildMasterData.getId())){
-                areGuildMaster = true;
-                break;
-            }
-        }
-
-        if(areGuildMaster == false){
-            throw new AreNotGuildMasterException(guild.getName());
-        }
-
-    }
-
-    private Guild guildCheck(final Integer guildId) throws GuildNotExistedException, GuildDoesNotUseApplication {
-
-        final Optional<Guild> optionalGuild = this.guildRepository.findById(guildId);
-
-        if(optionalGuild.isEmpty()){
-            throw new GuildNotExistedException(guildId);
-        }
-
-        final Guild guild = optionalGuild.get();
-
-        if(guild.getUseApplication() == false){
-            throw new GuildDoesNotUseApplication(guild);
-        }
-
-        return guild;
-
-    }
-
-    @Override
-    public GuildDTO getGuild(final Integer guildId) throws GuildNotExistedException, GuildDoesNotUseApplication,
-            IOException {
-        final Guild guild = this.guildCheck(guildId);
-        final GuildDTO guildDTO = new GuildDTO();
-
-        final List<CharacterSummaryDTO> characterSummaryDTOs = this.getGuildMembers(guild);
-        final GuildSummaryDTO guildSummaryDTO = this.getGuildInformations(guild);
-
-        guildDTO.setCharacterSummaryDTOs(characterSummaryDTOs);
-        guildDTO.setGuildSummaryDTO(guildSummaryDTO);
-
-        return guildDTO;
-    }
-
-    private List<CharacterSummaryDTO> getGuildMembers(final Guild guild) throws GuildNotExistedException,
-            GuildDoesNotUseApplication {
-
-        final List<Character> characters = guild.getCharacterList();
-
-        final List<CharacterSummaryDTO> characterSummaryDTOs = new ArrayList<>();
-        CharacterSummaryDTO characterSummaryDTO;
-
-        for(final Character character : characters){
-            characterSummaryDTO = new CharacterSummaryDTO();
-            characterSummaryDTO.build(character);
-            characterSummaryDTOs.add(characterSummaryDTO);
-        }
-
-        return characterSummaryDTOs;
-
-    }
-
-    private GuildSummaryDTO getGuildInformations(final Guild guild) throws GuildNotExistedException,
-            GuildDoesNotUseApplication, IOException {
-
-        final GuildSummaryDTO guildSummaryDTO = new GuildSummaryDTO();
-        final GuildData guildData = this.blizzardAPIHelper.getGuildData(guild);
-        guildSummaryDTO.build(guild, guildData);
-        
-        return guildSummaryDTO;
-
     }
 }
